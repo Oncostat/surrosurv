@@ -1,0 +1,20 @@
+import(eha, lme4, msm, mvmeta, optextras, optimx, phmm, survival)
+importFrom(copula,
+           tau, claytonCopula, plackettCopula)
+importFrom(MASS, 
+           mvrnorm)
+importFrom(matrixcalc, 
+           is.positive.definite)
+importFrom(parfm, 
+           parfm)
+importFrom(graphics,
+           plot, segments)
+export(convergence,
+       plotsson,
+       poissonize,
+       simData.mx,
+       simData.cc,
+       simData.re,
+       surrosurv)
+S3method(print, 
+         surrosurv)

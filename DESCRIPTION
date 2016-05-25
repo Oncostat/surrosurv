@@ -1,0 +1,31 @@
+Package: surrosurv
+Type: Package
+Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
+    Meta-Analyses
+Version: 0.0.2
+Date: 2016-05-19
+Authors@R: person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr",
+               role=c("aut", "cre"))
+Author: Federico Rotolo [aut, cre]
+Maintainer: Federico Rotolo <federico.rotolo@gustaveroussy.fr>
+Description: The surrosurv package provides functions for the evaluation of
+    surrogate endpoints when both the surrogate and the true endpoint are failure
+    time variables. The approaches implemented are: (1) the two-step approach
+    (Burzykowski et al, 2001) with a copula model (Clayton, Plackett, Hougaard) at
+    the first step and either a linear regression of log-hazard ratios at the second
+    step (either adjusted or not for measurement error); (2) mixed proportional
+    hazard models estimated via mixed Poisson GLM.
+Depends: stats, optimx
+Imports:
+    copula,
+    eha,
+    lme4,
+    MASS,
+    matrixcalc,
+    msm,
+    mvmeta,
+    optextras,
+    parfm,
+    phmm,
+    survival
+License: GPL-2
