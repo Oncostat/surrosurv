@@ -9,7 +9,8 @@
   the \code{\link{glm}()} function for fitting a Poisson model.
 }
 \usage{
-poissonize(data, interval.width = max(data[, grep("time", names(data))]),
+poissonize(data,
+           all.breaks = NULL, interval.width = NULL, nInts = 8,
            factors = NULL, compress = TRUE)
 plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
 }
@@ -24,8 +25,19 @@ plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
       in the regression model   
     }
 }
+  \item{all.breaks}{
+    the breakpoints between time intervals
+}
   \item{interval.width}{
-    the width of the time intervals on wich the risks will be assumed consant
+    the width of the time intervals on wich the risks will be assumed consant,
+    in case of intervals of the same length.
+    This parameter is ignored if \code{all.breaks} is specified
+}
+  \item{nInts}{
+    the number of intervals containing the same expected number of events
+    (used only if \code{is.null(interval.width)}, see Details).
+    This parameter is ignored if either \code{all.breaks}
+    or \code{interval.width} is specified
 }
   \item{factors}{
     a vector of characters, containing the names of the factors
@@ -53,6 +65,13 @@ plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
   \item{\dots}{
   other \link[=par]{graphical parameters}
 }
+}
+
+\details{
+  If \code{interval.width} is not null, the study period is diveded into
+    equal-length intervals of length \code{interval.width}.
+  Otherwise, \code{nInts} intervals are used, and the location of their bounds
+    is computed based on the empirical quantiles of the survival function.
 }
 \references{
   Crowther MJ, Riley RD, Staessen JA, Wang J, Gueyffier F, Lambert PC.
@@ -126,6 +145,7 @@ system.time({
 })
 {
     cox.base <- basehaz(fitcox, centered = FALSE)
+    par(mfrow=c(1, 1))
     plot(stepfun(cox.base$time[-nrow(cox.base)], exp(-cox.base$hazard)),
          ylim=0:1, xlim=c(0, max(cox.base$time)),
          do.points=FALSE, verticals=FALSE, xaxs='i',

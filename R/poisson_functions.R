@@ -1,7 +1,8 @@
 poisSurr <- function(data,
                      OPTIMIZER = 'bobyqa',
                      MAXFUN = 1e8,
-                     intWidth = 365.25/4) {
+                     intWidth = NULL,
+                     nInts = NULL) {
   #     library('phmm')
   #     library('parfm')
   #     library('survival')
@@ -28,20 +29,32 @@ poisSurr <- function(data,
     data$trt <- data$trt - .5
   }
   
+  if (is.null(intWidth)) {
+    times <- unlist(data[, grep('time', names(data))])
+    stata <- unlist(data[, grep('status', names(data))])
+    # library('survival')
+    smod <- survfit(Surv(times, stata) ~ 1)
+    smin <- min(smod$surv)
+    all.breaks <- c(0, sapply(1 - 1:nInts / nInts, function(p) 
+      smod$time[(smod$surv - smin) / (1 - smin) <= p][1]))
+    rm(times, stata, smod, smin)
+  } else all.breaks <- NULL
+  
   colnames(data)[colnames(data) == "timeS"] <- 'time'
   colnames(data)[colnames(data) == "statusS"] <- 'status'
-  S$poidata <- poissonize(data, interval.width = intWidth, 
+  S$poidata <- poissonize(data, all.breaks = all.breaks, 
+                          interval.width = intWidth, nInts = nInts,
                           factors = c('trialref', 'trt', 'id'), compress=TRUE)
   colnames(data)[colnames(data) == "time"] <- 'timeS'
   colnames(data)[colnames(data) == "status"] <- 'statusS'
   
   colnames(data)[colnames(data) == "timeT"] <- 'time'
   colnames(data)[colnames(data) == "statusT"] <- 'status'
-  T$poidata <- poissonize(data, interval.width = intWidth, 
+  T$poidata <- poissonize(data, all.breaks = all.breaks, 
+                          interval.width = intWidth, nInts = nInts, 
                           factors = c('trialref', 'trt', 'id'), compress=TRUE)
   colnames(data)[colnames(data) == "time"] <- 'timeT'
   colnames(data)[colnames(data) == "status"] <- 'statusT'
-  
   ############################################################################
   
   
@@ -71,95 +84,97 @@ poisSurr <- function(data,
   }
   
   #     library('optimx')
-  # * Model 2a: Poisson model with
+  # * Model T: Poisson model with
   #             - random treatment-trial interaction
   system.time({
-    JOINT$poifit2a <- glmer(
+    JOINT$poifitT <- glmer(
       update(baseform, .~. + (-1+trtT+trtS|trialref)),
       data=JOINT$poidata, family=poisson,
       control=GLMERCONTROL)
-  }) -> attr(JOINT$poifit2a, 'exec.time')
+  }) -> attr(JOINT$poifitT, 'exec.time')
   
-  # * Model 2b: Poisson model with
+  # * Model I: Poisson model with
   #             - individual random intercept
   system.time({
-    JOINT$poifit2b <-  glmer(
+    JOINT$poifitI <-  glmer(
       update(baseform, .~. + (1|id)) ,
       data=JOINT$poidata, family=poisson,
       control=GLMERCONTROL)
-  }) -> attr(JOINT$poifit2b, 'exec.time')
+  }) -> attr(JOINT$poifitI, 'exec.time')
   
-  attr(JOINT$poifit2b, 'kTau') <- parfm:::fr.lognormal(
+  attr(JOINT$poifitI, 'kTau') <- parfm:::fr.lognormal(
     what = 'tau',
-    sigma2 = as.double(summary(JOINT$poifit2b)$varcor$id))
+    sigma2 = as.double(summary(JOINT$poifitI)$varcor$id))
   
-  # * Model 3: Poisson model with
+  # * Model TI: Poisson model with
   #            - random treatment-trial interaction
   #            - individual random intercept 
   system.time({
-    JOINT$poifit3 <- update(JOINT$poifit2a, .~. + (1|id))
-  }) -> attr(JOINT$poifit3, 'exec.time')
+    JOINT$poifitTI <- update(JOINT$poifitT, .~. + (1|id))
+  }) -> attr(JOINT$poifitTI, 'exec.time')
   
-  attr(JOINT$poifit3, 'kTau') <- parfm:::fr.lognormal(
+  attr(JOINT$poifitTI, 'kTau') <- parfm:::fr.lognormal(
     what = 'tau',
-    sigma2 = as.double(summary(JOINT$poifit3)$varcor$id))
+    sigma2 = as.double(summary(JOINT$poifitTI)$varcor$id))
   
-  # * Model 5b: Poisson model with
+  # * Model TIa: Poisson model with
   #             - random treatment-trial interaction
   #             - individual random intercept 
   #             - random trial intercept (shared by the two EndPoints)
   system.time({
     JOINT$poidata$trialrefSH <- JOINT$poidata$trialref
-    JOINT$poifit5b <- update(JOINT$poifit3, .~. + (1|trialrefSH))
-  }) -> attr(JOINT$poifit5b, 'exec.time')
+    JOINT$poifitTIa <- update(JOINT$poifitTI, .~. + (1|trialrefSH))
+  }) -> attr(JOINT$poifitTIa, 'exec.time')
   
-  attr(JOINT$poifit5b, 'kTau') <- parfm:::fr.lognormal(
+  attr(JOINT$poifitTIa, 'kTau') <- parfm:::fr.lognormal(
     what = 'tau',
-    sigma2 = as.double(summary(JOINT$poifit5b)$varcor$id))
+    sigma2 = as.double(summary(JOINT$poifitTIa)$varcor$id))
   ############################################################################
   
   options(warn=W)
   
   RES <- list(
-    model2a = list(
+    modelT = list(
       kTau = NULL,
-      alpha = fixef(JOINT$poifit2a)['trtS'],
-      beta = fixef(JOINT$poifit2a)['trtT'],
-      R2 = VarCorr(JOINT$poifit2a)$trialref[1, 2]^2 /
-        prod(diag(VarCorr(JOINT$poifit2a)$trialref)),
-      ranef = ranef(JOINT$poifit2a),
-      VarCor = VarCorr(JOINT$poifit2a),
-      optinfo = JOINT$poifit2a@optinfo
+      alpha = fixef(JOINT$poifitT)['trtS'],
+      beta = fixef(JOINT$poifitT)['trtT'],
+      R2 = VarCorr(JOINT$poifitT)$trialref[1, 2]^2 /
+        prod(diag(VarCorr(JOINT$poifitT)$trialref)),
+      ranef = ranef(JOINT$poifitT),
+      VarCor = VarCorr(JOINT$poifitT),
+      optinfo = JOINT$poifitT@optinfo
     ),
-    model2b = list(
-      kTau = attr(JOINT$poifit2b, 'kTau'),
-      alpha = fixef(JOINT$poifit2b)['trtS'],
-      beta = fixef(JOINT$poifit2b)['trtT'],
+    modelI = list(
+      kTau = attr(JOINT$poifitI, 'kTau'),
+      alpha = fixef(JOINT$poifitI)['trtS'],
+      beta = fixef(JOINT$poifitI)['trtT'],
       R2 = NULL,
-      ranef = ranef(JOINT$poifit2b),
-      VarCor = VarCorr(JOINT$poifit2b),
-      optinfo = JOINT$poifit2b@optinfo
+      ranef = ranef(JOINT$poifitI),
+      VarCor = VarCorr(JOINT$poifitI),
+      optinfo = JOINT$poifitI@optinfo
     ),
-    model3 = list(
-      kTau = attr(JOINT$poifit3, 'kTau'),
-      alpha = fixef(JOINT$poifit3)['trtS'],
-      beta = fixef(JOINT$poifit3)['trtT'],
-      R2 = VarCorr(JOINT$poifit3)$trialref[1, 2]^2 /
-        prod(diag(VarCorr(JOINT$poifit3)$trialref)),
-      ranef = ranef(JOINT$poifit3),
-      VarCor = VarCorr(JOINT$poifit3),
-      optinfo = JOINT$poifit3@optinfo
+    modelTI = list(
+      kTau = attr(JOINT$poifitTI, 'kTau'),
+      alpha = fixef(JOINT$poifitTI)['trtS'],
+      beta = fixef(JOINT$poifitTI)['trtT'],
+      R2 = VarCorr(JOINT$poifitTI)$trialref[1, 2]^2 /
+        prod(diag(VarCorr(JOINT$poifitTI)$trialref)),
+      ranef = ranef(JOINT$poifitTI),
+      VarCor = VarCorr(JOINT$poifitTI),
+      optinfo = JOINT$poifitTI@optinfo
     ),
-    model5b = list(
-      kTau = attr(JOINT$poifit5b, 'kTau'),
-      alpha = fixef(JOINT$poifit5b)['trtS'],
-      beta = fixef(JOINT$poifit5b)['trtT'],
-      R2 = VarCorr(JOINT$poifit5b)$trialref[1, 2]^2 /
-        prod(diag(VarCorr(JOINT$poifit5b)$trialref)),
-      ranef = ranef(JOINT$poifit5b),
-      VarCor = VarCorr(JOINT$poifit5b),
+    modelTIa = list(
+      kTau = attr(JOINT$poifitTIa, 'kTau'),
+      alpha = fixef(JOINT$poifitTIa)['trtS'],
+      beta = fixef(JOINT$poifitTIa)['trtT'],
+      R2 = VarCorr(JOINT$poifitTIa)$trialref[1, 2]^2 /
+        prod(diag(VarCorr(JOINT$poifitTIa)$trialref)),
+      ranef = ranef(JOINT$poifitTIa),
+      VarCor = VarCorr(JOINT$poifitTIa),
       optinfo = JOINT$poifit5@optinfo
     )
   )
+  attr(RES, 'intWidth') <- intWidth
+  attr(RES, 'nInts') <- attr(RES, 'nInts')
   return(RES)
 }

@@ -12,14 +12,14 @@
 }
 \usage{
 surrosurv(data,
-models = c("Clayton", "Plackett", "Hougaard", "Poisson"), 
-          intWidth,
+          models = c("Clayton", "Plackett", "Hougaard", "Poisson"), 
+          intWidth,  nInts = 8,
           cop.OPTIMIZER = "bobyqa",
           poi.OPTIMIZER = "bobyqa",
           verbose = FALSE)
           
 \method{print}{surrosurv}(x, silent = FALSE, 
-                          digits = 2, na.print = "-.--", ...)
+      digits = 2, na.print = "-.--", ...)
 }
 
 \arguments{
@@ -48,6 +48,10 @@ models = c("Clayton", "Plackett", "Hougaard", "Poisson"),
 }
   \item{intWidth}{
     the width of time intervals for data Poissonization
+    (see \link{poissonize})
+}
+  \item{nInts}{
+    the number of time intervals for data Poissonization
     (see \link{poissonize})
 }
   \item{cop.OPTIMIZER}{

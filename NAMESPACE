@@ -1,10 +1,12 @@
-import(eha, lme4, msm, mvmeta, optextras, optimx, phmm, survival)
+import(eha, lme4, msm, mvmeta, optextras, optimx, phmm, stats, survival)
 importFrom(copula,
            tau, claytonCopula, plackettCopula)
 importFrom(MASS, 
            mvrnorm)
 importFrom(matrixcalc, 
            is.positive.definite)
+importFrom(NADA, 
+           cenken)
 importFrom(parfm, 
            parfm)
 importFrom(graphics,

@@ -34,7 +34,8 @@ Multivariate meta-analysis for non-linear and other multi-parameter associations
 \doi{10.1002/sim.5471}
 
 Burzykowski T, Molenberghs G, Buyse M (2005). 
-emph{The Evaluation of Surrogate Endpoints}. Springer, New York.
+\emph{The Evaluation of Surrogate Endpoints}. Springer, New York.
+\url{http://rd.springer.com/book/10.1007/b138566}
 }
 \keyword{ surrogate endpoint }
 \keyword{ survival }

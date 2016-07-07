@@ -3,12 +3,13 @@
 ############################################################################### 
 fitClayton <- function(data, varcor=FALSE, 
                        optimx.method,
-                       MAXFUN = 1e8) {
+                       MAXFUN = 1e8, 
+                       ini_kTau = 0.5) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE)
   Mpars <- margFits(data)
   
-  INIpars <- c(log(2), #i.e. kTau = 0.5
+  INIpars <- c(log(copula::iTau(claytonCopula(), ini_kTau)),
                log(Mpars$lambdaS), 
                log(Mpars$rhoS),
                Mpars$alpha, 
@@ -72,13 +73,14 @@ kTau.clay <- function(x) {
 ############################################################################### 
 fitPlackett <- function(data, varcor=FALSE, 
                         optimx.method,
-                        MAXFUN = 1e8) {
+                        MAXFUN = 1e8, 
+                        ini_kTau = 0.5) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE)
 
   Mpars <- margFits(data)
   
-  INIpars <- c(log(11.4), #i.e. kTau = 0.5
+  INIpars <- c(log(copula::iTau(plackettCopula(), ini_kTau)),
                log(Mpars$lambdaS), 
                log(Mpars$rhoS),
                Mpars$alpha, 
@@ -97,7 +99,8 @@ fitPlackett <- function(data, varcor=FALSE,
     attr(RES, 'grad') <- grnd(as.numeric(RES[, 1:attr(RES, 'npar')]),
                               mloglik, data=data, family='plackett')
     attr(RES, 'hessian') <- optimHess(RES[1:length(INIpars)], 
-                                      mloglik, data=data, family='plackett')
+                                      mloglik, data=data, family='plackett',
+                                      control= OPTIMX_CONTROL)
     #             library('msm')
     tranform <- eval(parse(text = paste(
       # theta
@@ -140,13 +143,14 @@ kTau.plack <- function(x) {
 ############################################################################### 
 fitHougaard <- function(data, varcor=FALSE, 
                         optimx.method,
-                        MAXFUN = 1e8) {
+                        MAXFUN = 1e8, 
+                        ini_kTau = 0.5) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE)
   
   Mpars <- margFits(data)
   
-  INIpars <- c(log(-log(0.5)), #i.e. kTau = 0.5
+  INIpars <- c(log(1 - ini_kTau),
                log(Mpars$lambdaS), 
                log(Mpars$rhoS),
                Mpars$alpha, 
@@ -426,22 +430,26 @@ mloglik <- function(pars, data, family=c('clayton', 'plackett', 'hougaard')) {
 ############################################################################### 
 copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'), 
                      varcor1=FALSE, 
-                     optimx.method) {
+                     optimx.method,
+                     INIkTau = 0.5) {
   family <- tolower(family)
   family <- match.arg(family)
   margPars <- margFits(data)
   
   if (family == 'clayton'){
     step1 <- fitClayton(data, varcor=varcor1,
-                        optimx.method = optimx.method)
+                        optimx.method = optimx.method,
+                        ini_kTau = INIkTau)
     kTau <- kTau.clay(step1)
   } else if (family == 'plackett'){
     step1 <- fitPlackett(data, varcor=varcor1,
-                         optimx.method = optimx.method)
+                         optimx.method = optimx.method,
+                         ini_kTau = INIkTau)
     kTau <- kTau.plack(step1)
   } else if (family == 'hougaard'){
     step1 <- fitHougaard(data, varcor=varcor1,
-                         optimx.method = optimx.method)
+                         optimx.method = optimx.method,
+                         ini_kTau = INIkTau)
     kTau <- kTau.houg(step1)
   }
   
@@ -449,12 +457,6 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
                          ep = rep(c('S', 'T'), each=length(step1$alpha)),
                          trial = rep(1:length(step1$alpha), 2), 
                          weights = as.vector(table(data$trialref)))
-  
-  #     library('nlme')
-  #     step2 <- lme(trteff ~ ep -1 , random = ~ ep-1 | trial, data=step1est)
-  #     alpha <- step2$coef$fixed['epS']
-  #     beta <- step2$coef$fixed['epT']
-  #     R2 <- (getVarCov(step2)[1, 2] / prod(sqrt(diag(getVarCov(step2)))))^2
   
   ############################################################################
   # 2nd step using the mvmeta package                                        #
@@ -469,6 +471,7 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
   # and                                                                      #
   # van Houwelingen mstrong B, Kenward MG. Multivariate meta-analysis for    #
   #   non-linear abd other multi-parameter associations. Stat Med 2012; 31.  #
+  ############################################################################
   poss <- cumsum(sapply(step1, length))
   ind_AlphaBeta <- which(names(poss) %in% c('alpha', 'beta'))
   ind_AlphaBeta <- mapply(':', poss[ind_AlphaBeta-1]+1, poss[ind_AlphaBeta])
@@ -487,10 +490,8 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
     alpha = alpha,
     beta = beta,
     R2 = R2,
-    #         ranef = step2$coef$random$trial,
     ranef = bvmodel$fitted.values,
     optimxRES = step1$optimxRES,
-    #         VarCor2 = getVarCov(step2),
     VarCor2 = bvmodel$Psi
   )
   if (varcor1) RES <- c(RES, list(VarCor1 = step1$VarCor))
@@ -505,6 +506,7 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
       kTau = kTau,
       alpha = alpha,
       beta = beta,
+      step1 = step1,
       R2 = R2,
       ranef = NULL,
       optimxRES = step1$optimxRES,
@@ -515,11 +517,3 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
   return(RES)
 }
 
-
-# limits <- range(step2$data$trteff) + .1 * c(-1, 1)
-# newdata <- data.frame(pfs_est = seq(limits[1]-1, limits[2]+1, 
-#                                     length.out=500),
-#                       weight=rep(1000, 100))
-# pd <- predict(modelW, interval="confidence", newdata=newdata)
-# STE <- mean(newdata$pfs_est[0:1+max(which(pd[,3]<0))])
-# 
