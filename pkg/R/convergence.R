@@ -1,44 +1,36 @@
 #####################################################################################
 #####################################################################################
 #####################################################################################
-convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6, restricted = FALSE) {
+convals <- function(x, restricted = FALSE) {
   if (!'surrosurv' %in% class(x))
     stop('x must be of class surrosurv')
   
   models <- c('Clayton', 'Plackett', 'Hougaard', 'Poisson')
   models <- models[sapply(models, function(y) any(grepl(y, names(x))))]
   
-  kktCtrl <- list(kkttolA = kkttol,
-                  kkt2tolA = kkt2tol)
-  
   copulas <- function(cop) {
     f <- function() {
       res <- t(sapply(x[[cop]], function(y) {
-        # library('optextras')
-        kkt <- try({
+        vals <- try({
           if (restricted) {
-            kktc(
-              par = as.numeric(y$optimxRES[, 1]),
-              fval = y$optimxRES$value,
-              ngr = attr(y$optimxRES, 'grad')[1], 
-              nHes = attr(y$optimxRES, 'hessian')[1, 1, drop=FALSE], 
-              nbm=0, control = kktCtrl)
+            c(maxAgrad = abs(attr(y$optimxRES, 'grad')[1]),
+              minev1 = tryCatch(
+                min(eigen(solve(
+                  attr(y$optimxRES, 'hessian')[1, 1, drop=FALSE])
+                )$values) > 0,
+              error = function(x) return(NA)))
           } else {
-            kktc(
-              par = as.numeric(y$optimxRES[, 1:attr(y$optimxRES, 'npar')]),
-              fval = y$optimxRES$value,
-              ngr = attr(y$optimxRES, 'grad'), 
-              nHes = attr(y$optimxRES, 'hessian'), 
-              nbm=0, control = kktCtrl)
+            c(maxAgrad = max(abs(attr(y$optimxRES, 'grad'))),
+              minev1 = tryCatch(
+                min(eigen(solve(attr(y$optimxRES, 'hessian')))$values),
+                error = function(x) return(NA)))
           }
         }, silent = TRUE)
-        if (class(kkt) == 'try-error') kkt <- c(kkt1 = NA, kkt2 = NA)
-        return(rbind(c(
-          unlist(kkt[c('kkt1', 'kkt2')]),
-          VCpd = tryCatch({
-            # library('corpcor')
-            is.positive.definite(y$VarCor2, tol = kkttol)
-          }, error=function(x) return(NA)))))
+        if (class(vals) == 'try-error') vals <- c(maxAgrad = NA, minev1 = NA)
+        return(rbind(c(vals,
+                       minev2 = tryCatch(
+                         min(eigen(y$VarCor2)$values),
+                         error=function(x) return(NA)))))
       }))
       rownames(res) <- paste(cop, rownames(res))
       return(res)
@@ -49,21 +41,20 @@ convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6, restricted = FALSE) {
   Plackett = copulas('Plackett')
   Hougaard = copulas('Hougaard')
   Poisson = function() {
-    #         library('optextras')
     which_models <- x[grepl('Poisson', names(x))]
     convres <- t(sapply(
       which_models,
       function (y) tryCatch({
-        kkt <- kktc(par = y$optinfo$val,
-                    fval = y$optinfo$control$maxfun,
-                    ngr = y$optinfo$derivs$gradient, 
-                    nHes = y$optinfo$derivs$Hessian, 
-                    nbm=0, control = kktCtrl)
-        #                 library('matrixcalc')
-        return(c(unlist(kkt[c('kkt1', 'kkt2')]),
-                 VCpd = tryCatch(
-                   is.positive.definite(y$VarCor$trialref, tol = kkttol),
-                   error = function(x) return(NA))))
+        vals <- try({
+          c(maxAgrad = max(abs(y$optinfo$derivs$gradient)), 
+            minev1 = tryCatch(
+              min(eigen(solve(y$optinfo$derivs$Hessian))$values),
+              error = function(x) return(NA)))
+        })
+        if (class(vals) == 'try-error') vals <- c(maxAgrad = NA, minev1 = NA)
+        return(c(vals,
+                 minev2 = tryCatch(min(eigen(y$VarCor$trialref)$values),
+                                   error = function(x) return(NA))))
       }, error=function(x) return(rep(NA, 3))))
     )
     names(convres) <- names(which_models)
@@ -74,4 +65,19 @@ convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6, restricted = FALSE) {
   
   fitRES <- do.call(rbind, lapply(models, function(x) eval(call(paste(x)))))
   return(fitRES)
+}
+
+#####################################################################################
+#####################################################################################
+#####################################################################################
+convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6, restricted = FALSE) {
+  if (!'surrosurv' %in% class(x))
+    stop('x must be of class surrosurv')
+    
+  ConvRES <- convals(x, restricted)
+  checkConvRES <- cbind(
+    ConvRES[, 1] <= kkttol,
+    ConvRES[, 2:3] >= kkt2tol)
+  
+  return(checkConvRES)
 }

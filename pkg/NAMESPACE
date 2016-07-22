@@ -3,8 +3,6 @@ importFrom(copula,
            tau, claytonCopula, plackettCopula)
 importFrom(MASS, 
            mvrnorm)
-importFrom(matrixcalc, 
-           is.positive.definite)
 importFrom(NADA, 
            cenken)
 importFrom(parfm, 

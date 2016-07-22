@@ -48,7 +48,7 @@ fitClayton <- function(data, varcor=FALSE,
     VarCor <- try(deltamethod(tranform,
                               mean = as.numeric(RES[1:length(INIpars)]),
                               cov = solve(attr(RES, 'hessian')),
-                              ses=FALSE))
+                              ses = FALSE))
   }
   
   RES <- list(

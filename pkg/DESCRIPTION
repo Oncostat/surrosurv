@@ -2,8 +2,8 @@ Package: surrosurv
 Type: Package
 Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
     Meta-Analyses
-Version: 0.0.5
-Date: 2016-07-07
+Version: 0.0.6
+Date: 2016-07-22
 Authors@R: person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr",
                role=c("aut", "cre"))
 Author: Federico Rotolo [aut, cre]
@@ -21,7 +21,6 @@ Imports:
     eha,
     lme4,
     MASS,
-    matrixcalc,
     msm,
     mvmeta,
     NADA,
