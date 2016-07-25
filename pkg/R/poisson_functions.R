@@ -3,7 +3,6 @@ poisSurr <- function(data,
                      MAXFUN = 1e8,
                      intWidth = NULL,
                      nInts = NULL) {
-  #     library('phmm')
   #     library('parfm')
   #     library('survival')
   #     library('msm')

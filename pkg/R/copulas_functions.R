@@ -4,12 +4,14 @@
 fitClayton <- function(data, varcor=FALSE, 
                        optimx.method,
                        MAXFUN = 1e8, 
+                       ini_rho = 0.5,
                        ini_kTau = 0.5) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE)
   Mpars <- margFits(data)
   
-  INIpars <- c(log(copula::iTau(claytonCopula(), ini_kTau)),
+  INIpars <- c(log(copula::iRho(claytonCopula(), ini_rho)),
+               #log(copula::iTau(claytonCopula(), ini_kTau)),
                log(Mpars$lambdaS), 
                log(Mpars$rhoS),
                Mpars$alpha, 
@@ -74,13 +76,15 @@ kTau.clay <- function(x) {
 fitPlackett <- function(data, varcor=FALSE, 
                         optimx.method,
                         MAXFUN = 1e8, 
-                        ini_kTau = 0.5) {
+                        ini_kTau = 0.5, 
+                        ini_rho = 0.5) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE)
 
   Mpars <- margFits(data)
   
-  INIpars <- c(log(copula::iTau(plackettCopula(), ini_kTau)),
+  INIpars <- c(log(copula::iRho(plackettCopula(), ini_rho)),
+               #log(copula::iTau(plackettCopula(), ini_kTau)),
                log(Mpars$lambdaS), 
                log(Mpars$rhoS),
                Mpars$alpha, 
@@ -144,13 +148,15 @@ kTau.plack <- function(x) {
 fitHougaard <- function(data, varcor=FALSE, 
                         optimx.method,
                         MAXFUN = 1e8, 
+                        ini_rho = 0.5, 
                         ini_kTau = 0.5) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE)
   
   Mpars <- margFits(data)
   
-  INIpars <- c(log(1 - ini_kTau),
+  INIpars <- c(log(1 / copula::iRho(gumbelCopula(), ini_rho)),
+               #log(1 - ini_kTau),
                log(Mpars$lambdaS), 
                log(Mpars$rhoS),
                Mpars$alpha, 
@@ -431,6 +437,7 @@ mloglik <- function(pars, data, family=c('clayton', 'plackett', 'hougaard')) {
 copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'), 
                      varcor1=FALSE, 
                      optimx.method,
+                     INIrho = 0.5,
                      INIkTau = 0.5) {
   family <- tolower(family)
   family <- match.arg(family)
@@ -439,17 +446,23 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
   if (family == 'clayton'){
     step1 <- fitClayton(data, varcor=varcor1,
                         optimx.method = optimx.method,
-                        ini_kTau = INIkTau)
+                        ini_rho = INIrho,
+                        #ini_kTau = INIkTau
+                        )
     kTau <- kTau.clay(step1)
   } else if (family == 'plackett'){
     step1 <- fitPlackett(data, varcor=varcor1,
                          optimx.method = optimx.method,
-                         ini_kTau = INIkTau)
+                         ini_rho = INIrho,
+                         #ini_kTau = INIkTau
+                         )
     kTau <- kTau.plack(step1)
   } else if (family == 'hougaard'){
     step1 <- fitHougaard(data, varcor=varcor1,
                          optimx.method = optimx.method,
-                         ini_kTau = INIkTau)
+                         ini_rho = INIrho,
+                         #ini_kTau = INIkTau
+                         )
     kTau <- kTau.houg(step1)
   }
   

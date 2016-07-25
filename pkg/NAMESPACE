@@ -1,10 +1,10 @@
-import(eha, lme4, msm, mvmeta, optextras, optimx, phmm, stats, survival)
+import(eha, lme4, msm, mvmeta, optextras, optimx, stats, survival)
 importFrom(copula,
-           tau, claytonCopula, plackettCopula)
+           tau, claytonCopula, gumbelCopula, plackettCopula)
 importFrom(MASS, 
            mvrnorm)
-importFrom(NADA, 
-           cenken)
+importFrom(SurvCorr, 
+           survcorr)
 importFrom(parfm, 
            parfm)
 importFrom(graphics,

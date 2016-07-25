@@ -1,14 +1,19 @@
 \documentclass{article}
 \usepackage[cm]{fullpage}
-\usepackage{amsmath}
+\usepackage{amsmath, natbib, hyperref, doi}
 % \VignetteIndexEntry{Parameterization of copula functions}
 % \VignetteKeyword{copula}
 % \VignetteKeyword{Clayton}
 % \VignetteKeyword{Palckett}
 % \VignetteKeyword{Hougaard}
 % \VignetteKeyword{Kendall}
+\def\ccom{\raisebox{.45ex}{\textrm{,}}}
 
-\title{Copula functions for bivariate survival data}
+\title{Parameterization of copula functions \\
+  for bivariate survival data \\
+  in the \href{http://r-forge.r-project.org/projects/surrosurv}{surrosurv} package}
+\author{\href{mailto:Federico Rotolo <federico.rotolo@gustaveroussy.fr>
+?Subject=R:::surrosurv}{Federico Rotolo}}
 \begin{document}
 \maketitle
 \SweaveOpts{concordance=TRUE}
@@ -41,7 +46,7 @@ In the case of possibly right-censored data,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Clayton copula}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The bivariate Clayton copula is defined as
+The bivariate \cite{Clayton78} copula is defined as
 \begin{equation}
     C(u,v)= \left(
         u^{-\theta} + v^{-\theta} - 1
@@ -52,8 +57,9 @@ The first derivative with respect to $u$ is
 \begin{align}
     \frac{\partial}{\partial u}C(u,v)
     &=\left(u^{-\theta} + v^{-\theta} - 1\right)^{-\frac{1+\theta}\theta}
-        u^{-(1+\theta)}\\
-    &=\left[\frac{C(u, v)}u\right]^{1+\theta}
+        u^{-(1+\theta)}
+        \nonumber\\
+    &=\left[\frac{C(u, v)}u\right]^{1+\theta}\cdot
 \end{align}
 
 The second derivative with respect to $u$ and $v$ is 
@@ -66,28 +72,27 @@ The second derivative with respect to $u$ and $v$ is
         }\cdot
 \end{equation}
 
-The Kendall's tau for the Clayton copula is
+The \cite{Kendall38}'s tau for the Clayton copula is
 \begin{equation}
-    \tau = \frac\theta{\theta+2}.
+    \tau = \frac\theta{\theta+2}\cdot
 \end{equation}
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Plackett copula}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The bivariate Plackett copula is defined as
+The bivariate \cite{Plackett65} copula is defined as
 \begin{equation}
     C(u,v)= \frac{
         \left[ Q - R^{1/2} \right]
     }{
         2 (\theta - 1)
-    }, \qquad \theta > 0,
+    }\ccom \qquad \theta > 0,
 \end{equation}
 with
 \begin{align}
-    Q &= 1 +(\theta-1)(u+v),\\
+    Q &= 1 +(\theta-1)(u+v),
+        \nonumber\\
     R &= Q^2 - 4 \theta(\theta-1)uv.
 \end{align}
 
@@ -103,10 +108,11 @@ the first derivative of $C(u, v)$ with respect to $u$ is
     \frac{\partial}{\partial u}C(u,v)
     &=\frac12\left[1-\frac{
         1 - (\theta+1) v + (\theta-1) u
-    }{R^{1/2}}\right]\\
+    }{R^{1/2}}\right]
+        \nonumber\\
     &=\frac12\left[1-\frac{
         Q - 2\theta v
-    }{R^{1/2}}\right]
+    }{R^{1/2}}\right]\cdot
 \end{align}
 
 By defining
@@ -123,14 +129,17 @@ and given that
 then, the second derivative with respect to $u$ and $v$ is 
 \begin{align}
     \frac{\partial^2}{\partial u\partial v}C(u,v)
-        &= - \frac{f^\prime g - fg^\prime}{2 g^2}\\
+        &= - \frac{f^\prime g - fg^\prime}{2 g^2}
+        \nonumber\\
         &= - \frac\theta{R^{3/2}}\Big[
-            1 + (\theta-1)(u+v-2uv)\Big]\\
+            1 + (\theta-1)(u+v-2uv)\Big]
+        \nonumber\\
         &= - \frac\theta{R^{3/2}}\Big[
             Q - 2(\theta-1)uv\Big].
 \end{align}
 
-The Kendall's tau for the Plackett copula cannot be computed analyticaly.
+The Kendall's tau for the Plackett copula cannot be computed analyticaly
+  and is obtained numerically.
 
 
 
@@ -138,7 +147,7 @@ The Kendall's tau for the Plackett copula cannot be computed analyticaly.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Gumbel--Hougaard copula}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The bivariate Gumbel--Hougaard copula is defined as
+The bivariate \cite{Gumbel60}--\cite{Hougaard86} copula is defined as
 \begin{equation}
     C(u,v)= \exp\Big(-Q^\theta \Big), \qquad \theta \in (0, 1),
 \end{equation}
@@ -150,7 +159,7 @@ with
 Given that
 \begin{equation}
     \frac{\partial}{\partial u}Q
-        = -\frac{(- \ln u)^{1/\theta-1}}{\theta u},
+        = -\frac{(- \ln u)^{1/\theta-1}}{\theta u}\ccom
 \end{equation}
 then, the first derivative with respect to $u$ is 
 \begin{equation}
@@ -171,4 +180,6 @@ The Kendall's tau for the Gumbel--Hougaard copula is
 \end{equation}
 
 
+\bibliographystyle{plainnat}
+\bibliography{copulas}{}
 \end{document}

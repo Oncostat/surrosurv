@@ -2,8 +2,8 @@ Package: surrosurv
 Type: Package
 Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
     Meta-Analyses
-Version: 0.0.6
-Date: 2016-07-22
+Version: 0.0.7
+Date: 2016-07-25
 Authors@R: person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr",
                role=c("aut", "cre"))
 Author: Federico Rotolo [aut, cre]
@@ -23,9 +23,8 @@ Imports:
     MASS,
     msm,
     mvmeta,
-    NADA,
     optextras,
     parfm,
-    phmm,
-    survival
+    survival,
+    SurvCorr
 License: GPL-2

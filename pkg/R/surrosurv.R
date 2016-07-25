@@ -25,9 +25,12 @@ surrosurv <- function(
   #   }  
   
   if (length(setdiff(models, 'Poisson'))) {
+    # library('SurvCorr')
+    INIrho <- survcorr(Surv(timeS, statusS) ~ 1, 
+                        Surv(timeT, statusT) ~ 1, data = data)$rho
     # library('NADA')
-    INIkTau <- cenken(data$timeS, (data$statusS == 0),
-                      data$timeT, (data$statusT == 0))$tau
+      #INIkTau <- cenken(-data$timeS, (data$statusS == 0),
+      #                       -data$timeT, (data$statusT == 0))$tau
   } else INIkTau <- NULL
   
   # Copula approach
@@ -35,7 +38,10 @@ surrosurv <- function(
     f <- function(){
       res <- try(copuSurr(data = data, family = cop, 
                           optimx.method = cop.OPTIMIZER, 
-                          varcor1 = TRUE, INIkTau = INIkTau), silent = TRUE)
+                          varcor1 = TRUE,
+                          #INIkTau = INIkTau
+                          INIrho = INIrho
+                          ), silent = TRUE)
       if (class(res) == 'try-error'){
         res <- list(kTau = NA, alpha = NA, beta = NA,
                     R2 = NA, ranef = NA, 
