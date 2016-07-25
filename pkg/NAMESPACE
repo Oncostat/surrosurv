@@ -9,7 +9,8 @@ importFrom(parfm,
            parfm)
 importFrom(graphics,
            plot, segments)
-export(convergence,
+export(convals,
+       convergence,
        plotsson,
        poissonize,
        simData.mx,
