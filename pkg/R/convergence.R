@@ -1,7 +1,7 @@
 #####################################################################################
 #####################################################################################
 #####################################################################################
-convals <- function(x, restricted = FALSE) {
+convals <- function(x) {
   if (!'surrosurv' %in% class(x))
     stop('x must be of class surrosurv')
   
@@ -12,19 +12,10 @@ convals <- function(x, restricted = FALSE) {
     f <- function() {
       res <- t(sapply(x[[cop]], function(y) {
         vals <- try({
-          if (restricted) {
-            c(maxAgrad = abs(attr(y$optimxRES, 'grad')[1]),
-              minev1 = tryCatch(
-                min(eigen(solve(
-                  attr(y$optimxRES, 'hessian')[1, 1, drop=FALSE])
-                )$values) > 0,
+          c(maxAgrad = max(abs(attr(y$optimxRES, 'grad'))),
+            minev1 = tryCatch(
+              min(eigen(attr(y$optimxRES, 'hessian'))$values),
               error = function(x) return(NA)))
-          } else {
-            c(maxAgrad = max(abs(attr(y$optimxRES, 'grad'))),
-              minev1 = tryCatch(
-                min(eigen(solve(attr(y$optimxRES, 'hessian')))$values),
-                error = function(x) return(NA)))
-          }
         }, silent = TRUE)
         if (class(vals) == 'try-error') vals <- c(maxAgrad = NA, minev1 = NA)
         return(rbind(c(vals,
@@ -48,7 +39,7 @@ convals <- function(x, restricted = FALSE) {
         vals <- try({
           c(maxAgrad = max(abs(y$optinfo$derivs$gradient)), 
             minev1 = tryCatch(
-              min(eigen(solve(y$optinfo$derivs$Hessian))$values),
+              min(eigen(y$optinfo$derivs$Hessian)$values),
               error = function(x) return(NA)))
         })
         if (class(vals) == 'try-error') vals <- c(maxAgrad = NA, minev1 = NA)
@@ -58,8 +49,6 @@ convals <- function(x, restricted = FALSE) {
       }, error=function(x) return(rep(NA, 3))))
     )
     names(convres) <- names(which_models)
-    if (restricted)
-      convres[, 1:2] <- NA
     return(convres)
   }
   
@@ -70,11 +59,11 @@ convals <- function(x, restricted = FALSE) {
 #####################################################################################
 #####################################################################################
 #####################################################################################
-convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6, restricted = FALSE) {
+convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6) {
   if (!'surrosurv' %in% class(x))
     stop('x must be of class surrosurv')
-    
-  ConvRES <- convals(x, restricted)
+  
+  ConvRES <- convals(x)
   checkConvRES <- cbind(
     ConvRES[, 1] <= kkttol,
     ConvRES[, 2:3] >= kkt2tol)

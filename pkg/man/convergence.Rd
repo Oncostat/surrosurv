@@ -8,44 +8,39 @@
   This function evaluates whether the fitted models for evaluating 
     the surrogacy of a candidate endpoint have converged.
   Convergence is assessed by checking whether the maximum absolute gradient 
-    is small enough, and whether the inverse of the Hessian matrix
+    is small enough, and whether the Hessian matrix
     and the variance-covariance matrix of random treatment effects
     are definie positive.
 }
 \usage{
-  convals(x, restricted = FALSE)
-  convergence(x, kkttol = 1e-3, kkt2tol = 1e-6, restricted = FALSE)
+  convals(x)
+  convergence(x, kkttol = 1e-3, kkt2tol = 1e-6)
 }
 \arguments{
   \item{x}{
-  The fitted models, an object of class \code{\link{surrosurv}}.
+    The fitted models, an object of class \code{\link{surrosurv}}.
   }
   \item{kkttol}{
-  The tolerance thresholds for the assessing whether the maximum absolute
-    gradient is small enough.
+    The tolerance thresholds for the assessing whether the maximum absolute
+      gradient is small enough.
   }
   \item{kkt2tol}{
-  The tolerance thresholds for checking whether
-    the inverse of the Hessian matrix and
-    the variance-covariance matrix of random treatment effects
-    are positive definite.
-  The threshold is for the minimum of the eigenvalues.
-}
-  \item{restricted}{
-  If \code{FALSE} (default), the convergence is checked on all the parameters.
-  If \code{TRUE}, the convergence is checked only on parameters
-    which contribute to the computation of surrogacy measures.
-}
+    The tolerance thresholds for checking whether
+      the Hessian matrix and
+      the variance-covariance matrix of random treatment effects
+      are positive definite.
+    The threshold is for the minimum of the eigenvalues.
+  }
 }
 
 \value{
-The function \code{convals()} returns a matrix with one row per model and three columans,
-  reporting the values of the maximum absolute gradient, 
-  of the minimum eigenvalue of the inverse of the Hessian matrix, and
-  of the minimum eigenvalue of the estimated variance-covariance matrix of random treatment effects.
-The function \code{convergence()} returns a matrix with the same structure as \code{convals()},
-  with \code{TRUE}/\code{FALSE} values for the test of the results of \code{convals()}
-  against the given thresholds \code{kkttol} and \code{kkt2tol}.
+  The function \code{convals()} returns a matrix with one row per model and three columans,
+    reporting the values of the maximum absolute gradient, 
+    of the minimum eigenvalue of the Hessian matrix, and
+    of the minimum eigenvalue of the estimated variance-covariance matrix of random treatment effects.
+  The function \code{convergence()} returns a matrix with the same structure as \code{convals()},
+    with \code{TRUE}/\code{FALSE} values for the test of the results of \code{convals()}
+    against the given thresholds \code{kkttol} and \code{kkt2tol}.
 }
 \author{
   \packageAuthor{surrosurv}

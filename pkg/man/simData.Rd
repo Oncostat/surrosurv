@@ -132,7 +132,7 @@ time-to-event surrogate endpoints in clinical trials.
 }
 
 \author{
-  \packageMaintainer{surrosurv}
+  \packageAuthor{surrosurv}
 }
 
 \examples{

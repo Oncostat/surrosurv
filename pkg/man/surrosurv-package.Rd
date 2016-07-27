@@ -2,40 +2,42 @@
 \alias{surrosurv-package}
 \docType{package}
 \title{
-\packageTitle{surrosurv}
+  \packageTitle{surrosurv}
 }
 \description{
-\packageDescription{surrosurv}
+  \packageDescription{surrosurv}
 }
 \details{
-The DESCRIPTION file:
-\packageDESCRIPTION{surrosurv}
-\packageIndices{surrosurv}
+  The DESCRIPTION file:
+  \packageDESCRIPTION{surrosurv}
+  \packageIndices{surrosurv}
 }
-\author{
-\packageAuthor{surrosurv}
 
-Maintainer: \packageMaintainer{surrosurv}
+\author{
+  \packageAuthor{surrosurv}
+  
+  Maintainer: \packageMaintainer{surrosurv}
 }
 \references{
-Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
-Evaluation of failure time surrogate endpoints in individual patient data meta-analyses of randomized clinical trials. A Poisson approach.
-\emph{Working paper}.
-
-Burzykowski T, Molenberghs G, Buyse M et al.
-Validation of surrogate end points in multiple randomized clinical trials with failure time end points.
-\emph{Journal of the Royal Statistical Society C} 2001;
-\bold{50}:405--422.
-\doi{10.1111/1467-9876.00244}.
-
-Gasparrini A, Armstrong B, Kenward MG.
-Multivariate meta-analysis for non-linear and other multi-parameter associations.
-\emph{Statistics in Medicine} 2012; \bold{31}:3821--39.
-\doi{10.1002/sim.5471}
-
-Burzykowski T, Molenberghs G, Buyse M (2005). 
-\emph{The Evaluation of Surrogate Endpoints}. Springer, New York.
-\url{http://rd.springer.com/book/10.1007/b138566}
+  Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
+  Evaluation of failure time surrogate endpoints in individual patient data meta-analyses
+  of randomized clinical trials. A Poisson approach.
+  \emph{Working paper}.
+  
+  Burzykowski T, Molenberghs G, Buyse M et al.
+  Validation of surrogate end points in multiple randomized clinical trials with failure time end points.
+  \emph{Journal of the Royal Statistical Society C} 2001;
+  \bold{50}:405--422.
+  \doi{10.1111/1467-9876.00244}.
+  
+  Gasparrini A, Armstrong B, Kenward MG.
+  Multivariate meta-analysis for non-linear and other multi-parameter associations.
+  \emph{Statistics in Medicine} 2012; \bold{31}:3821--39.
+  \doi{10.1002/sim.5471}
+  
+  Burzykowski T, Molenberghs G, Buyse M (2005). 
+  \emph{The Evaluation of Surrogate Endpoints}. Springer, New York.
+  \url{http://rd.springer.com/book/10.1007/b138566}
 }
 \keyword{ surrogate endpoint }
 \keyword{ survival }
@@ -50,5 +52,5 @@ Burzykowski T, Molenberghs G, Buyse M (2005).
 \keyword{ Poisson }
 
 \seealso{
-\CRANpkg{Surrogate}, \CRANpkg{mvmeta}
+  \CRANpkg{Surrogate}, \CRANpkg{mvmeta}
 }

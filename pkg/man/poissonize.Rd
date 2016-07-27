@@ -81,7 +81,7 @@ plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
   \doi{10.1186/1471-2288-12-34}.
 }
 \author{
-  Federico Rotolo
+  \packageAuthor{surrosurv}
 }
 \note{
   This code is hugely inspired by original code made publicly available by Stephanie Kovalchik

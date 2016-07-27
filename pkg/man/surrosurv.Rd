@@ -143,9 +143,11 @@ surrosurv(data,
   \doi{10.1002/sim.1040}
 
 }
+
 \author{
-  \packageMaintainer{surrosurv}
+  \packageAuthor{surrosurv}
 }
+
 \examples{
   set.seed(150)
   data <- simData.re(J = 20, Nj = 250,
