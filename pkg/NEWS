@@ -1,3 +1,6 @@
+Changes in version 0.0.9 (2016-07-28)
+- bugfix in Poisson method, which did not return results because of mispelled model name
+
 Changes in version 0.0.7 (2016-07-25)
 - the Kendall's tau for copulas is now initialized using the SurvCorr package (much faster)
 

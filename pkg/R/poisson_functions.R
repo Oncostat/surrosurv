@@ -170,7 +170,7 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitTIa)$trialref)),
       ranef = ranef(JOINT$poifitTIa),
       VarCor = VarCorr(JOINT$poifitTIa),
-      optinfo = JOINT$poifit5@optinfo
+      optinfo = JOINT$poifitTIa@optinfo
     )
   )
   attr(RES, 'intWidth') <- intWidth
