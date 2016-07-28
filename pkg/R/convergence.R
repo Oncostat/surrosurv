@@ -59,7 +59,8 @@ convals <- function(x) {
 #####################################################################################
 #####################################################################################
 #####################################################################################
-convergence <- function(x, kkttol = 1e-3, kkt2tol = 1e-6) {
+convergence <- function(x) UseMethod("convergence")
+convergence.surrosurv <- function(x, kkttol = 1e-3, kkt2tol = 1e-6) {
   if (!'surrosurv' %in% class(x))
     stop('x must be of class surrosurv')
   

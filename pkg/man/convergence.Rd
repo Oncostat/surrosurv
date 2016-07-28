@@ -1,5 +1,5 @@
-\name{convergence}
-\alias{convergence}
+\name{convergence.surrosurv}
+\alias{convergence.surrosurv}
 \alias{convals}
 \title{
   Assesses the convergence of fitted models for surrogacy evaluation
@@ -14,7 +14,7 @@
 }
 \usage{
   convals(x)
-  convergence(x, kkttol = 1e-3, kkt2tol = 1e-6)
+  \method{convergence}{surrosurv}(x, kkttol = 1e-3, kkt2tol = 1e-6)
 }
 \arguments{
   \item{x}{
