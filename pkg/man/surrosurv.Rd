@@ -1,6 +1,10 @@
 \name{surrosurv}
 \alias{surrosurv}
 \alias{print.surrosurv}
+\alias{plot.surrosurv}
+\alias{predict.surrosurv}
+\alias{plot.predictSurrosurv}
+\alias{print.predictSurrosurv}
 \title{
   Fit and print the models for evaluating the surrogacy strength 
   of a candidate surrogate endpoint
@@ -17,9 +21,17 @@ surrosurv(data,
           cop.OPTIMIZER = "bobyqa",
           poi.OPTIMIZER = "bobyqa",
           verbose = FALSE)
-          
+
+\method{predict}{surrosurv}(x)
+
 \method{print}{surrosurv}(x, silent = FALSE, 
       digits = 2, na.print = "-.--", ...)
+          
+\method{print}{predictSurrosurv}(x, n = 6)
+          
+\method{plot}{surrosurv}(x, ...)
+
+\method{plot}{predictSurrosurv}(x, models = names(x), ...)
 }
 
 \arguments{
@@ -71,7 +83,10 @@ surrosurv(data,
     Should the results be return for storing without printing them?
 }
   \item{digits, na.print, ...}{
-    other parameters for \link{print}
+    other parameters for \link{print} or \link{plot}
+}
+  \item{models}{
+    the models for which plots must be drawn
 }
 }
 

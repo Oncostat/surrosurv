@@ -89,6 +89,7 @@ surrosurv <- function(
   RES <- c(RES, fitRES, list(intWidth = intWidth,
                              runTime = Sys.time() - begin))
   class(RES) <- c('surrosurv', class(RES))
+  attr(RES, 'trialSizes') <- table(data$trialref)
   options(warn = W)
   return(RES)
 }

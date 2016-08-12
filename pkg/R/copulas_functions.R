@@ -503,7 +503,7 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
     alpha = alpha,
     beta = beta,
     R2 = R2,
-    ranef = bvmodel$fitted.values,
+    ranef = blup(bvmodel),
     optimxRES = step1$optimxRES,
     VarCor2 = bvmodel$Psi
   )

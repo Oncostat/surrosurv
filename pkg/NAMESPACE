@@ -17,5 +17,12 @@ export(convals,
        simData.cc,
        simData.re,
        surrosurv)
+
 S3method(print, conv)
+
+S3method(predict, surrosurv)
 S3method(print, surrosurv)
+S3method(plot, surrosurv)
+
+S3method(print, predictSurrosurv)
+S3method(plot, predictSurrosurv)
