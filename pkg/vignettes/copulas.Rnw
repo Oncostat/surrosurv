@@ -179,6 +179,7 @@ The Kendall's tau for the Gumbel--Hougaard copula is
     \tau = 1 - \theta.
 \end{equation}
 
+\nocite{Nelsen06}
 
 \bibliographystyle{plainnat}
 \bibliography{copulas}{}
