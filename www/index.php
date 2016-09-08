@@ -42,8 +42,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <p><a href="http://cran.r-project.org/web/packages/surrosurv/index.html">Information about the current plublic release on CRAN can be found here.</a>
 <br><a href="http://r-forge.r-project.org/projects/surrosurv/">Information about the project development can be found here.</a>
 
-
+<p>
 ...
+</p>
 
 
 <!--References--><hr>
@@ -54,7 +55,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   with failure time end points.
   <em>Journal of the Royal Statistical Society C</em> 2001;
   <b>50</b>:405--422.
-  <a href="http://dx.doi.org/10.1111/1467-9876.00244">10.1111/1467-9876.00244</a>
+  <a href="http://dx.doi.org/10.1111/1467-9876.00244" target="_blank">10.1111/1467-9876.00244</a>
 </p>
   
 <p>
@@ -64,7 +65,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   in chronic disease incidence.
   <em>Biometrika}</em>1978; 
   <b>65</b>:141--151.
-  <a href="http://dx.doi.org/10.1093/biomet/65.1.141">10.1093/biomet/65.1.141</a>
+  <a href="http://dx.doi.org/10.1093/biomet/65.1.141" target="_blank">10.1093/biomet/65.1.141</a>
 </p>
   
 <p>
@@ -73,8 +74,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   using Poisson regression models.
   <em>BMC Medical Research Methodology</em> 2012;
   <b>12</b>:34.
-  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807">10.1080/01621459.1965.10480807</a>
-  \doi{10.1186/1471-2288-12-34}.
+  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1186/1471-2288-12-34</a>
 </p>
   
 <p>
@@ -82,8 +82,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   Multivariate meta-analysis for non-linear and other multi-parameter associations.
   <em>Statistics in Medicine</em> 2012; 
   <b>31</b>:3821--39.
-  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807">10.1080/01621459.1965.10480807</a>
-  \doi{10.1002/sim.5471}
+  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1002/sim.5471</a>
 </p>
   
 <p>
@@ -91,8 +90,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   A class of multivariate failure time distributions.
   <em>Biometrika</em> 1986; 
   <b>73</b>:671--678.
-  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807">10.1080/01621459.1965.10480807</a>
-  \doi{10.1093/biomet/73.3.671}
+  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1093/biomet/73.3.671</a>
 </p>
   
 <p>
@@ -100,7 +98,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   A class of bivariate distributions. 
   <em>Journal of the America Statistical Association</em> 1965;
   <b>60</b>:516--522.
-  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807">10.1080/01621459.1965.10480807</a>
+  <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1080/01621459.1965.10480807</a>
 </p>
   
 <p>
@@ -115,7 +113,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   Advanced methods in meta-analysis: multivariate approach and meta-regression.
   <em>Statistics in Medicine</em> 2002;
   <b>21</b>:589--624.
-  <a href="http://dx.doi.org/10.1002/sim.1040">10.1002/sim.1040</a>
+  <a href="http://dx.doi.org/10.1002/sim.1040" target="_blank">10.1002/sim.1040</a>
 </p>
   
 </body>
