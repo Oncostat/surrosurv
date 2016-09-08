@@ -22,12 +22,12 @@ surrosurv(data,
           poi.OPTIMIZER = "bobyqa",
           verbose = FALSE)
 
-\method{predict}{surrosurv}(x)
+\method{predict}{surrosurv}(object, ...)
 
 \method{print}{surrosurv}(x, silent = FALSE, 
       digits = 2, na.print = "-.--", ...)
           
-\method{print}{predictSurrosurv}(x, n = 6)
+\method{print}{predictSurrosurv}(x, n = 6, ...)
           
 \method{plot}{surrosurv}(x, ...)
 
@@ -48,7 +48,7 @@ surrosurv(data,
   }
 }
   \item{models}{
-  Which models should be fitted: 
+  For \code{surrosurv()}, which models should be fitted: 
     Clayton copula (unadjusted and adjusted),
     Plackett (unadjusted and adjusted),
     Hougaard (unadjusted and adjusted),
@@ -57,6 +57,9 @@ surrosurv(data,
               with both individual- and trial-level heterogeneity,
               with both individual- and trial-level heterogeneity 
               and with random per-trial intercept)
+              
+  For \code{plot.surrosurv()}, 
+    the models for which plots must be drawn.
 }
   \item{intWidth}{
     the width of time intervals for data Poissonization
@@ -76,7 +79,7 @@ surrosurv(data,
     should the function print out the model being fitted
 }
 
-  \item{x}{
+  \item{x, object}{
     The fitted models, an object of class \code{\link{surrosurv}}
 }
   \item{silent}{
@@ -85,8 +88,8 @@ surrosurv(data,
   \item{digits, na.print, ...}{
     other parameters for \link{print} or \link{plot}
 }
-  \item{models}{
-    the models for which plots must be drawn
+  \item{n}{
+    the number of row to print
 }
 }
 

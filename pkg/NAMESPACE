@@ -8,7 +8,11 @@ importFrom(SurvCorr,
 importFrom(parfm, 
            parfm)
 importFrom(graphics,
-           plot, segments)
+           abline, axis, axTicks, par, plot, segments)
+importFrom(grDevices,
+           n2mfrow, rgb)
+importFrom(utils,
+           head)
 export(convals,
        convergence,
        plotsson,

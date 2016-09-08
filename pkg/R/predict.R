@@ -1,30 +1,30 @@
-predict.surrosurv <- function(x, ...) {
-  copulas <- intersect(c('Clayton', 'Plackett', 'Hougaard'), names(x))
-  poissons <- grep('PoissonT', names(x), value = TRUE)
+predict.surrosurv <- function(object, ...) {
+  copulas <- intersect(c('Clayton', 'Plackett', 'Hougaard'), names(object))
+  poissons <- grep('PoissonT', names(object), value = TRUE)
   
   allRES <- c(
     # Copula models
     sapply(copulas, function(cop) {
       list(
-        unadj = as.data.frame(x[[cop]]$unadj$step1[c('alpha', 'beta')]),
-        adj = as.data.frame(x[[cop]]$adj$ranef))
+        unadj = as.data.frame(object[[cop]]$unadj$step1[c('alpha', 'beta')]),
+        adj = as.data.frame(object[[cop]]$adj$ranef))
     }),
     # Poisson models
     lapply(poissons, function(poi) {
-      x[[poi]]$ranef$trialref[, c('trtS', 'trtT')]
+      object[[poi]]$ranef$trialref[, c('trtS', 'trtT')]
     })
   )
   
-  allRES <- lapply(allRES, function(x) {
-    colnames(x) <- c('trtS', 'trtT')
-    return(x)
+  allRES <- lapply(allRES, function(object) {
+    colnames(object) <- c('trtS', 'trtT')
+    return(object)
   })
   names(allRES) <- c(
     paste(rep(copulas, each = 2), c('unadj', 'adj'), sep='.'),
     poissons)
   
   class(allRES)  <- c('predictSurrosurv', class(allRES))
-  attr(allRES, 'trialSizes') <- attr(x, 'trialSizes')
+  attr(allRES, 'trialSizes') <- attr(object, 'trialSizes')
   return(allRES)
 }
 
