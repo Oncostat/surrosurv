@@ -38,6 +38,8 @@ format.methodNames <- function(x) {
     fixed = TRUE), fixed = TRUE)
 }
 
+noSpP <- function(x) gsub('[\\. ]', '', x)
+
 print.predictSurrosurv <- function(x, n = 6, ...) {
   cat('Treatment effect prediction for surrosurv object\n' )
   for (i in 1:length(x)) {
@@ -58,13 +60,16 @@ plot.surrosurv <- function(x, ...)
   plot(predict(x), ...)
 
 
-plot.predictSurrosurv <- function(x, 
-                                  models = names(x), 
-                                  exact.models = TRUE, 
-                                  xlab, 
-                                  ylab, ...) {
+plot.predictSurrosurv <- function(
+  x, 
+  models = names(x), 
+  exact.models, 
+  xlab, 
+  ylab, ...) {
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
   if (missing(ylab)) ylab <- 'Treatment effect (HR) on T'
+  if (missing(exact.models))
+    exact.models <- any(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
   
   w <- attr(x, 'trialSizes')
   if (var(w)) {
@@ -72,10 +77,11 @@ plot.predictSurrosurv <- function(x,
   } else w <- 1
   
   if (exact.models) {
-    x <- x[tolower(names(x)) %in% tolower(models)]
+    x <- x[tolower(noSpP(names(x))) %in% 
+             tolower(noSpP(models))]
   } else {
-    x <- x[which(sapply(tolower(names(x)), function(mod)
-      !all(is.na(pmatch(tolower(models), mod)))))]
+    x <- x[which(sapply(tolower(noSpP(names(x))), function(mod)
+      !all(is.na(pmatch(tolower(noSpP(models)), mod)))))]
   }
   
   if (length(x)) {
