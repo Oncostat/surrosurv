@@ -11,7 +11,10 @@ predict.surrosurv <- function(object, ...) {
     }),
     # Poisson models
     lapply(poissons, function(poi) {
-      object[[poi]]$ranef$trialref[, c('trtS', 'trtT')]
+      # object[[poi]]$ranef$trialref[, c('trtS', 'trtT')]
+      as.data.frame(t(
+        t(object[[poi]]$ranef$trialref) + 
+          unlist(object[[poi]][c('alpha', 'beta')])))
     })
   )
   
@@ -56,7 +59,7 @@ plot.surrosurv <- function(x, ...)
 
 
 plot.predictSurrosurv <- function(
-  x, models = names(x), ...) {
+  x, models = names(x), xlab, ylab, ...) {
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
   if (missing(ylab)) ylab <- 'Treatment effect (HR) on T'
   
@@ -71,11 +74,20 @@ plot.predictSurrosurv <- function(
   if (length(x)) {
     par(mfrow = n2mfrow(length(x)))
     for (i in 1:length(x)) {
-      plot(x[[i]], asp = 1,
+      abcoeff <- try(coef(lm(x[[i]][, 2:1])), silent = TRUE)
+      set0in <- function(xint) {
+        if (xint[1] > 0) xint[1] <- 0
+        if (xint[2] < 0) xint[2] <- 0
+        return(xint)
+      }
+      xlims <- set0in(range(x[[i]][, 1]))
+      ylims <- set0in(range(x[[i]][, 2]))
+      plot(x[[i]], asp = 1, xlim = xlims, ylim = ylims,
            cex = w, pch = 21, bg = rgb(.5, .5, .5, .5),
            panel.first = {
              abline(h=0, v=0, col='grey')
-             abline(lm(x[[i]][, 2:1]), col=rgb(.2, .2, .2, .8), lwd = 2)
+             if (all(is.finite(abcoeff)))
+               abline(lm(x[[i]][, 2:1]), col=rgb(.2, .2, .2, .8), lwd = 2)
            },
            xaxt = 'n', yaxt = 'n',
            main =  format.methodNames(x)[i], 
@@ -83,6 +95,18 @@ plot.predictSurrosurv <- function(
       axis(1, at = axTicks(1), 
            labels = sapply(
              exp(axTicks(1)), function(x)
+               ifelse(x < .1, format(x, nsmall=3, digits=2),
+                      ifelse(x < 1, format(x, nsmall=2, digits=2),
+                             ifelse(x < 10, format(x, nsmall=1, digits=2),
+                                    format(x, digits=2, drop0trailing=FALSE)
+                             )
+                      )
+               )
+           )
+      )
+      axis(2, at = axTicks(2), 
+           labels = sapply(
+             exp(axTicks(2)), function(x)
                ifelse(x < .1, format(x, nsmall=3, digits=2),
                       ifelse(x < 1, format(x, nsmall=2, digits=2),
                              ifelse(x < 10, format(x, nsmall=1, digits=2),
