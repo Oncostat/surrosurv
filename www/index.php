@@ -12,8 +12,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
 
 <head>
-  <title>surrosurv: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
-    Meta-Analyses in R</title>
+  <title>surrosurv: an R Package for the Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="author" content="F. Rotolo" />
@@ -36,8 +35,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <!-- project title  -->
 
-<h2>Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
-    Meta-Analyses in R</h2>
+<h2>surrosurv: an R Package for the Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses</h2>
 <em>F.Rotolo</em>
 <p><a href="http://cran.r-project.org/web/packages/surrosurv/index.html">Information about the current plublic release on CRAN can be found here.</a>
 <br><a href="http://r-forge.r-project.org/projects/surrosurv/">Information about the project development can be found here.</a>
@@ -54,7 +52,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   Validation of surrogate end points in multiple randomized clinical trials
   with failure time end points.
   <em>Journal of the Royal Statistical Society C</em> 2001;
-  <b>50</b>:405--422.
+  <b>50</b>:405&ndash;422.
   <a href="http://dx.doi.org/10.1111/1467-9876.00244" target="_blank">10.1111/1467-9876.00244</a>
 </p>
   
@@ -64,7 +62,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   and its application in epidemiological studies of familial tendency 
   in chronic disease incidence.
   <em>Biometrika}</em>1978; 
-  <b>65</b>:141--151.
+  <b>65</b>:141&ndash;151.
   <a href="http://dx.doi.org/10.1093/biomet/65.1.141" target="_blank">10.1093/biomet/65.1.141</a>
 </p>
   
@@ -81,7 +79,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   Gasparrini A, Armstrong B, Kenward MG.
   Multivariate meta-analysis for non-linear and other multi-parameter associations.
   <em>Statistics in Medicine</em> 2012; 
-  <b>31</b>:3821--39.
+  <b>31</b>:3821&ndash;3839.
   <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1002/sim.5471</a>
 </p>
   
@@ -89,7 +87,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   Hougaard P.
   A class of multivariate failure time distributions.
   <em>Biometrika</em> 1986; 
-  <b>73</b>:671--678.
+  <b>73</b>:671&ndash;678.
   <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1093/biomet/73.3.671</a>
 </p>
   
@@ -97,7 +95,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   Plackett RL.
   A class of bivariate distributions. 
   <em>Journal of the America Statistical Association</em> 1965;
-  <b>60</b>:516--522.
+  <b>60</b>:516&ndash;522.
   <a href="http://dx.doi.org/10.1080/01621459.1965.10480807" target="_blank">10.1080/01621459.1965.10480807</a>
 </p>
   
@@ -112,7 +110,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   van Houwelingen HC, Arends LR, Stijnen T.
   Advanced methods in meta-analysis: multivariate approach and meta-regression.
   <em>Statistics in Medicine</em> 2002;
-  <b>21</b>:589--624.
+  <b>21</b>:589&ndash;624.
   <a href="http://dx.doi.org/10.1002/sim.1040" target="_blank">10.1002/sim.1040</a>
 </p>
   
