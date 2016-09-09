@@ -58,8 +58,11 @@ plot.surrosurv <- function(x, ...)
   plot(predict(x), ...)
 
 
-plot.predictSurrosurv <- function(
-  x, models = names(x), xlab, ylab, ...) {
+plot.predictSurrosurv <- function(x, 
+                                  models = names(x), 
+                                  exact.models = TRUE, 
+                                  xlab, 
+                                  ylab, ...) {
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
   if (missing(ylab)) ylab <- 'Treatment effect (HR) on T'
   
@@ -68,8 +71,12 @@ plot.predictSurrosurv <- function(
     w <- .8 + 3 * (w - min(w)) / (max(w) - min(w))
   } else w <- 1
   
-  x <- x[which(sapply(tolower(names(x)), function(mod)
-    !all(is.na(pmatch(tolower(models), mod)))))]
+  if (exact.models) {
+    x <- x[tolower(names(x)) %in% tolower(models)]
+  } else {
+    x <- x[which(sapply(tolower(names(x)), function(mod)
+      !all(is.na(pmatch(tolower(models), mod)))))]
+  }
   
   if (length(x)) {
     par(mfrow = n2mfrow(length(x)))

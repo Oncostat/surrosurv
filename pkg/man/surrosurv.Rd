@@ -31,7 +31,7 @@ surrosurv(data,
           
 \method{plot}{surrosurv}(x, ...)
 
-\method{plot}{predictSurrosurv}(x, models = names(x), ...)
+\method{plot}{predictSurrosurv}(x, models = names(x), exact.models = TRUE, ...)
 }
 
 \arguments{
@@ -90,6 +90,12 @@ surrosurv(data,
 }
   \item{n}{
     the number of row to print
+}
+  \item{exact.models}{
+    If \code{TRUE}, only the elements of \code{x} which match exactly
+      any of \code{models} are plotted.
+    If \code{exact.models = TRUE}, partial matching is used.
+    
 }
 }
 
