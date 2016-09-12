@@ -31,7 +31,8 @@ surrosurv(data,
           
 \method{plot}{surrosurv}(x, ...)
 
-\method{plot}{predictSurrosurv}(x, models = names(x), exact.models = TRUE, ...)
+\method{plot}{predictSurrosurv}(x, models = names(x), exact.models = TRUE,
+                      xlab, ylab, ...)
 }
 
 \arguments{
@@ -85,7 +86,7 @@ surrosurv(data,
   \item{silent}{
     Should the results be return for storing without printing them?
 }
-  \item{digits, na.print, ...}{
+  \item{digits, na.print, xlab, ylab, ...}{
     other parameters for \link{print} or \link{plot}
 }
   \item{n}{
