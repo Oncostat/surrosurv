@@ -63,7 +63,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   A model for association in bivariate life tables
   and its application in epidemiological studies of familial tendency 
   in chronic disease incidence.
-  <em>Biometrika}</em>1978; 
+  <em>Biometrika</em>1978; 
   <b>65</b>:141&ndash;151.
   <a href="http://dx.doi.org/10.1093/biomet/65.1.141" target="_blank">10.1093/biomet/65.1.141</a>
 </p>
