@@ -37,8 +37,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <h2>surrosurv: an R Package for the Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses</h2>
 <em>F.Rotolo</em>
-<p><a href="http://cran.r-project.org/web/packages/surrosurv/index.html">Information about the current plublic release on CRAN can be found here.</a>
-<br><a href="http://r-forge.r-project.org/projects/surrosurv/">Information about the project development can be found here.</a>
+<p>
+<!--a href="http://cran.r-project.org/web/packages/surrosurv/index.html">Information about the current plublic release on CRAN can be found here.</a>
+<br-->
+<a href="http://r-forge.r-project.org/projects/surrosurv/">Information about the project development can be found here.</a>
 
 <p>
 ...
