@@ -446,21 +446,21 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
   if (family == 'clayton'){
     step1 <- fitClayton(data, varcor=varcor1,
                         optimx.method = optimx.method,
-                        ini_rho = INIrho,
+                        ini_rho = INIrho
                         #ini_kTau = INIkTau
                         )
     kTau <- kTau.clay(step1)
   } else if (family == 'plackett'){
     step1 <- fitPlackett(data, varcor=varcor1,
                          optimx.method = optimx.method,
-                         ini_rho = INIrho,
+                         ini_rho = INIrho
                          #ini_kTau = INIkTau
                          )
     kTau <- kTau.plack(step1)
   } else if (family == 'hougaard'){
     step1 <- fitHougaard(data, varcor=varcor1,
                          optimx.method = optimx.method,
-                         ini_rho = INIrho,
+                         ini_rho = INIrho
                          #ini_kTau = INIkTau
                          )
     kTau <- kTau.houg(step1)
@@ -493,7 +493,8 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
     albe_Covar = diag(step1$VarCor[ind_AlphaBeta[, 1], ind_AlphaBeta[, 2]]),
     beta_Var = diag(step1$VarCor[ind_AlphaBeta[, 2], ind_AlphaBeta[, 2]])))
   #     library('mvmeta')
-  bvmodel <- mvmeta(cbind(step1$alpha, step1$beta), S=myS)
+  bvmodel <- mvmeta(cbind(alpha, beta), S = myS, 
+                    data = as.data.frame(step1[c('alpha', 'beta')]))
   alpha <- bvmodel$coefficients[1]
   beta <- bvmodel$coefficients[2]
   R2 <- bvmodel$Psi[1, 2]^2 / prod(diag(bvmodel$Psi))    
@@ -502,6 +503,8 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
     kTau = kTau,
     alpha = alpha,
     beta = beta,
+    step1 = step1,
+    step2 = bvmodel,
     R2 = R2,
     ranef = blup(bvmodel),
     optimxRES = step1$optimxRES,
@@ -509,7 +512,8 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
   )
   if (varcor1) RES <- c(RES, list(VarCor1 = step1$VarCor))
   
-  step2 <- lm(step1$alpha ~ step1$beta)
+  step2 <- lm(beta ~ alpha,
+              data = as.data.frame(step1[c('alpha', 'beta')]))
   alpha <- mean(step1$alpha)
   beta <- mean(step1$beta)
   R2 <- summary(step2)$r.squared
@@ -520,6 +524,7 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
       alpha = alpha,
       beta = beta,
       step1 = step1,
+      step2 = step2,
       R2 = R2,
       ranef = NULL,
       optimxRES = step1$optimxRES,

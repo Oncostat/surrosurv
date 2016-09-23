@@ -31,8 +31,8 @@ surrosurv(data,
           
 \method{plot}{surrosurv}(x, ...)
 
-\method{plot}{predictSurrosurv}(x, models = names(x), exact.models = TRUE,
-                      xlab, ylab, ...)
+\method{plot}{predictSurrosurv}(x, models = names(x), exact.models,
+                      pred.ints = TRUE, xlab, ylab, ...)
 }
 
 \arguments{
@@ -96,7 +96,12 @@ surrosurv(data,
     If \code{TRUE}, only the elements of \code{x} which match exactly
       any of \code{models} are plotted.
     If \code{exact.models = TRUE}, partial matching is used.
-    
+    By default, \code{exact.models = TRUE} if any of \code{models}
+      matches exactly any of the elements of \code{x}
+      and \code{exact.models = FALSE} otherwise.
+}
+  \item{pred.ints}{
+    Should the prediction intervals be plotted?
 }
 }
 
