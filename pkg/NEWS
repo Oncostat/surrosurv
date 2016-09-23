@@ -15,5 +15,5 @@ Changes in version 0.0.7 (2016-07-25)
 - the Kendall's tau for copulas is now initialized using the SurvCorr package (much faster)
 
 Changes in version 0.0.6 (2016-07-22)
-- added the function convals(), giving the values of the max abs gradient and the min eigenvalue of the Hessian matrix and of the variance-covariance matrix of the random treatment effects
+- added the function convals(), giving the values of the max abs gradient and the min eigenvalue of the variance-covariance matrix of the random treatment effects
 - the function convergence() uses explicit computation provided by covals(), instead of using the function optimx in the package optimx
