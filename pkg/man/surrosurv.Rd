@@ -32,7 +32,10 @@ surrosurv(data,
 \method{plot}{surrosurv}(x, ...)
 
 \method{plot}{predictSurrosurv}(x, models = names(x), exact.models,
-                      pred.ints = TRUE, xlab, ylab, ...)
+                      pred.ints = TRUE,
+                      show.ste = TRUE,
+                      surro.stats = TRUE, 
+                      xlab, ylab, ...)
 }
 
 \arguments{
@@ -102,6 +105,12 @@ surrosurv(data,
 }
   \item{pred.ints}{
     Should the prediction intervals be plotted?
+}
+  \item{show.ste}{
+    Should the surrogate threshold effect be showed?
+}
+  \item{surro.stats}{
+    Should the surrogacy statistics be showed?
 }
 }
 

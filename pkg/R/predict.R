@@ -82,6 +82,7 @@ predict.surrosurv <- function(object, ...) {
       })
     })
   )
+  attr(allRES, 'surro.stats') <- print(object, silent = TRUE)
   names(attr(allRES, 'predf')) <- names(allRES)
   return(allRES)
 }
@@ -111,8 +112,40 @@ print.predictSurrosurv <- function(x, n = 6, ...) {
 
 ##############################################################################
 
-plot.surrosurv <- function(x, ...)
+ste <- function(x, models = names(x), exact.models) {
+  if (class(x) == 'surrosurv') x <- predict(x)
+  if (missing(exact.models))
+    exact.models <- any(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
+  if (exact.models) {
+    ind <- which(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
+  } else {
+    ind <- which(sapply(tolower(noSpP(names(x))), function(mod)
+      !all(is.na(pmatch(tolower(noSpP(models)), mod)))))
+  }
+  
+  res <- sapply(ind, function(i) {
+    f <- function(y) attr(x, 'predf')[[i]](y)[3,]^2
+    ste <- optimize(f, c(-1e8, 1e8))$minimum
+    return(ste)
+  })
+  names(res) <- names(x)[ind]
+  class(res) <- 'steSurrosurv'
+  return(res)
+}
+
+print.steSurrosurv <- function(x, n = 2, ...) {
+  res2print <- cbind(
+    beta = round(x, n),
+    HR = round(exp(x), n))
+  print(res2print, quote = FALSE, ...)
+}
+
+
+##############################################################################
+
+plot.surrosurv <- function(x, ...) {
   plot(predict(x), ...)
+}
 
 
 plot.predictSurrosurv <- function(
@@ -120,6 +153,8 @@ plot.predictSurrosurv <- function(
   models = names(x), 
   exact.models,
   pred.ints = TRUE,
+  show.ste = TRUE,
+  surro.stats = TRUE,
   xlab, 
   ylab, ...) {
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
@@ -140,6 +175,13 @@ plot.predictSurrosurv <- function(
       !all(is.na(pmatch(tolower(noSpP(models)), mod)))))
   }
   PREDF <- attr(x, 'predf')[ind]
+  if (show.ste)
+    STE <- ste(x, names(x)[ind], exact.models = TRUE)
+  if (surro.stats){
+    SURRO.STATS <- round(matrix(as.numeric(attr(x, 'surro.stats')), ncol = 2), 
+                         2)[ind, ]
+    SURRO.STATS[is.na(SURRO.STATS)] <- '\u2014'
+    }
   x <- x[ind]
   
   if (length(x)) {
@@ -173,6 +215,17 @@ plot.predictSurrosurv <- function(
            xaxt = 'n', yaxt = 'n',
            main =  format.methodNames(x)[i], 
            xlab = xlab, ylab = ylab, ...)
+      if (show.ste) {
+        points(STE[i], 0, col = 2, pch = '|', font = 2)
+        text(STE[i], 0, col = 2, font = 2, adj = c(1.1, -.5),
+             labels = paste('STE =', round(exp(STE[i]), 2)))
+      }
+      if (surro.stats) {
+        mtext(bquote(paste(R^2, ' = ', .(SURRO.STATS[i, 2]))),
+              side = 1, line = -1.2, adj = .9, font = 2)
+        mtext(bquote(paste(tau, ' = ', .(SURRO.STATS[i, 1]))),
+              side = 1, line = -2.8, adj = .9, font = 2)
+      }
       axis(1, at = axTicks(1), 
            labels = sapply(
              exp(axTicks(1)), function(x)
