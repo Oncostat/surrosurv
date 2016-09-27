@@ -207,7 +207,8 @@ surrosurv(data,
   }
   
   # Advanced GASTRIC data
-  \dontrun{
+  \donttest{
+    # Long computation time...
     data('gastadv')
     allSurroRes <- surrosurv(gastadv, c('Clayton', 'Poisson'), verbose = TRUE)
     convergence(allSurroRes)

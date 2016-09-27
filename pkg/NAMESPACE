@@ -1,8 +1,8 @@
 import(eha, lme4, msm, mvmeta, optextras, optimx, parallel, stats, survival)
 importFrom(copula,
            tau, claytonCopula, gumbelCopula, plackettCopula)
-importFrom("graphics",
-           "curve", "mtext", "points", "polygon", "text")
+importFrom(graphics,
+           curve, mtext, points, polygon, text)
 importFrom(MASS, 
            mvrnorm)
 importFrom(SurvCorr, 

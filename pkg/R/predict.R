@@ -163,6 +163,7 @@ plot.predictSurrosurv <- function(
   surro.stats = TRUE,
   xlab, 
   ylab, ...) {
+  # ************************************************************************** #
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
   if (missing(ylab)) ylab <- 'Treatment effect (HR) on T'
   if (missing(exact.models))
