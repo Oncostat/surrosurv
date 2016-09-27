@@ -1,3 +1,6 @@
+Changes in version 0.0.16 (2016-09-27)
+- new function loocv() (with print() and plot() functions) to compute leave-one-out cross-validation
+
 Changes in version 0.0.15 (2016-09-23)
 - new function ste() to compute the surrogate threshold effect
 - plot.sussosurv() can now show prediction intervals and the STE

@@ -1,6 +1,8 @@
-import(eha, lme4, msm, mvmeta, optextras, optimx, stats, survival)
+import(eha, lme4, msm, mvmeta, optextras, optimx, parallel, stats, survival)
 importFrom(copula,
            tau, claytonCopula, gumbelCopula, plackettCopula)
+importFrom("graphics",
+           "curve", "mtext", "points", "polygon", "text")
 importFrom(MASS, 
            mvrnorm)
 importFrom(SurvCorr, 
@@ -15,6 +17,7 @@ importFrom(utils,
            head)
 export(convals,
        convergence,
+       loocv,
        plotsson,
        poissonize,
        simData.mx,
@@ -30,3 +33,6 @@ S3method(plot, surrosurv)
 
 S3method(print, predictSurrosurv)
 S3method(plot, predictSurrosurv)
+
+S3method(print, loocvSurrosurv)
+S3method(plot, loocvSurrosurv)

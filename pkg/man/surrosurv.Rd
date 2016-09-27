@@ -202,8 +202,18 @@ surrosurv(data,
        
   \dontrun{
     surrores <- surrosurv(data, verbose = TRUE)
-    surrores
     convergence(surrores)
+    surrores
+  }
+  
+  # Advanced GASTRIC data
+  \dontrun{
+    data('gastadv')
+    allSurroRes <- surrosurv(gastadv, c('Clayton', 'Poisson'), verbose = TRUE)
+    convergence(allSurroRes)
+    allSurroRes
+    predict(allSurroRes)
+    plot(allSurroRes)
   }
 }
 

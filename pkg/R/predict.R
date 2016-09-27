@@ -46,9 +46,11 @@ predict.surrosurv <- function(object, ...) {
           #         sum(object[[cop]]$unadj$step1$alpha)^2
           #     )
           # ) * S * t + est
-          predict(object[[cop]]$unadj$step2,
-                  data.frame(alpha = x),
-                  interval = 'prediction')
+          res <- as.vector(predict(object[[cop]]$unadj$step2,
+                                   data.frame(alpha = x),
+                                   interval = 'prediction'))
+          names(res) <- c('fit', 'lwr', 'upr')
+          return(res)
         }),
         adj = Vectorize(function(x) {
           VCOV <- object[[cop]]$adj$step2$Psi + object[[cop]]$adj$step2$vcov
@@ -57,9 +59,11 @@ predict.surrosurv <- function(object, ...) {
           cMEAN <- AVG[, 'beta'] + (x - AVG[, 'alpha']) * CORR * 
             # sqrt(VCOV['beta', 'beta'] / VCOV['alpha', 'alpha'])
             sqrt(exp(diff(log(diag(VCOV)))))
-          return(rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
-                   sqrt(VCOV['beta', 'beta'] * (
-                     1 - VCOV['alpha', 'beta'] / prod(sqrt(diag(VCOV))))))
+          res <- rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
+            sqrt(VCOV['beta', 'beta'] * (
+              1 - VCOV['alpha', 'beta'] / prod(sqrt(diag(VCOV)))))
+          names(res) <- c('fit', 'lwr', 'upr')
+          return(res)
         }))
     }),
     # Poisson models
@@ -75,10 +79,12 @@ predict.surrosurv <- function(object, ...) {
         cMEAN <- AVG['beta.trtT'] + (x - AVG['alpha.trtS']) * CORR *
           # sqrt(VCOV['trtT', 'trtT'] / VCOV['trtS', 'trtS'])
           sqrt(exp(diff(log(diag(VCOV)))))
-        res <- rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
-          sqrt(VCOV['trtS', 'trtS'] * (1 - VCOV[1, 2] / prod(sqrt(diag(VCOV)))))
+        res <- as.vector(
+          rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
+            sqrt(VCOV['trtS', 'trtS'] * (1 - VCOV[1, 2] / 
+                                           prod(sqrt(diag(VCOV))))))
         names(res) <- c('fit', 'lwr', 'upr')
-        return(cbind(res))
+        return(res)
       })
     })
   )
@@ -113,7 +119,7 @@ print.predictSurrosurv <- function(x, n = 6, ...) {
 ##############################################################################
 
 ste <- function(x, models = names(x), exact.models) {
-  if (class(x) == 'surrosurv') x <- predict(x)
+  if (class(x)[1] == 'surrosurv') x <- predict(x)
   if (missing(exact.models))
     exact.models <- any(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
   if (exact.models) {
@@ -179,7 +185,7 @@ plot.predictSurrosurv <- function(
     STE <- ste(x, names(x)[ind], exact.models = TRUE)
   if (surro.stats){
     SURRO.STATS <- round(matrix(as.numeric(attr(x, 'surro.stats')), ncol = 2), 
-                         2)[ind, ]
+                         2)[ind, , drop = FALSE]
     SURRO.STATS[is.na(SURRO.STATS)] <- '\u2014'
     }
   x <- x[ind]
