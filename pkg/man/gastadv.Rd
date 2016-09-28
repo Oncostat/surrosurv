@@ -3,11 +3,14 @@
 \alias{gastadv}
 \title{Individual data from the advanced GASTRIC meta-analysis}
 \description{
-  
+  The \code{gastadv} dataset contains individual data
+    (overall and progression-free survival)
+    of 4069 patients with advanced/recurrent gastric cancer
+    from 20 randomized trials of chemotherapy.
 }
+
 \usage{data(gastadv)}
-\format{A dataframe containing data of 4069 patients from 20 randomized
-  trials of chemotherapy.
+\format{A dataframe with variables:
   \describe{
     \item{timeT:}{Overall survival time (days).}
     \item{statusT:}{Overall survival indicator (0=censored, 1=death).}
@@ -19,17 +22,17 @@
     }
   }
 \references{
-The GASTRIC group.
-  Role of chemotherapy for advanced/recurrent gastric cancer:
-  An individual-patient-data meta-analysis. 
-  \emph{Eur J Cancer}, 49(7):1565-77, 2013.
-  doi:\href{http://dx.doi.org/10.1016/j.ejca.2012.12.016}{10.1016/j.ejca.2012.12.016}.
-  
-Paoletti X, Oba K, Bang Y-J, et al.
-  Progression-free survival as a surrogate for overall survival
-  in advanced/recurrent gastric cancer trials: a meta-analysis.
-  \emph{J Ntl Cancer Inst}, 105(21):1667-70, 2013.
-  doi:\href{http://dx.doi.org/10.1093/jnci/djt269}{10.1093/jnci/djt269}.
+  Paoletti X, Oba K, Bang Y-J, et al.
+    Progression-free survival as a surrogate for overall survival
+    in advanced/recurrent gastric cancer trials: a meta-analysis.
+    \emph{J Ntl Cancer Inst}, 105(21):1667-70, 2013.
+    doi:\href{http://dx.doi.org/10.1093/jnci/djt269}{10.1093/jnci/djt269}.
+    
+  The GASTRIC group.
+    Role of chemotherapy for advanced/recurrent gastric cancer:
+    An individual-patient-data meta-analysis. 
+    \emph{Eur J Cancer}, 49(7):1565-77, 2013.
+    doi:\href{http://dx.doi.org/10.1016/j.ejca.2012.12.016}{10.1016/j.ejca.2012.12.016}.
 }
 \examples{
   \dontrun{
