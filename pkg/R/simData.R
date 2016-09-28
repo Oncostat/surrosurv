@@ -545,6 +545,7 @@ simData <- function(method = c('re', 'cc', 'mx')) {
         cor(data$S[data$trt == -.5], data$T[data$trt == -.5], method='kendall'),
         cor(data$S[data$trt == 0.5], data$T[data$trt == 0.5], method='kendall'))
     } else {
+      indCorr <- NULL
       ATTRs$kTau <- kTau
       
       if (method == 're') {
