@@ -200,7 +200,8 @@ surrosurv(data,
   plot(survfit(Surv(timeT, statusT) ~ trt, data = data), lty = 1:2,
        xscale = 365.25, main = 'Overall Survival\n(T)')
        
-  \dontrun{
+  \donttest{
+    # Long computation time!
     surrores <- surrosurv(data, verbose = TRUE)
     convergence(surrores)
     surrores
@@ -208,7 +209,7 @@ surrosurv(data,
   
   # Advanced GASTRIC data
   \donttest{
-    # Long computation time...
+    # Long computation time!
     data('gastadv')
     allSurroRes <- surrosurv(gastadv, c('Clayton', 'Poisson'), verbose = TRUE)
     convergence(allSurroRes)

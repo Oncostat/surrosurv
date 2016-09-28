@@ -7,12 +7,12 @@ Date: 2016-09-28
 Authors@R: c(
   person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr", 
           role=c("aut", "cre")),
-  person("Xavier", "Paoletti", role="aut"),
-  person("Marc", "Buyse", role="aut"),
-  person("Tomasz", "Burzykowski", role="aut"),
-  person("Stefan", "Michiels", role="aut"))
+  person("Xavier", "Paoletti", role="ctr"),
+  person("Marc", "Buyse", role="ctr"),
+  person("Tomasz", "Burzykowski", role="ctr"),
+  person("Stefan", "Michiels", role="ctr"))
 Author: Federico Rotolo [aut, cre],
-  Xavier Paoletti [aut], Marc Buyse [aut], Tomasz Burzykowski [aut], Stefan Michiels [aut]
+  Xavier Paoletti [ctr], Marc Buyse [ctr], Tomasz Burzykowski [ctr], Stefan Michiels [ctr]
 Maintainer: Federico Rotolo <federico.rotolo@gustaveroussy.fr>
 Description: The surrosurv package provides functions for the evaluation of
     surrogate endpoints when both the surrogate and the true endpoint are failure
