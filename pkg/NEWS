@@ -1,4 +1,4 @@
-Changes in version 0.0.16 (2016-09-27)
+Changes in version 0.1.0 (First Complete version, 2016-09-28)
 - new function loocv() (with print() and plot() functions) to compute leave-one-out cross-validation
 
 Changes in version 0.0.15 (2016-09-23)

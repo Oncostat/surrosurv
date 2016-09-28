@@ -20,7 +20,7 @@ loocv(data, nCores, parallel = TRUE,
 
 \method{print}{loocvSurrosurv}(x, n = 6, silent = FALSE, ...)
           
-\method{plot}{loocvSurrosurv}(x, ...)
+\method{plot}{loocvSurrosurv}(x, models, exact.models, ...)
 }
 
 \arguments{
@@ -42,12 +42,14 @@ loocv(data, nCores, parallel = TRUE,
   \item{parallel}{
     Should results be computed using parallelization?
   }
-  \item{models}{
-    Which models should be fitted
-    (see \code{\link{surrosurv}()})
+  \item{models, exact.models}{
+    Which models should be fitted (see \code{\link{surrosurv}()})
   }
   \item{x}{
     The fitted models, an object of class \code{\link{surrosurv}}
+  }
+  \item{n}{
+    the number of rows to print
   }
   \item{silent}{
     Should the results be return for storing without printing them?

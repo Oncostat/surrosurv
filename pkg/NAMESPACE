@@ -23,6 +23,7 @@ export(convals,
        simData.mx,
        simData.cc,
        simData.re,
+       ste,
        surrosurv)
 
 S3method(print, conv)

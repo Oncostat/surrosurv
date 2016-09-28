@@ -64,37 +64,7 @@ surrosurv(data,
               
   For \code{plot.surrosurv()}, 
     the models for which plots must be drawn.
-}
-  \item{intWidth}{
-    the width of time intervals for data Poissonization
-    (see \link{poissonize})
-}
-  \item{nInts}{
-    the number of time intervals for data Poissonization
-    (see \link{poissonize})
-}
-  \item{cop.OPTIMIZER}{
-    the optimizer for copula models (see \link{optimx})
-}
-  \item{poi.OPTIMIZER}{
-    the optimizer for Poisson models (see \link{optimx})
-}
-  \item{verbose}{
-    should the function print out the model being fitted
-}
-
-  \item{x, object}{
-    The fitted models, an object of class \code{\link{surrosurv}}
-}
-  \item{silent}{
-    Should the results be return for storing without printing them?
-}
-  \item{digits, na.print, xlab, ylab, ...}{
-    other parameters for \link{print} or \link{plot}
-}
-  \item{n}{
-    the number of row to print
-}
+  }
   \item{exact.models}{
     If \code{TRUE}, only the elements of \code{x} which match exactly
       any of \code{models} are plotted.
@@ -102,16 +72,46 @@ surrosurv(data,
     By default, \code{exact.models = TRUE} if any of \code{models}
       matches exactly any of the elements of \code{x}
       and \code{exact.models = FALSE} otherwise.
-}
+  }
+  \item{intWidth}{
+    the width of time intervals for data Poissonization
+    (see \link{poissonize})
+  }
+  \item{nInts}{
+    the number of time intervals for data Poissonization
+    (see \link{poissonize})
+  }
+  \item{cop.OPTIMIZER}{
+    the optimizer for copula models (see \link{optimx})
+  }
+  \item{poi.OPTIMIZER}{
+    the optimizer for Poisson models (see \link{optimx})
+  }
+  \item{verbose}{
+    should the function print out the model being fitted
+  }
+
+  \item{x, object}{
+    The fitted models, an object of class \code{\link{surrosurv}}
+  }
+  \item{silent}{
+    Should the results be return for storing without printing them?
+  }
+  \item{digits, na.print, xlab, ylab, ...}{
+    other parameters for \link{print} or \link{plot}
+  }
+  \item{n}{
+    the number of rows to print
+  }
   \item{pred.ints}{
     Should the prediction intervals be plotted?
-}
+  }
   \item{show.ste}{
     Should the surrogate threshold effect be showed?
-}
+  }
   \item{surro.stats}{
     Should the surrogacy statistics be showed?
-}
+  }
 }
 
 \details{
@@ -130,9 +130,9 @@ surrosurv(data,
   as described for instance by Crowther et al (2014).
   The statistical details are provided in Rotolo et al (WP).
 }
+
 \value{
-  The fitted models, an object of class \code{\link{surrosurv}}, 
-  with possible elements
+  The fitted models, an object of class \code{\link{surrosurv}}.
 }
   
 \references{

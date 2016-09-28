@@ -104,7 +104,7 @@ print.loocvSurrosurv <- function(x, n = 6, silent = FALSE, ...) {
   for (i in 1:length(RES)) {
     method <- format.methodNames(RES)[i]
     cat('\n  ', method, '\n')
-    res2print <- format(RES[[i]][, 1:n], digits=1, na.encode = FALSE)
+    res2print <- format(RES[[i]][, 1:n], digits = 1, na.encode = FALSE)
     if (nrow(RES[[i]] > n))
       res2print <- cbind(res2print, '  ' = c('...', '...'))
     # rownames(res2print) <- paste0(

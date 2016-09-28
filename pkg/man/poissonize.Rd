@@ -6,7 +6,8 @@
 }
 \description{
   This function  tranform survival data into a format compatible with
-  the \code{\link{glm}()} function for fitting a Poisson model.
+  the \code{\link{glm}()} function for fitting an auxiliary Poisson model,
+  providing the parameter estimates of the associated proportional hazard model.
 }
 \usage{
 poissonize(data,
@@ -74,11 +75,17 @@ plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
     is computed based on the empirical quantiles of the survival function.
 }
 \references{
+  Whitehead, J.
+    Fitting Cox's regression model to survival
+    data using GLIM.
+    \emph{J Roy Stat Soc C Appl Stat} 1980; \bold{29}(3):268-275.
+    \url{http://www.jstor.org/stable/2346901}.
+  
   Crowther MJ, Riley RD, Staessen JA, Wang J, Gueyffier F, Lambert PC.
-  Individual patient data meta-analysis of survival data
-  using Poisson regression models.
-  \emph{BMC Medical Research Methodology} 2012; \bold{12}:34.
-  \doi{10.1186/1471-2288-12-34}.
+    Individual patient data meta-analysis of survival data
+    using Poisson regression models.
+    \emph{BMC Medical Research Methodology} 2012; \bold{12}:34.
+    \doi{10.1186/1471-2288-12-34}.
 }
 \author{
   \packageAuthor{surrosurv}

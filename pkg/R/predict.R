@@ -139,10 +139,10 @@ ste <- function(x, models = names(x), exact.models) {
   return(res)
 }
 
-print.steSurrosurv <- function(x, n = 2, ...) {
+print.steSurrosurv <- function(x, digits = 2, ...) {
   res2print <- cbind(
-    beta = round(x, n),
-    HR = round(exp(x), n))
+    beta = round(x, digits),
+    HR = round(exp(x), digits))
   print(res2print, quote = FALSE, ...)
 }
 
