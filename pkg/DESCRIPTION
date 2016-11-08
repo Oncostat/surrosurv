@@ -3,7 +3,7 @@ Type: Package
 Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
     Meta-Analyses
 Version: 1.0.0
-Date: 2016-11-04
+Date: 2016-11-07
 Authors@R: c(
   person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr", 
           role=c("aut", "cre")),
