@@ -1,12 +1,12 @@
 \documentclass{article}
 \usepackage[cm]{fullpage}
 \usepackage{amsmath, natbib, hyperref, doi}
-% \VignetteIndexEntry{Parameterization of copula functions}
-% \VignetteKeyword{copula}
-% \VignetteKeyword{Clayton}
-% \VignetteKeyword{Palckett}
-% \VignetteKeyword{Hougaard}
-% \VignetteKeyword{Kendall}
+%\VignetteIndexEntry{Parameterization of copula functions}
+%\VignetteKeyword{copula}
+%\VignetteKeyword{Clayton}
+%\VignetteKeyword{Palckett}
+%\VignetteKeyword{Hougaard}
+%\VignetteKeyword{Kendall}
 \def\ccom{\raisebox{.45ex}{\textrm{,}}}
 
 \title{Parameterization of copula functions \\
