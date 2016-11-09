@@ -32,6 +32,8 @@ S3method(predict, surrosurv)
 S3method(print, surrosurv)
 S3method(plot, surrosurv)
 
+S3method(print, steSurrosurv)
+
 S3method(print, predictSurrosurv)
 S3method(plot, predictSurrosurv)
 
