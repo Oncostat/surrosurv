@@ -3,7 +3,8 @@ predict.surrosurv <- function(object,
                               exact.models,
                               ...) {
   if (missing(exact.models))
-    exact.models <- any(tolower(noSpP(names(object))) %in% tolower(noSpP(models)))
+    exact.models <- all(sapply(tolower(noSpP(models)), function(m)
+      any(tolower(noSpP(names(object))) %in% m)))
   
   if (exact.models) {
     ind <- which(tolower(noSpP(names(object))) %in% tolower(noSpP(models)))
@@ -15,8 +16,6 @@ predict.surrosurv <- function(object,
   
   copulas <- intersect(c('Clayton', 'Plackett', 'Hougaard'), models)
   poissons <- grep('PoissonT', models, value = TRUE)
-  
-  
   
   allRES <- c(
     # Copula models
@@ -105,6 +104,10 @@ predict.surrosurv <- function(object,
     })
   )
   attr(allRES, 'surro.stats') <- print(object, silent = TRUE)
+  attr(allRES, 'surro.stats') <- attr(allRES, 'surro.stats')[
+    noSpP(rownames(attr(allRES, 'surro.stats'))) %in%
+      noSpP(names(allRES)), , drop=FALSE]
+  noSpP(names(allRES))
   names(attr(allRES, 'predf')) <- names(allRES)
   return(allRES)
 }
@@ -137,7 +140,9 @@ print.predictSurrosurv <- function(x, n = 6, ...) {
 ste <- function(x, models = names(x), exact.models) {
   if (class(x)[1] == 'surrosurv') x <- predict(x)
   if (missing(exact.models))
-    exact.models <- any(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
+    exact.models <- all(sapply(tolower(noSpP(models)), function(m)
+      any(tolower(noSpP(names(x))) %in% m)))
+  
   if (exact.models) {
     ind <- which(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
   } else {
@@ -178,12 +183,16 @@ plot.predictSurrosurv <- function(
   show.ste = TRUE,
   surro.stats = TRUE,
   xlab, 
-  ylab, ...) {
+  ylab,
+  xlim,
+  ylim,
+  ...) {
   # ************************************************************************** #
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
   if (missing(ylab)) ylab <- 'Treatment effect (HR) on T'
   if (missing(exact.models))
-    exact.models <- any(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
+    exact.models <- all(sapply(tolower(noSpP(models)), function(m)
+      any(tolower(noSpP(names(x))) %in% m)))
   
   w <- attr(x, 'trialSizes')
   if (var(w)) {
@@ -207,6 +216,9 @@ plot.predictSurrosurv <- function(
     }
   x <- x[ind]
   
+  if(!missing('xlim')) xlim <- log(xlim)
+  if(!missing('ylim')) ylim <- log(ylim)
+  
   if (length(x)) {
     par(mfrow = n2mfrow(length(x)))
     for (i in 1:length(x)) {
@@ -217,9 +229,11 @@ plot.predictSurrosurv <- function(
         if (xint[2] < 0) xint[2] <- 0
         return(xint)
       }
-      xlims <- set0in(range(x[[i]][, 1]))
-      ylims <- set0in(range(x[[i]][, 2]))
-      plot(x[[i]], asp = 1, xlim = xlims, ylim = ylims,
+      if(missing('xlim'))
+        xlim <- set0in(range(x[[i]][, 1]))
+      if(missing('ylim'))
+        ylim <- set0in(range(x[[i]][, 2]))
+      plot(x[[i]], asp = 1, xlim = xlim, ylim = ylim,
            cex = w, pch = 21, bg = rgb(.5, .5, .5, .5),
            panel.first = {
              if (pred.ints) {

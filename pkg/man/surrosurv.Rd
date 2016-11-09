@@ -69,8 +69,8 @@ surrosurv(data,
     If \code{TRUE}, plots or predictions are generated only
       for the elements of \code{x} which match exactly any of \code{models}.
     If \code{exact.models = TRUE}, partial matching is used.
-    By default, \code{exact.models = TRUE} if any of \code{models}
-      matches exactly any of the elements of \code{x}
+    By default, \code{exact.models = TRUE} if all the \code{models}
+      match exactly any of the \code{names(x)} (or  \code{names(object)})
       and \code{exact.models = FALSE} otherwise.
   }
   \item{intWidth}{
