@@ -22,7 +22,7 @@ surrosurv(data,
           poi.OPTIMIZER = "bobyqa",
           verbose = FALSE)
 
-\method{predict}{surrosurv}(object, ...)
+\method{predict}{surrosurv}(object, models = names(object), exact.models, ...)
 
 \method{print}{surrosurv}(x, silent = FALSE, 
       digits = 2, na.print = "-.--", ...)
@@ -52,7 +52,7 @@ surrosurv(data,
   }
 }
   \item{models}{
-  For \code{surrosurv()}, which models should be fitted: 
+  For \code{surrosurv()}, which models should be fitted/plotted/predicted: 
     Clayton copula (unadjusted and adjusted),
     Plackett (unadjusted and adjusted),
     Hougaard (unadjusted and adjusted),
@@ -66,8 +66,8 @@ surrosurv(data,
     the models for which plots must be drawn.
   }
   \item{exact.models}{
-    If \code{TRUE}, only the elements of \code{x} which match exactly
-      any of \code{models} are plotted.
+    If \code{TRUE}, plots or predictions are generated only
+      for the elements of \code{x} which match exactly any of \code{models}.
     If \code{exact.models = TRUE}, partial matching is used.
     By default, \code{exact.models = TRUE} if any of \code{models}
       matches exactly any of the elements of \code{x}

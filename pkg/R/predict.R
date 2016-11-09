@@ -1,6 +1,22 @@
-predict.surrosurv <- function(object, ...) {
-  copulas <- intersect(c('Clayton', 'Plackett', 'Hougaard'), names(object))
-  poissons <- grep('PoissonT', names(object), value = TRUE)
+predict.surrosurv <- function(object,
+                              models = names(object),
+                              exact.models,
+                              ...) {
+  if (missing(exact.models))
+    exact.models <- any(tolower(noSpP(names(object))) %in% tolower(noSpP(models)))
+  
+  if (exact.models) {
+    ind <- which(tolower(noSpP(names(object))) %in% tolower(noSpP(models)))
+  } else {
+    ind <- which(sapply(tolower(noSpP(names(object))), function(mod)
+      !all(is.na(pmatch(tolower(noSpP(models)), mod)))))
+  }
+  models <- names(object)[ind]
+  
+  copulas <- intersect(c('Clayton', 'Plackett', 'Hougaard'), models)
+  poissons <- grep('PoissonT', models, value = TRUE)
+  
+  
   
   allRES <- c(
     # Copula models
