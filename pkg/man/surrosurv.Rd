@@ -35,7 +35,8 @@ surrosurv(data,
                       pred.ints = TRUE,
                       show.ste = TRUE,
                       surro.stats = TRUE, 
-                      xlab, ylab, ...)
+                      xlab, ylab, 
+                      xlim, ylim, ...)
 }
 
 \arguments{
@@ -97,7 +98,7 @@ surrosurv(data,
   \item{silent}{
     Should the results be return for storing without printing them?
   }
-  \item{digits, na.print, xlab, ylab, ...}{
+  \item{digits, na.print, xlab, ylab, xlim, ylim, ...}{
     other parameters for \link{print} or \link{plot}
   }
   \item{n}{
