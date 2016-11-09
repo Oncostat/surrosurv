@@ -42,7 +42,7 @@ surrosurv <- function(
                           #INIkTau = INIkTau
                           INIrho = INIrho
                           ), silent = TRUE)
-      if (class(res) == 'try-error'){
+      if (class(res) == 'try-error') {
         res <- list(kTau = NA, alpha = NA, beta = NA,
                     R2 = NA, ranef = NA, 
                     VarCor2 = NA, VarCor1 = NA)

@@ -23,7 +23,7 @@ predict.surrosurv <- function(object, ...) {
     return(object)
   })
   names(allRES) <- c(
-    paste(rep(copulas, each = 2), c('unadj', 'adj'), sep='.'),
+    paste(rep(copulas, each = 2), rep(c('unadj', 'adj'), length(copulas)), sep='.'),
     poissons)
   
   class(allRES)  <- c('predictSurrosurv', class(allRES))
