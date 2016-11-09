@@ -10,7 +10,7 @@
   Convergence is assessed by checking whether the maximum gradient is small enough,
     and whether the Hessian matrix
     and the variance-covariance matrix of random treatment effects
-    are definie positive.
+    are positive definite.
 }
 \usage{
   convals(x)
