@@ -16,7 +16,8 @@
 }
 \usage{
 surrosurv(data,
-          models = c("Clayton", "Plackett", "Hougaard", "Poisson"), 
+          models = c('Clayton', 'Plackett', 'Hougaard',
+                     'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
           intWidth,  nInts = 8,
           cop.OPTIMIZER = "bobyqa",
           poi.OPTIMIZER = "bobyqa",
@@ -36,7 +37,7 @@ surrosurv(data,
                       show.ste = TRUE,
                       surro.stats = TRUE, 
                       xlab, ylab, 
-                      xlim, ylim, ...)
+                      xlim, ylim, mfrow, ...)
 }
 
 \arguments{
@@ -83,10 +84,10 @@ surrosurv(data,
     (see \link{poissonize})
   }
   \item{cop.OPTIMIZER}{
-    the optimizer for copula models (see \link{optimx})
+    the optimizer for copula models (see \code{\link{optimx}})
   }
   \item{poi.OPTIMIZER}{
-    the optimizer for Poisson models (see \link{optimx})
+    the optimizer for Poisson models (see \code{\link{optimx}})
   }
   \item{verbose}{
     should the function print out the model being fitted
@@ -99,7 +100,13 @@ surrosurv(data,
     Should the results be return for storing without printing them?
   }
   \item{digits, na.print, xlab, ylab, xlim, ylim, ...}{
-    other parameters for \link{print} or \link{plot}
+    other parameters for \code{\link[base]{print}} or \code{\link[graphics]{plot}}
+  }
+  \item{mfrow}{
+    the number of rows and columns for displaying the plots
+    (see \code{\link[graphics]{par}}).
+    If missing, the default is computed using the function
+      \code{\link[grDevices]{n2mfrow}}
   }
   \item{n}{
     the number of rows to print

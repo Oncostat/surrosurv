@@ -3,18 +3,26 @@
 #####################################################################################
 surrosurv <- function(
   data, 
-  models = c('Clayton', 'Plackett', 'Hougaard', 'Poisson'),
+  models = c('Clayton', 'Plackett', 'Hougaard',
+             'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
   intWidth = NULL,  nInts = 8,
   cop.OPTIMIZER = 'bobyqa',
   poi.OPTIMIZER = 'bobyqa',
   verbose = FALSE) {
-  # ******************************************************************************* #
-  models <- match.arg(models, several.ok = TRUE)
+  # ************************************************************************** #
+  models <- tolower(noSpP(models))
+  if ('poisson' %in% models) {
+    models <- setdiff(models, 'poisson')
+    models <- unique(c(models, paste0('poisson', c('i', 't', 'ti', 'tia'))))
+  }
+  models <- match.arg(models, several.ok = TRUE, choices = c(
+    'clayton', 'plackett', 'hougaard', paste0('poisson', c('i', 't', 'ti', 'tia'))))
+  Poissons <- models[grepl('poisson', models)]
   begin <- Sys.time()
   W <- options()$warn
   options(warn=-1)
   
-  ### *** Parameter estimation *** ###############################################
+  ### *** Parameter estimation *** #############################################
   #   if (missing(intWidth)) {
   #     times <- c(data$timeT, data$timeS)
   #     status <- c(data$statusT, data$statusS)
@@ -24,13 +32,10 @@ surrosurv <- function(
   #     rm(times, status, sfit)
   #   }  
   
-  if (length(setdiff(models, 'Poisson'))) {
+  if (any(!grepl('poisson', models))) {
     # library('SurvCorr')
     INIrho <- survcorr(Surv(timeS, statusS) ~ 1, 
                         Surv(timeT, statusT) ~ 1, data = data)$rho
-    # library('NADA')
-      #INIkTau <- cenken(-data$timeS, (data$statusS == 0),
-      #                       -data$timeT, (data$statusT == 0))$tau
   } else INIkTau <- NULL
   
   # Copula approach
@@ -52,34 +57,43 @@ surrosurv <- function(
     }
     return(f)
   }
-  Clayton = copulas('Clayton')
-  Plackett = copulas('Plackett')
-  Hougaard = copulas('Hougaard')
+  clayton = copulas('Clayton')
+  plackett = copulas('Plackett')
+  hougaard = copulas('Hougaard')
   
   # Poisson approach
-  Poisson = function(){
+  poisson = function(poissons = Poissons){
     res <- try(poisSurr(data = data, 
                         intWidth = intWidth, nInts = nInts,
-                        OPTIMIZER = poi.OPTIMIZER), silent = TRUE)
+                        OPTIMIZER = poi.OPTIMIZER, models = poissons), 
+               silent = TRUE)
     if (class(res) == 'try-error') 
       res <- list(modelT = list(R2 = NA, kTau = NA), 
                   modelI = list(R2 = NA, kTau = NA), 
                   modelTI = list(R2 = NA, kTau = NA), 
-                  modelTIa = list(R2 = NA, kTau = NA))
+                  modelTIa = list(R2 = NA, kTau = NA))[
+                    sub('poisson ', 'model', Poissons)]
     return(res)
   }
-  ################################################################################
-  fitRES <- lapply(models, function(x, verb=verbose) {
+  ##############################################################################
+  models <- c(models[!grepl('poisson', models)],
+              ifelse(any(grepl('poisson', models)), 'poisson', ''))
+  fitRES <- lapply(models, function(x, verb = verbose) {
     if (verbose) message(paste('Estimating model:', x))
     eval(call(paste(x)))
   })
   names(fitRES) <- models
-  if ('Poisson' %in% models)
-    fitRES <- c(fitRES[!(names(fitRES) == 'Poisson')], list(
-      PoissonT = fitRES$Poisson$modelT,
-      PoissonI = fitRES$Poisson$modelI,
-      PoissonTI  = fitRES$Poisson$modelTI,
-      PoissonTIa = fitRES$Poisson$modelTIa))
+  
+  if ('poisson' %in% models)
+    fitRES <- c(fitRES[!(names(fitRES) == 'poisson')], 
+                # list(
+                #   PoissonT = fitRES$Poisson$modelT,
+                #   PoissonI = fitRES$Poisson$modelI,
+                #   PoissonTI  = fitRES$Poisson$modelTI,
+                #   PoissonTIa = fitRES$Poisson$modelTIa)
+                fitRES$poisson)
+  names(fitRES) <- sapply(names(fitRES), function(x) paste0(
+    toupper(substr(x, 1, 1)), substr(x, 2, 100)))
   
   if (all(c('kTau', 'R2') %in% names(attributes(data)))) {
     RES <- list('True Values' = attributes(data)[c('kTau', 'R2')])
@@ -117,10 +131,12 @@ print.surrosurv <- function(x, silent=FALSE, digits=2, na.print='-.--', ...) {
   Hougaard = copulas('Hougaard')
   # Poisson approach
   Poisson = function(){
-    res <- rbind(PoissonT = x[['PoissonT']][c('kTau', 'R2')],
-                 PoissonI = x[['PoissonI']][c('kTau', 'R2')],
-                 PoissonTI  = x[['PoissonTI']][c('kTau', 'R2')],
-                 PoissonTIa  = x[['PoissonTIa']][c('kTau', 'R2')])
+    res <- 
+      # rbind(PoissonT = x[['PoissonT']][c('kTau', 'R2')],
+      #            PoissonI = x[['PoissonI']][c('kTau', 'R2')],
+      #            PoissonTI  = x[['PoissonTI']][c('kTau', 'R2')],
+      #            PoissonTIa  = x[['PoissonTIa']][c('kTau', 'R2')])
+      t(sapply(x[grepl('Poisson', names(x ))], function(y) y[c('kTau', 'R2')]))
     res[sapply(res, is.null)] <- NA
     return(res)
   }

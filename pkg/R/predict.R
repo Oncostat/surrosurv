@@ -186,6 +186,7 @@ plot.predictSurrosurv <- function(
   ylab,
   xlim,
   ylim,
+  mfrow,
   ...) {
   # ************************************************************************** #
   if (missing(xlab)) xlab <- 'Treatment effect (HR) on S'
@@ -216,24 +217,29 @@ plot.predictSurrosurv <- function(
     }
   x <- x[ind]
   
-  if(!missing('xlim')) xlim <- log(xlim)
-  if(!missing('ylim')) ylim <- log(ylim)
+  if(!missing('xlim')) xlims <- log(xlim)
+  if(!missing('ylim')) ylims <- log(ylim)
   
   if (length(x)) {
-    par(mfrow = n2mfrow(length(x)))
+    if (missing(mfrow)) {
+      par(mfrow = n2mfrow(length(x)))
+    } else {
+      par(mfrow = mfrow)
+    }
     for (i in 1:length(x)) {
       # abcoeff <- try(coef(lm(x[[i]][, 2:1])), silent = TRUE)
       predf.fit <- Vectorize(function(y) {PREDF[[i]](y)[1]})
       set0in <- function(xint) {
         if (xint[1] > 0) xint[1] <- 0
         if (xint[2] < 0) xint[2] <- 0
-        return(xint)
+        five <- diff(range(xint)) / 20
+        return(xint + c(-1, 1) * five)
       }
       if(missing('xlim'))
-        xlim <- set0in(range(x[[i]][, 1]))
+        xlims <- set0in(range(x[[i]][, 1]))
       if(missing('ylim'))
-        ylim <- set0in(range(x[[i]][, 2]))
-      plot(x[[i]], asp = 1, xlim = xlim, ylim = ylim,
+        ylims <- set0in(range(x[[i]][, 2]))
+      plot(x[[i]], asp = 1, xlim = xlims, ylim = ylims,
            cex = w, pch = 21, bg = rgb(.5, .5, .5, .5),
            panel.first = {
              if (pred.ints) {

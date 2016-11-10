@@ -1,9 +1,16 @@
 ################################################################################
 loocv <- function(data, nCores, parallel = TRUE, 
-                  models = c("Clayton", "Plackett", "Hougaard", "Poisson"), 
+                  models = c('Clayton', 'Plackett', 'Hougaard',
+                             'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
                   ...) {
   # ************************************************************************** #
-  models <- match.arg(models, several.ok = TRUE)
+  models <- tolower(noSpP(models))
+  if ('poisson' %in% models) {
+    models <- setdiff(models, 'poisson')
+    models <- unique(c(models, paste0('poisson', c('i', 't', 'ti', 'tia'))))
+  }
+  models <- match.arg(models, several.ok = TRUE, choices = c(
+    'clayton', 'plackett', 'hougaard', paste0('poisson', c('i', 't', 'ti', 'tia'))))
   data$trialref <- factor(data$trialref)
   
   # library('parallel')
@@ -152,7 +159,8 @@ plot.loocvSurrosurv <- function(x,
       NC <- is.na(x[[i]][2, ]) | is.na(x[[i]][3, ])
       COLs[NC] <- 0
       points(1:ncol(x[[i]]), x[[i]][1, ], pch = 16, cex = 1.4, col = COLs)
-      mtext('x', 1, -1, at = which(NC), col=2, font=2)
+      if (any(NC))
+        mtext('x', 1, -1, at = which(NC), col=2, font=2)
     }
   }
 }

@@ -2,7 +2,11 @@ poisSurr <- function(data,
                      OPTIMIZER = 'bobyqa',
                      MAXFUN = 1e8,
                      intWidth = NULL,
-                     nInts = NULL) {
+                     nInts = NULL,
+                     models = paste('Poisson', c('I', 'T', 'TI', 'TIa'))) {
+  models <- tolower(noSpP(models))
+  models <- match.arg(models, several.ok = TRUE, 
+                      choices = paste0('poisson', c('i', 't', 'ti', 'tia')))
   #     library('parfm')
   #     library('survival')
   #     library('msm')
@@ -77,63 +81,28 @@ poisSurr <- function(data,
   options(warn=-1)
   
   if (nlevels(JOINT$poidata$interval) > 1) {
-    baseform <- m~-1+interval*ep-ep + trtT + trtS + offset(log(Rt))
+    baseform <- m~ -1 +interval*ep-ep + trtT + trtS + offset(log(Rt))
   } else  {
-    baseform <- m~-1+ ep + trtT + trtS + offset(log(Rt))
+    baseform <- m~ -1 + ep + trtT + trtS + offset(log(Rt))
   }
   
+  RES <- list()
+  
+  ##############################################################################
+  ##############################################################################
   #     library('optimx')
   # * Model T: Poisson model with
   #             - random treatment-trial interaction
-  system.time({
-    JOINT$poifitT <- glmer(
-      update(baseform, .~. + (-1+trtT+trtS|trialref)),
-      data=JOINT$poidata, family=poisson,
-      control=GLMERCONTROL)
-  }) -> attr(JOINT$poifitT, 'exec.time')
-  
-  # * Model I: Poisson model with
-  #             - individual random intercept
-  system.time({
-    JOINT$poifitI <-  glmer(
-      update(baseform, .~. + (1|id)) ,
-      data=JOINT$poidata, family=poisson,
-      control=GLMERCONTROL)
-  }) -> attr(JOINT$poifitI, 'exec.time')
-  
-  attr(JOINT$poifitI, 'kTau') <- parfm:::fr.lognormal(
-    what = 'tau',
-    sigma2 = as.double(summary(JOINT$poifitI)$varcor$id))
-  
-  # * Model TI: Poisson model with
-  #            - random treatment-trial interaction
-  #            - individual random intercept 
-  system.time({
-    JOINT$poifitTI <- update(JOINT$poifitT, .~. + (1|id))
-  }) -> attr(JOINT$poifitTI, 'exec.time')
-  
-  attr(JOINT$poifitTI, 'kTau') <- parfm:::fr.lognormal(
-    what = 'tau',
-    sigma2 = as.double(summary(JOINT$poifitTI)$varcor$id))
-  
-  # * Model TIa: Poisson model with
-  #             - random treatment-trial interaction
-  #             - individual random intercept 
-  #             - random trial intercept (shared by the two EndPoints)
-  system.time({
-    JOINT$poidata$trialrefSH <- JOINT$poidata$trialref
-    JOINT$poifitTIa <- update(JOINT$poifitTI, .~. + (1|trialrefSH))
-  }) -> attr(JOINT$poifitTIa, 'exec.time')
-  
-  attr(JOINT$poifitTIa, 'kTau') <- parfm:::fr.lognormal(
-    what = 'tau',
-    sigma2 = as.double(summary(JOINT$poifitTIa)$varcor$id))
-  ############################################################################
-  
-  options(warn=W)
-  
-  RES <- list(
-    modelT = list(
+  if ('poissont' %in% models) {
+    system.time({
+      JOINT$poifitT <- glmer(
+        update(baseform, .~. +
+                 (-1 + trtT + trtS | trialref)),
+        data = JOINT$poidata, family = poisson,
+        control = GLMERCONTROL)
+    }) -> attr(JOINT$poifitT, 'exec.time')
+    
+    RES$PoissonT <- list(
       kTau = NULL,
       alpha = fixef(JOINT$poifitT)['trtS'],
       beta = fixef(JOINT$poifitT)['trtT'],
@@ -142,9 +111,26 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitT)$trialref)),
       ranef = ranef(JOINT$poifitT),
       VarCor = VarCorr(JOINT$poifitT),
-      optinfo = JOINT$poifitT@optinfo
-    ),
-    modelI = list(
+      optinfo = JOINT$poifitT@optinfo)
+  }#############################################################################
+  
+  ##############################################################################
+  # * Model I: Poisson model with
+  #             - individual random intercept
+  if ('poissoni' %in% models) {
+    system.time({
+      JOINT$poifitI <-  glmer(
+        update(baseform, .~. +
+                 (1 | id)) ,
+        data = JOINT$poidata, family = poisson,
+        control = GLMERCONTROL)
+    }) -> attr(JOINT$poifitI, 'exec.time')
+    
+    attr(JOINT$poifitI, 'kTau') <- parfm:::fr.lognormal(
+      what = 'tau',
+      sigma2 = as.double(summary(JOINT$poifitI)$varcor$id))
+    
+    RES$PoissonI <- list(
       kTau = attr(JOINT$poifitI, 'kTau'),
       alpha = fixef(JOINT$poifitI)['trtS'],
       beta = fixef(JOINT$poifitI)['trtT'],
@@ -152,9 +138,28 @@ poisSurr <- function(data,
       R2 = NULL,
       ranef = ranef(JOINT$poifitI),
       VarCor = VarCorr(JOINT$poifitI),
-      optinfo = JOINT$poifitI@optinfo
-    ),
-    modelTI = list(
+      optinfo = JOINT$poifitI@optinfo)
+  }#############################################################################
+  
+  ##############################################################################
+  # * Model TI: Poisson model with
+  #            - random treatment-trial interaction
+  #            - individual random intercept 
+  if ('poissonti' %in% models) {
+    system.time({
+      JOINT$poifitTI <- glmer(
+        update(baseform, .~. +
+                 (-1 + trtT + trtS | trialref) +
+                 (1 | id)),
+        data = JOINT$poidata, family = poisson,
+        control = GLMERCONTROL)
+    }) -> attr(JOINT$poifitTI, 'exec.time')
+    
+    attr(JOINT$poifitTI, 'kTau') <- parfm:::fr.lognormal(
+      what = 'tau',
+      sigma2 = as.double(summary(JOINT$poifitTI)$varcor$id))
+    
+    RES$PoissonTI <- list(
       kTau = attr(JOINT$poifitTI, 'kTau'),
       alpha = fixef(JOINT$poifitTI)['trtS'],
       beta = fixef(JOINT$poifitTI)['trtT'],
@@ -163,9 +168,31 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitTI)$trialref)),
       ranef = ranef(JOINT$poifitTI),
       VarCor = VarCorr(JOINT$poifitTI),
-      optinfo = JOINT$poifitTI@optinfo
-    ),
-    modelTIa = list(
+      optinfo = JOINT$poifitTI@optinfo)
+  }#############################################################################
+  
+  ##############################################################################
+  # * Model TIa: Poisson model with
+  #             - random treatment-trial interaction
+  #             - individual random intercept 
+  #             - random trial intercept (shared by the two EndPoints)
+  if ('poissontia' %in% models) {
+    system.time({
+      JOINT$poidata$trialrefSH <- JOINT$poidata$trialref
+      JOINT$poifitTIa <-  glmer(
+        update(baseform, .~. +
+                 (-1 + trtT + trtS | trialref) +
+                 (1 | id) +
+                 (1 | trialrefSH)),
+        data = JOINT$poidata, family = poisson,
+        control = GLMERCONTROL)
+    }) -> attr(JOINT$poifitTIa, 'exec.time')
+    
+    attr(JOINT$poifitTIa, 'kTau') <- parfm:::fr.lognormal(
+      what = 'tau',
+      sigma2 = as.double(summary(JOINT$poifitTIa)$varcor$id))
+    
+    RES$PoissonTIa <- list(
       kTau = attr(JOINT$poifitTIa, 'kTau'),
       alpha = fixef(JOINT$poifitTIa)['trtS'],
       beta = fixef(JOINT$poifitTIa)['trtT'],
@@ -174,9 +201,12 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitTIa)$trialref)),
       ranef = ranef(JOINT$poifitTIa),
       VarCor = VarCorr(JOINT$poifitTIa),
-      optinfo = JOINT$poifitTIa@optinfo
-    )
-  )
+      optinfo = JOINT$poifitTIa@optinfo)
+  }#############################################################################
+  ##############################################################################
+  
+  options(warn = W)
+  
   attr(RES, 'intWidth') <- intWidth
   attr(RES, 'nInts') <- attr(RES, 'nInts')
   return(RES)

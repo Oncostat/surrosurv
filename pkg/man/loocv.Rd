@@ -15,7 +15,8 @@
 }
 \usage{
 loocv(data, nCores, parallel = TRUE,
-      models = c("Clayton", "Plackett", "Hougaard", "Poisson"), 
+      models = c('Clayton', 'Plackett', 'Hougaard',
+                 'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'), 
       ...)
 
 \method{print}{loocvSurrosurv}(x, n = 6, silent = FALSE, ...)
