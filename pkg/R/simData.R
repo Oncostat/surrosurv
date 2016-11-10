@@ -19,9 +19,9 @@
 #   ############################################################################
 #   ############################ *** PARAMETERS *** ############################
 #   R2 = 0.6,           # adjusted trial-level R^2
-#   J = 30,             # number of trials
-#   Nj = 2000,          # number of patients per trial
-#   Njfix = TRUE,       # is Nj fix? (or average)
+#   N = 30,             # number of trials
+#   ni = 2000,          # number of patients per trial
+#   nifix = TRUE,       # is ni fix? (or average)
 #   gammaWei = c(1, 1), # shape parameters of the Weibull distributions
 #   censorT,            # censoring rate for the true endpoint T
 #   censorA,            # administrative censoring at time censorA
@@ -39,19 +39,19 @@
 #   if (length(gammaWei) == 1)
 #     gammaWei <- rep(gammaWei, 2)
 #   
-#   if (Njfix) {
-#     trialref <- rep(1:J, each = Nj)
+#   if (nifix) {
+#     trialref <- rep(1:N, each = ni)
 #   } else {
-#     trialref <- sort(sample(1:J, J * Nj, replace = TRUE, prob = rpois(J, 5)))
+#     trialref <- sort(sample(1:N, N * ni, replace = TRUE, prob = rpois(N, 5)))
 #   }
 #   
 #   data <- data.frame(
 #     trialref = factor(trialref),
-#     trt = rbinom(n = Nj * J, size = 1, prob = 0.5) - .5
+#     trt = rbinom(n = ni * N, size = 1, prob = 0.5) - .5
 #   )
 #   data$id <- factor(mapply(paste, data$trialref, 
 #                            unlist(lapply(table(data$trialref), function(x) 1:x)),
-#                            #rep(1:Nj, J), 
+#                            #rep(1:ni, N), 
 #                            sep='.'))
 #   
 #   # First stage: regression coefficients *********************************** #
@@ -64,12 +64,12 @@
 #                           0,                     0, alphaVar,    d_ab,
 #                           0,                     0,     d_ab, betaVar ), 4)
 #   #   library('MASS')
-#   pars <- mvrnorm(n= J, mu = c(muS, muT, -alpha, -beta), 
+#   pars <- mvrnorm(n= N, mu = c(muS, muT, -alpha, -beta), 
 #                   Sigma = Sigma_trial)
 #   
 #   ATTRs <- list(
-#     'J'=J,
-#     'Nj'=Nj,
+#     'N'=N,
+#     'ni'=ni,
 #     'gammaWei'=gammaWei,
 #     'censorT'= ifelse(missing(censorT), NA, censorT),
 #     'censorA'= ifelse(missing(censorA), NA, censorA),
@@ -92,16 +92,16 @@
 #   # Second stage: survival times ******************************************* #
 #   # Y, the truncated normal random variables
 #   #   library('msm')
-#   Y <- rtnorm(n = Nj * J, lower=0)
+#   Y <- rtnorm(n = ni * N, lower=0)
 #   if (indCorr) {
 #     Y <- cbind(Y, Y)
 #   } else {
-#     Y <- cbind(Y, rtnorm(n = Nj * J, lower=0))
+#     Y <- cbind(Y, rtnorm(n = ni * N, lower=0))
 #   }
 #   
 #   # lambda, the exponential random variables
-#   lambdaS <- rexp(n = Nj * J, rate = 1)
-#   lambdaT <- rexp(n = Nj * J, rate = 1)
+#   lambdaS <- rexp(n = ni * N, rate = 1)
+#   lambdaT <- rexp(n = ni * N, rate = 1)
 #   
 #   # S and T, the times
 #   deltaS <- exp(pars[, 1] + pars[, 3] * data$trt)
@@ -171,9 +171,9 @@ find.sigma2 <- function(tau) {
 #   ############################################################################
 #   ############################ *** PARAMETERS *** ############################
 #   R2 = 0.6,           # adjusted trial-level R^2
-#   J = 30,             # number of trials
-#   Nj = 2000,          # number of patients per trial
-#   Njfix = TRUE,       # is Nj fix? (or average)
+#   N = 30,             # number of trials
+#   ni = 2000,          # number of patients per trial
+#   nifix = TRUE,       # is ni fix? (or average)
 #   gammaWei = c(1, 1), # shape parameters of the Weibull distributions
 #   censorT,            # censoring rate for the true endpoint T
 #   censorA,            # administrative censoring at time censorA
@@ -191,19 +191,19 @@ find.sigma2 <- function(tau) {
 #   if (length(gammaWei) == 1)
 #     gammaWei <- rep(gammaWei, 2)
 #   
-#   if (Njfix) {
-#     trialref <- rep(1:J, each = Nj)
+#   if (nifix) {
+#     trialref <- rep(1:N, each = ni)
 #   } else {
-#     trialref <- sort(sample(1:J, J * Nj, replace = TRUE, prob = rpois(J, 5)))
+#     trialref <- sort(sample(1:N, N * ni, replace = TRUE, prob = rpois(N, 5)))
 #   }
 #   
 #   data <- data.frame(
 #     trialref = factor(trialref),
-#     trt = rbinom(n = Nj * J, size = 1, prob = 0.5) - .5
+#     trt = rbinom(n = ni * N, size = 1, prob = 0.5) - .5
 #   )
 #   data$id <- factor(mapply(paste, data$trialref, 
 #                            unlist(lapply(table(data$trialref), function(x) 1:x)),
-#                            #rep(1:Nj, J), 
+#                            #rep(1:ni, N), 
 #                            sep='.'))
 #   
 #   # First stage: random effects ******************************************** #
@@ -217,12 +217,12 @@ find.sigma2 <- function(tau) {
 #                           0,                     0, alphaVar,    d_ab,
 #                           0,                     0,     d_ab, betaVar ), 4)
 #   #   library('MASS')
-#   pars <- mvrnorm(n= J, mu = c(muS, muT, alpha, beta), 
+#   pars <- mvrnorm(n= N, mu = c(muS, muT, alpha, beta), 
 #                   Sigma = Sigma_trial)
 #   
 #   ATTRs <- list(
-#     'J'=J,
-#     'Nj'=Nj,
+#     'N'=N,
+#     'ni'=ni,
 #     'gammaWei'=gammaWei,
 #     'censorT'= ifelse(missing(censorT), NA, censorT),
 #     'censorA'= ifelse(missing(censorA), NA, censorA),
@@ -316,9 +316,9 @@ find.sigma2 <- function(tau) {
 #   ############################################################################
 #   ############################ *** PARAMETERS *** ############################
 #   R2 = 0.6,           # adjusted trial-level R^2
-#   J = 30,             # number of trials
-#   Nj = 2000,          # number of patients per trial
-#   Njfix = TRUE,       # is Nj fix? (or average)
+#   N = 30,             # number of trials
+#   ni = 2000,          # number of patients per trial
+#   nifix = TRUE,       # is ni fix? (or average)
 #   gammaWei = c(1, 1), # shape parameters of the Weibull distributions
 #   censorT,            # censoring rate for the true endpoint T
 #   censorA,            # administrative censoring at time censorA
@@ -336,19 +336,19 @@ find.sigma2 <- function(tau) {
 #   if (length(gammaWei) == 1)
 #     gammaWei <- rep(gammaWei, 2)
 #   
-#   if (Njfix) {
-#     trialref <- rep(1:J, each = Nj)
+#   if (nifix) {
+#     trialref <- rep(1:N, each = ni)
 #   } else {
-#     trialref <- sort(sample(1:J, J * Nj, replace = TRUE, prob = rpois(J, 5)))
+#     trialref <- sort(sample(1:N, N * ni, replace = TRUE, prob = rpois(N, 5)))
 #   }
 #   
 #   data <- data.frame(
 #     trialref = factor(trialref),
-#     trt = rbinom(n = Nj * J, size = 1, prob = 0.5) - .5
+#     trt = rbinom(n = ni * N, size = 1, prob = 0.5) - .5
 #   )
 #   data$id <- factor(mapply(paste, data$trialref, 
 #                            unlist(lapply(table(data$trialref), function(x) 1:x)),
-#                            #rep(1:Nj, J), 
+#                            #rep(1:ni, N), 
 #                            sep='.'))
 #   
 #   # First stage: random effects ******************************************** #
@@ -362,12 +362,12 @@ find.sigma2 <- function(tau) {
 #                           0,                     0, alphaVar,    d_ab,
 #                           0,                     0,     d_ab, betaVar ), 4)
 #   #   library('MASS')
-#   pars <- mvrnorm(n= J, mu = c(muS, muT, alpha, beta), 
+#   pars <- mvrnorm(n= N, mu = c(muS, muT, alpha, beta), 
 #                   Sigma = Sigma_trial)
 #   
 #   ATTRs <- list(
-#     'J'=J,
-#     'Nj'=Nj,
+#     'N'=N,
+#     'ni'=ni,
 #     'gammaWei'=gammaWei,
 #     'censorT'= ifelse(missing(censorT), NA, censorT),
 #     'censorA'= ifelse(missing(censorA), NA, censorA),
@@ -448,9 +448,9 @@ simData <- function(method = c('re', 'cc', 'mx')) {
     ############################################################################
     ############################ *** PARAMETERS *** ############################
     R2 = 0.6,           # adjusted trial-level R^2
-    J = 30,             # number of trials
-    Nj = 200,           # number of patients per trial
-    Njfix = TRUE,       # is Nj fix? (or average)
+    N = 30,             # number of trials
+    ni = 200,           # number of patients per trial
+    nifix = TRUE,       # is ni fix? (or average)
     gammaWei = c(1, 1), # shape parameters of the Weibull distributions
     censorT,            # censoring rate for the true endpoint T
     censorA,            # administrative censoring at time censorA
@@ -469,19 +469,19 @@ simData <- function(method = c('re', 'cc', 'mx')) {
     if (length(gammaWei) == 1)
       gammaWei <- rep(gammaWei, 2)
     
-    if (Njfix) {
-      trialref <- rep(1:J, each = Nj)
+    if (nifix) {
+      trialref <- rep(1:N, each = ni)
     } else {
-      trialref <- sort(sample(1:J, J * Nj, replace = TRUE, prob = rpois(J, 5)))
+      trialref <- sort(sample(1:N, N * ni, replace = TRUE, prob = rpois(N, 5)))
     }
     
     data <- data.frame(
       trialref = factor(trialref),
-      trt = rbinom(n = Nj * J, size = 1, prob = 0.5) - .5
+      trt = rbinom(n = ni * N, size = 1, prob = 0.5) - .5
     )
     data$id <- factor(mapply(paste, data$trialref, 
                              unlist(lapply(table(data$trialref), function(x) 1:x)),
-                             #rep(1:Nj, J), 
+                             #rep(1:ni, N), 
                              sep='.'))
     
     # First stage: random effects ******************************************** #
@@ -495,13 +495,13 @@ simData <- function(method = c('re', 'cc', 'mx')) {
                             0,                     0, alphaVar,    d_ab,
                             0,                     0,     d_ab, betaVar ), 4)
     #   library('MASS')
-    pars <- mvrnorm(n= J, mu = c(muS, muT, alpha, beta), 
+    pars <- mvrnorm(n= N, mu = c(muS, muT, alpha, beta), 
                     Sigma = Sigma_trial)
     pars <- pars[data$trialref, ]
     
     ATTRs <- list(
-      'J'=J,
-      'Nj'=Nj,
+      'N'=N,
+      'ni'=ni,
       'gammaWei'= gammaWei,
       'censorT'= ifelse(missing(censorT), NA, censorT),
       'censorA'= ifelse(missing(censorA), NA, censorA),
@@ -523,16 +523,16 @@ simData <- function(method = c('re', 'cc', 'mx')) {
       # Second stage: survival times ***************************************** #
       # Y, the truncated normal random variables
       #   library('msm')
-      Y <- rtnorm(n = Nj * J, lower=0)
+      Y <- rtnorm(n = ni * N, lower=0)
       if (indCorr) {
         Y <- cbind(Y, Y)
       } else {
-        Y <- cbind(Y, rtnorm(n = Nj * J, lower=0))
+        Y <- cbind(Y, rtnorm(n = ni * N, lower=0))
       }
       
       # lambda, the exponential random variables
-      lambdaS <- rexp(n = Nj * J, rate = 1)
-      lambdaT <- rexp(n = Nj * J, rate = 1)
+      lambdaS <- rexp(n = ni * N, rate = 1)
+      lambdaT <- rexp(n = ni * N, rate = 1)
       
       # S and T, the times
       deltaS <- exp(pars[, 1] + pars[, 3] * data$trt)

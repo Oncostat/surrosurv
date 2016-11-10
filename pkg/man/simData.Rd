@@ -12,22 +12,22 @@
   (Shi et al., 2011).
 }
 \usage{
-simData.re(R2 = 0.6, J = 30, Nj = 200,
-           Njfix = TRUE, gammaWei = c(1, 1), censorT, censorA, 
+simData.re(R2 = 0.6, N = 30, ni = 200,
+           nifix = TRUE, gammaWei = c(1, 1), censorT, censorA, 
            kTau= 0.6, baseCorr = 0.5, baseVars = c(0.2, 0.2),
            alpha = 0, beta = 0,
            alphaVar = 0.1, betaVar = 0.1,
            mstS = 4 * 365.25, mstT = 8 * 365.25)
            
-simData.cc(R2 = 0.6, J = 30, Nj = 200,
-           Njfix = TRUE, gammaWei = c(1, 1), censorT, censorA,
+simData.cc(R2 = 0.6, N = 30, ni = 200,
+           nifix = TRUE, gammaWei = c(1, 1), censorT, censorA,
            kTau= 0.6, baseCorr = 0.5, baseVars = c(0.2, 0.2),
            alpha = 0, beta = 0,
            alphaVar = 0.1, betaVar = 0.1,
            mstS = 4 * 365.25, mstT = 8 * 365.25)
            
-simData.mx(R2 = 0.6, J = 30, Nj = 200,
-           Njfix = TRUE, gammaWei = c(1, 1), censorT, censorA,
+simData.mx(R2 = 0.6, N = 30, ni = 200,
+           nifix = TRUE, gammaWei = c(1, 1), censorT, censorA,
            indCorr = TRUE, baseCorr = 0.5, baseVars = c(0.2, 0.2),
            alpha = 0, beta = 0,
            alphaVar = 0.1, betaVar = 0.1,
@@ -38,16 +38,16 @@ simData.mx(R2 = 0.6, J = 30, Nj = 200,
   \item{R2}{
   The desired trial-level surrogacy \eqn{R^2}
 }
-  \item{J}{
+  \item{N}{
   The number of trials
 }
-  \item{Nj}{
+  \item{ni}{
   The (fixed or average) number of patients per trial
 }
-  \item{Njfix}{
-  Should all trials have the same size (if \code{Njfix = TRUE})
-    of should the \code{J * Nj} patients be randomly assigned to trials
-    with random probabilities (if \code{Njfix = FALSE})?
+  \item{nifix}{
+  Should all trials have the same size (if \code{nifix = TRUE})
+    of should the \code{N * ni} patients be randomly assigned to trials
+    with random probabilities (if \code{nifix = FALSE})?
 }
   \item{gammaWei}{
     The shape parameter(s) of the Weibull distributions.
@@ -137,9 +137,9 @@ time-to-event surrogate endpoints in clinical trials.
 
 \examples{
   set.seed(1)
-  simData.re(J=2, Nj=5)
-  simData.cc(J=2, Nj=5)
-  simData.mx(J=2, Nj=5)
+  simData.re(N=2, ni=5)
+  simData.cc(N=2, ni=5)
+  simData.mx(N=2, ni=5)
 }
 
 \keyword{ ~kwd1 }
