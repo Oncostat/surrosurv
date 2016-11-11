@@ -197,7 +197,7 @@ surrosurv(data,
 
 \examples{
   set.seed(150)
-  data <- simData.re(J = 20, Nj = 250,
+  data <- simData.re(N = 20, ni = 250,
                      R2 = 0.8, kTau = 0.4,
                      alpha = log(0.95), beta = log(0.85),
                      censorA = 15 * 365.25)

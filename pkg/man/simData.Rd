@@ -137,9 +137,9 @@ time-to-event surrogate endpoints in clinical trials.
 
 \examples{
   set.seed(1)
-  simData.re(N=2, ni=5)
-  simData.cc(N=2, ni=5)
-  simData.mx(N=2, ni=5)
+  simData.re(N = 2, ni = 5)
+  simData.cc(N = 2, ni = 5)
+  simData.mx(N = 2, ni = 5)
 }
 
 \keyword{ ~kwd1 }
