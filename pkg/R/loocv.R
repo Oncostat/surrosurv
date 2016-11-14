@@ -113,7 +113,7 @@ print.loocvSurrosurv <- function(x, n = 6, silent = FALSE, ...) {
     cat('\n  ', method, '\n')
     res2print <- format(RES[[i]][, 1:n], digits = 1, na.encode = FALSE)
     if (nrow(RES[[i]] > n))
-      res2print <- cbind(res2print, '  ' = c('...', '...'))
+      res2print <- cbind(res2print, '  ' = rep('...', 3))
     # rownames(res2print) <- paste0(
     #   sub('trt', '    Treatment effects on ', rownames(res2print)), ':')
     print(res2print, quote = FALSE, ...)
