@@ -51,12 +51,15 @@ poissonize <- function(data,
         smod$time[(smod$surv - smin) / (1 - smin) <= p][1]))
     }
   }
+  tol <- max(data$time) / 1e4
   all.breaks <- sort(unique(setdiff(
-    c(0, all.breaks, max(data$time)), NA)))
+    round(c(0, all.breaks, max(data$time)) / tol), 
+    NA))) * tol
   
   # THE FOLLOWING FUNCTION COMPUTES ALL THE TIME BREAKS GIVEN THE EXIT TIME
-  person.breaks <- Vectorize(function(stopT)
-    unique(c(all.breaks[all.breaks < stopT], stopT)), SIMPLIFY = FALSE)
+  person.breaks <- Vectorize(function(stopT) unique(
+    c(all.breaks[all.breaks < stopT], stopT) / tol
+    ) * tol, SIMPLIFY = FALSE)
   
   # NEXT WE GET A LIST OF EACH SUBJECT'S TIME PERIODS
   the.breaks <- person.breaks(data$time)
@@ -89,7 +92,7 @@ poissonize <- function(data,
   
   # NEXT WE CREATE A FACTOR FOR EACH INTERVAL THAT WILL ALLOW US
   # TO HAVE A DIFFERENT RATE FOR EACH PERIOD
-  expData$interval <- factor(expData$start)
+  expData$interval <- factor(expData$start, levels = unique(expData$start))
   expData <- subset(expData, select=-c(startT, stopT))
   #expData$time <- expData$time
   if (compress) {
@@ -105,7 +108,7 @@ poissonize <- function(data,
                    by = expData[, c('interval', factors), drop=FALSE], 
                    function(x) sum(!is.na(x)))
     colnames(N)[ncol(N)] <- 'N'
-    expData <- merge(m, merge(Rt, N))
+    expData <- merge(m, merge(Rt, N, sort = FALSE), sort = FALSE)
   }
   
   attr(expData, 'interval.width') <- interval.width
@@ -129,29 +132,53 @@ poissonize <- function(data,
 # Author: Federico Rotolo <federico.rotolo@gustaveroussy.fr>                   #
 #                                                                              #
 #   Date:                 June 22, 2015                                        #
-#   Last modification on: June 13, 2016                                        #
+#   Last modification on: November 14, 2016                                    #
 ################################################################################
-plotsson <- function(x, type = 'haz', add=FALSE, xscale=1, ...) {
+plotsson <- function(x, 
+                     type = c('survival', 'hazard'),
+                     add = FALSE, xscale = 1, by, col, ...) {
+  type <- tolower(type)
+  type <- match.arg(type)
+  
+  breaks <- attr(x$data, 'all.breaks')
   risks <- exp(coef(x)[grep('interval', names(coef(x)))]) * 
-    diff(attr(x$data, 'all.breaks'))
-  #   as.double(substr(names(coef(x)[
-  #     grep('interval', names(coef(x)))][2]), 9, 100))
-  if ( type == 'Surv') {
+    diff(breaks)
+  
+  if (type == 'survival') {
     risks <- exp(-cumsum(risks))    
     Ylims <- 0:1
     Ylab <- 'Survival probability'
   } else {
-    Ylims <- c(0, 1.1*max(risks))
+    Ylims <- c(0, 1.1 * max(risks))
     Ylab <- 'Hazard'
   }
-  startT <- as.double(substr(names(risks), 9, 100)) 
-  stopT <- c(startT[-1], rev(startT)[1] + startT[2]) / xscale
-  startT <- startT / xscale
+  
+  startT <- breaks[-length(breaks)] / xscale
+  stopT <- breaks[-1] / xscale
+  
   if (!add)
-    plot(0, xlim=c(0, 1.1*max(stopT)), ylim=Ylims,
-         xlab='time', ylab=Ylab, type = 'n', ...)
-  segments(startT, c(1, risks[2:length(risks)-1]), stopT, risks, ...)
-  #     segments(startT[-1], risks[1:(length(risks)-1)], y1=risks[-1])
-  #     lines(smooth.spline(startT + stopT[1]/2, risks, df = length(risks)/3),
-  #           lwd=2, col=rgb(.6, .4, .4, .6))
+    plot(0, xlim = c(0, 1.1 * max(stopT)), ylim = Ylims,
+         xlab = 'time', ylab = Ylab, type = 'n', ...)
+  
+  byVals <- if (missing(by)) {0} else {unique(x$data[, by])}
+  beta <- if (missing(by)) {0} else {coef(x)[by]}
+  
+  if (type == 'survival') {
+    for (v in 1:length(byVals))
+      segments(startT,
+               c(1, risks[2:length(risks) - 1]^exp(beta * byVals[v])),
+               stopT,
+               risks^exp(beta * byVals[v]), 
+               col = ifelse(missing(col), v, col),
+               ...)
+  } else {
+    for(v in 1:length(byVals))
+        segments(startT,
+                 risks * exp(beta * byVals[v]),
+                 stopT,
+                 risks * exp(beta * byVals[v]), 
+                 col = ifelse(missing(col), v, col), 
+                 ...)
+  }
+  
 }

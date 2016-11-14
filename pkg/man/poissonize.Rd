@@ -30,7 +30,7 @@ plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
     the breakpoints between time intervals
 }
   \item{interval.width}{
-    the width of the time intervals on wich the risks will be assumed consant,
+    the width of the time intervals on which the risks will be assumed consant,
     in case of intervals of the same length.
     This parameter is ignored if \code{all.breaks} is specified
 }
