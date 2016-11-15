@@ -96,14 +96,19 @@ loocv <- function(data, nCores, parallel = TRUE,
 print.loocvSurrosurv <- function(x, n = 6, silent = FALSE, ...) {
   # ************************************************************************** #
   models <- setdiff(names(x[[1]]), 'margPars')
-  RES <- lapply(models, function(y){
-    preds <- sapply(x, function(trial)
-      c(obsBeta = trial$margPars['beta'], trial[[y]][-1])
+  RES <- lapply(models, function(y) {
+    preds <- sapply(x, function(trial) {
+      trialRes <- if (is.null(trial[[y]])) {
+        rep(NA, 2)
+      } else {
+        trial[[y]][-1]
+      }
+      c(obsBeta = trial$margPars['beta'], trialRes)
+      }
     )
     rownames(preds) <- c('obsBeta', 'lwr', 'upr')
     return(preds)
-  }
-  )
+  })
   names(RES) <- models
   
   if (silent) return(RES)
