@@ -1,7 +1,8 @@
 \documentclass[article,shortnames, nojss]{jss}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+%\VignetteEngine{knitr::knitr}
+
 %\VignetteIndexEntry{Parameterization of copula functions}
+
 %\VignetteKeyword{copula}
 %\VignetteKeyword{Clayton}
 %\VignetteKeyword{Palckett}
@@ -22,6 +23,7 @@
 %\VignetteKeyword{random effects}
 %\VignetteKeyword{mixed models}
 
+
 \makeatletter
 \def\maxwidth{ %
   \ifdim\Gin@nat@width>\linewidth
@@ -34,6 +36,30 @@
 
 \usepackage{Sweave}
 
+\usepackage[]{graphicx}\usepackage[]{color}
+%\VignetteEngine{knitr::knitr}
+
+%\VignetteIndexEntry{Parameterization of copula functions}
+
+%\VignetteKeyword{copula}
+%\VignetteKeyword{Clayton}
+%\VignetteKeyword{Palckett}
+%\VignetteKeyword{Hougaard}
+%\VignetteKeyword{Poisson}
+%\VignetteKeyword{GLM}
+%\VignetteKeyword{auxiliary Poisson model}
+%\VignetteKeyword{poissonize}
+%\VignetteKeyword{data poissonization}
+%\VignetteKeyword{surrogate endpoint}
+%\VignetteKeyword{surrogate}
+%\VignetteKeyword{prediction}
+%\VignetteKeyword{leave-one-out}
+%\VignetteKeyword{leave-one-trial-out}
+%\VignetteKeyword{loocv}
+%\VignetteKeyword{cross-validation}
+%\VignetteKeyword{clinical trials}
+%\VignetteKeyword{random effects}
+%\VignetteKeyword{mixed models}
 
 \usepackage{amsmath, amssymb, bm, thumbpdf}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,15 +67,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Federico Rotolo\\Gustave Roussy\\INSERM U1018 \And 
-Xavier Paoletti\\Gustave Roussy\\INSERM U1018 \And 
-Marc Buyse\\Universiteit Hasselt\\IDDI\AND
-Tomasz Burzykowski\\Universiteit Hasselt\\IDDI \And 
-Stefan Michiels\\Gustave Roussy\\INSERM U1018}
+\author{
+% Federico Rotolo\\Gustave Roussy\\INSERM U1018 \And
+% Xavier Paoletti\\Gustave Roussy\\INSERM U1018 \And 
+% Marc Buyse\\Universiteit Hasselt\\IDDI\AND
+% Tomasz Burzykowski\\Universiteit Hasselt\\IDDI \And 
+% Stefan Michiels\\Gustave Roussy\\INSERM U1018
+}
 \title{\pkg{surrosurv}: an \proglang{R} Package for the Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses of Randomized Clinical Trials}
 
 %% for pretty printing and a nice hypersummary also set:
-\Plainauthor{Federico Rotolo, Xavier Paoletti, Tomasz Burzykowsi, Marc Buyse, Stefan Michiels} %% comma-separated
+\Plainauthor{
+% Federico Rotolo, Xavier Paoletti, Tomasz Burzykowsi, Marc Buyse, Stefan Michiels
+}
 \Plaintitle{surrosurv: an R Package for the Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses of Randomized Clinical Trials} %% without formatting
 \Shorttitle{\pkg{surrosurv}: Evaluation of Failure Time Surrogate Endpoints in \proglang{R}} 
 
@@ -110,19 +140,19 @@ R} %% without formatting
 %% The address of (at least) one author should be given
 %% in the following format:
 \Address{
-Federico Rotolo, Xavier Paoletti, and Stefan Michiels\\[.4em]
-Service de Biostatistique et d'\'Epid\'emiologie, Gustave Roussy\\
-INSERM U1018 OncoStat, CESP\\
-114, Rue Edouard Vaillant -- Villejuif, F-94805, France\\
-E-mail: \email{federico.rotolo@gustaveroussy.fr}\\
-
-Marc Buyse and Tomasz Burzykowski\\[.4em]
-I-BioStat, Universiteit Hasselt\\
-Agoralaan building D --
-Diepenbeek, B-3590, Belgium\\[.4em]
-International Drug Development Institute (IDDI)\\
-Avenue Provinciale 30 --
-Louvain-la-Neuve, B-1348, Belgium
+% Federico Rotolo, Xavier Paoletti, and Stefan Michiels\\[.4em]
+% Service de Biostatistique et d'\'Epid\'emiologie, Gustave Roussy\\
+% INSERM U1018 OncoStat, CESP\\
+% 114, Rue Edouard Vaillant -- Villejuif, F-94805, France\\
+% E-mail: \email{federico.rotolo@gustaveroussy.fr}\\
+% 
+% Marc Buyse and Tomasz Burzykowski\\[.4em]
+% I-BioStat, Universiteit Hasselt\\
+% Agoralaan building D --
+% Diepenbeek, B-3590, Belgium\\[.4em]
+% International Drug Development Institute (IDDI)\\
+% Avenue Provinciale 30 --
+% Louvain-la-Neuve, B-1348, Belgium
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
@@ -135,7 +165,6 @@ Louvain-la-Neuve, B-1348, Belgium
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 
 % \SweaveOpts{prefix.string=figs/fig}
 % \SweaveOpts{height=4}
@@ -466,7 +495,7 @@ Loading required package: optimx
 R> packageVersion('surrosurv')
 \end{Sinput}
 \begin{Soutput}
-[1] '1.1.2'
+[1] '1.1.3'
 \end{Soutput}
 \begin{Sinput}
 R> source('~/IGR/misc/R/paletteigr.R')

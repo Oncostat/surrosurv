@@ -13,7 +13,8 @@
 poissonize(data,
            all.breaks = NULL, interval.width = NULL, nInts = 8,
            factors = NULL, compress = TRUE)
-plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
+plotsson(x, type = c('survival', 'hazard'),
+         add = FALSE, xscale = 1, by, col, ...)
 }
 \arguments{
   \item{data}{
@@ -63,7 +64,10 @@ plotsson(x, type = "haz", add = FALSE, xscale = 1, ...)
   \item{xscale}{
   scaling factor for the time (x) axis
 }
-  \item{\dots}{
+  \item{by}{
+  covariate for which a different curve per level has to be plotted
+}
+  \item{col, \dots}{
   other \link[=par]{graphical parameters}
 }
 }
