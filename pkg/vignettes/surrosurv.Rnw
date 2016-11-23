@@ -135,6 +135,7 @@ Louvain-la-Neuve, B-1348, Belgium
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 % \SweaveOpts{prefix.string=figs/fig}
 % \SweaveOpts{height=4}

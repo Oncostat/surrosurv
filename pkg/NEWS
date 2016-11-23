@@ -1,3 +1,6 @@
+Changes in version 1.1.4
+- added JSS manuscript as vignette('surrosurv')
+
 Changes in version 1.1
 - Poisson models can be fitted each separately
 
