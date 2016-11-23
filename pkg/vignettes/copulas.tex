@@ -9,24 +9,25 @@
 %\VignetteKeyword{Kendall}
 \def\ccom{\raisebox{.45ex}{\textrm{,}}}
 
-\title{Parameterization of copula functions \\
-  for bivariate survival data \\
-  in the \href{http://r-forge.r-project.org/projects/surrosurv}{surrosurv} package}
+\title{Parameterization of copula functions for bivariate survival data \\
+  in the \href{https://cran.r-project.org/package=surrosurv}{\texttt{surrosurv}} package.\\
+  Modelling and simulation}
 \author{\href{mailto:Federico Rotolo <federico.rotolo@gustaveroussy.fr>
 ?Subject=R:::surrosurv}{Federico Rotolo}}
 \usepackage{Sweave}
 \begin{document}
 \maketitle
-\input{copulas-concordance}
+\hrule~\\[1em]
 
 Let define the joint survival function of $S$ and $T$
     via a copula function:
     \begin{equation}
-    S(s, t) = P(S\ge s, T\ge t) = \left.C(u,v)\right|_{u = S_S(s), v = S_T(t)},
+    S(s, t) = P(S> s, T> t) = \left.C(u,v)\right|_{u = S_S(s), v = S_T(t)},
     \end{equation}
-    where $S_S(\cdot)=P(S\ge s)$ and $S_T(\cdot)=P(T\ge t)$
+    where $S_S(\cdot)=P(S> s)$ and $S_T(\cdot)=P(T> t)$
     are the marginal survival functions of $S$ and $T$.
 
+\section*{Modelling}
 In the case of possibly right-censored data,
     the individual contribution to the likelihood is
 \begin{itemize}
@@ -60,6 +61,7 @@ The first derivative with respect to $u$ is
     &=\left(u^{-\theta} + v^{-\theta} - 1\right)^{-\frac{1+\theta}\theta}
         u^{-(1+\theta)}
         \nonumber\\
+    \label{eq:CCder1}
     &=\left[\frac{C(u, v)}u\right]^{1+\theta}\cdot
 \end{align}
 
@@ -180,8 +182,74 @@ The Kendall's tau for the Gumbel--Hougaard copula is
     \tau = 1 - \theta.
 \end{equation}
 
+
+\section*{Simulation}
+The function \texttt{simData.cc()} generates data from a Clayton copula model.
+First, the time value for the surrogate endpoint $S$ is generated
+  from its (exponential) marginal survival function:
+  \begin{equation}
+    S = -\log(U_S / \lambda_S), \qquad\text{with }
+      U_S := S_S(S) \sim U(0,1).
+  \end{equation}
+
+Then, the time value for the true endpoint $T$ is generated conditionally
+  on the value $s$ of $S$.
+The conditional survival function of $T\mid S$ is
+  \begin{equation}
+    S_{T\mid S}(t\mid s) 
+    = \frac{
+        - \dfrac{\partial}{\partial s} S(s, t)
+      }{
+        - \dfrac{\partial}{\partial s} S(s, 0)
+      }
+      = \frac{
+        \dfrac{\partial}{\partial u} C(u, v)
+      }{
+        \dfrac{\partial}{\partial u} C(u, 1)
+      }
+  \end{equation}
+As the Clayton copula is used, we get (see Equtaion~\ref{eq:CCder1})
+  \begin{align}
+    \nonumber
+    S_{T\mid S}(t\mid s) 
+    &= \left[\frac{
+        C(S_S(s), S_T(t))
+      }{
+        C(S_S(s), 1)
+      }\right]^{1 + \theta}
+    = \left[\frac{
+        U_S^{-\theta} + S_T(t)^{-\theta} - 1
+      }{
+        U_S^{-\theta}
+      }\right]^{\frac{1 + \theta}\theta}\\
+    &= \Big[1 + 
+        U_S^\theta (S_T(t)^{-\theta} - 1)
+        \Big]^{\frac{1 + \theta}\theta}
+  \end{align}
+By generating uniform random values for 
+  $U_T := S_{T\mid S}(T\mid s)\sim U(0,1)$,
+  the values for $T\mid S$ are obtained as follows:
+  \begin{align}
+    \nonumber
+    U_T &= \Big[1 + 
+      U_S^\theta (S_T(T)^{-\theta} - 1)
+      \Big]^{\frac{1 + \theta}\theta}
+    \\ \nonumber
+    S_T(T) &= \left[
+      \left(U_T^{-\frac\theta{1+\theta}} - 1\right) U_S^{-\theta} + 1
+      \right]^{-1 / \theta}
+    \\ 
+    T &= -\log(U^\prime_T / \lambda_T),  \qquad\text{with }
+      U^\prime_T = \left[
+      \left(U_T^{-\frac\theta{1+\theta}} - 1\right) U_S^{-\theta} + 1
+      \right]^{-1 / \theta}.
+  \end{align}
+
+  
+
+\hrule
 \nocite{Nelsen06}
 
 \bibliographystyle{plainnat}
-\bibliography{copulas}{}
+\bibliography{refs}{}
 \end{document}
