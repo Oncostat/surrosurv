@@ -466,7 +466,11 @@ by means of the individual patient data of the advanced GASTRIC meta-analysis
 <<echo=1:2>>=
 library('surrosurv')
 packageVersion('surrosurv')
-source('~/IGR/misc/R/paletteigr.R')
+paletteigr <- c(orange = rgb(234, 104, 14, max = 255),
+                blue = rgb( 28, 170, 155, max = 255),
+                magenta = rgb(191,  22, 120, max = 255),
+                green = rgb( 184, 201, 27, max = 255),
+                grey = rgb(79,71,68, max = 255))
 palette(paletteigr[c(4:1, 5)])
 LWD <- 3
 @
