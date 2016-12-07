@@ -1,4 +1,19 @@
-\documentclass[article,shortnames, nojss]{jss}
+\documentclass[article,shortnames, nojss]{jss}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\usepackage{Sweave}
+
+
 \usepackage{graphicx, color, amsmath, amssymb, bm, thumbpdf}
 %\VignetteEngine{knitr::knitr}
 
@@ -139,17 +154,9 @@
 %% need no \usepackage{Sweave.sty}
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-<<echo=FALSE, results='hide'>>=
-library('knitr')
-opts_chunk$set(prefix.string = 'figs/fig', 
-               fig.height = 4, fig.width = 7,
-               out.width = '\\textwidth', prompt = TRUE)
-options(replace.assign = TRUE, width = 90, prompt = "R> ", digits = 2)
-render_sweave()
-@
+
 % \SweaveOpts{prefix.string=figs/fig}
 % \SweaveOpts{height=4}
 % \SweaveOpts{width=7}
@@ -484,30 +491,43 @@ with $m_i\sim\mathcal N(0, \sigma^2_m)$.
 We illustrate the use of the function in the \pkg{surrosurv} package
 by means of the individual patient data of the advanced GASTRIC meta-analysis
 \citep{GASTRIC13, Paoletti2013}.
-<<echo=1:2>>=
-library('surrosurv')
-packageVersion('surrosurv')
-paletteigr <- c(orange = rgb(234, 104, 14, max = 255),
-                blue = rgb( 28, 170, 155, max = 255),
-                magenta = rgb(191,  22, 120, max = 255),
-                green = rgb( 184, 201, 27, max = 255),
-                grey = rgb(79,71,68, max = 255))
-palette(paletteigr[c(4:1, 5)])
-LWD <- 3
-@
+\begin{Schunk}
+\begin{Sinput}
+R> library('surrosurv')
+\end{Sinput}
+\begin{Soutput}
+Loading required package: optimx
+\end{Soutput}
+\begin{Sinput}
+R> packageVersion('surrosurv')
+\end{Sinput}
+\begin{Soutput}
+[1] '1.1.4'
+\end{Soutput}
+\end{Schunk}
 
 The individual data of the 4069 patients,
 already made public by \cite{BuyseEtal15},
 are also available directly in \proglang{R} in the \pkg{surrosurv} package:
-<<>>=
-data('gastadv')
-nrow(gastadv)
-@
+\begin{Schunk}
+\begin{Sinput}
+R> data('gastadv')
+R> nrow(gastadv)
+\end{Sinput}
+\begin{Soutput}
+[1] 4069
+\end{Soutput}
+\end{Schunk}
 
 The data set contains the following variables:
-<<>>=
-names(gastadv)
-@
+\begin{Schunk}
+\begin{Sinput}
+R> names(gastadv)
+\end{Sinput}
+\begin{Soutput}
+[1] "timeT"    "statusT"  "statusS"  "timeS"    "trialref" "trt"      "id"      
+\end{Soutput}
+\end{Schunk}
 where \code{timeT} and \code{timeS} are the (possibly censored) times 
 for overall survival (\code{T}) and
 for progression-fre survival (\code{S}) expressed in days,
@@ -519,21 +539,11 @@ and \code{id} is the patient indicator ($j$).
 Figure~\ref{fig:survCurves} shows the survival curves for overall survival,
 the true endpoint $T$, and progression-free survival,
 the candiddate surrogate $S$.
-<<survCurves, echo=FALSE, fig.env='figure', fig.lp='fig:', fig.cap='Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \\citep{GASTRIC13}'>>=
-library(survival)
-par(mar = c(4, 4, 2, 0)+.1)
-# Overall Survival (T)
-plot(survfit(Surv(timeT, statusT) ~ trt, data = gastadv), 
-     main = 'Advanced GASTRIC meta-analysis',
-     xlab = 'Years', ylab = 'Survival probability',
-     xmax = 365.25 * 4, col = 1, lty = 1:2, xscale = 365.25, lwd = LWD, yaxs = 'i', bty = 'l')
-# Progression-free Survival (S)
-lines(survfit(Surv(timeS, statusS) ~ trt, data = gastadv), 
-      xmax = 365.25 * 4, lty = 1:2, xscale = 365.25, add=TRUE, col = 2, lwd = LWD)
-legend('topright', t(outer(c('Overall Survival (T)', 'Progression-free Survival (S)'), 
-                           c('Control arm', 'Chemotherapy arm'), paste, sep = ' - ')),
-       lty = 1:2, lwd = LWD, col = rep(1:2, each = 2), bty = 'n')
-@
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=\textwidth]{figure/survCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}}\label{fig:survCurves}
+\end{figure}
+\end{Schunk}
 
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -582,20 +592,49 @@ legend('topright', t(outer(c('Overall Survival (T)', 'Progression-free Survival 
   
   The surrogacy models for the advanced GASTRIC cancer meta-analysis
   are obtained as follows:
-  <<label=SURROSURVfit, echo=TRUE, cache=TRUE>>=
-allSurroRes <-  surrosurv(gastadv, verbose = TRUE)
-@
+\begin{Schunk}
+\begin{Sinput}
+R> allSurroRes <-  surrosurv(gastadv, verbose = TRUE)
+\end{Sinput}
+\begin{Soutput}
+Estimating model: clayton
+\end{Soutput}
+\begin{Soutput}
+Estimating model: plackett
+\end{Soutput}
+\begin{Soutput}
+Estimating model: hougaard
+\end{Soutput}
+\begin{Soutput}
+Estimating model: poisson
+\end{Soutput}
+\end{Schunk}
 Note that, the computation time of the surrogacy models can be long.
 In this example, the computations required
-  \Sexpr{round(as.numeric(allSurroRes$runTime))}
-  \Sexpr{attr(allSurroRes$runTime, 'units')}
+  38
+  mins
   on a PC with an Intel\textsuperscript{\textregistered} quad-core CPU E3-1280 V2
   with 3.60 GHz clock speed and 16GB of RAM.
 The results are an object of class \code{surrosurv}
   and the estimated Kendall's $\tau$ and $R^2$ can be easily shown:
-<<echo=TRUE>>=
-  allSurroRes
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   allSurroRes
+\end{Sinput}
+\begin{Soutput}
+               kTau R2  
+Clayton unadj  0.61 0.45
+Clayton adj    0.61 0.42
+Plackett unadj 0.62 0.45
+Plackett adj   0.62 0.41
+Hougaard unadj 0.32 0.45
+Hougaard adj   0.32 0.38
+PoissonT       -.-- 1   
+PoissonI       0.51 -.--
+PoissonTI      0.51 0.63
+PoissonTIa     0.51 0.83
+\end{Soutput}
+\end{Schunk}
 For each copula model,
   both the results with measurement error adjustment (\code{adj})
   and without adjustment (\code{unadj}) are shown.
@@ -603,9 +642,24 @@ For each copula model,
 \subsection{Assessing convergence}
 The function \code{convergence()} checks whether convergence criteria
   are met by each of the fitted models:
-<<echo=TRUE>>=
-  convergence(allSurroRes)
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   convergence(allSurroRes)
+\end{Sinput}
+\begin{Soutput}
+               maxSgrad minHev minREev
+Clayton unadj     FALSE  FALSE     ---
+Clayton adj       FALSE  FALSE    TRUE
+Plackett unadj    FALSE  FALSE     ---
+Plackett adj      FALSE  FALSE    TRUE
+Hougaard unadj    FALSE   TRUE     ---
+Hougaard adj      FALSE   TRUE    TRUE
+PoissonT           TRUE   TRUE   FALSE
+PoissonI           TRUE   TRUE     ---
+PoissonTI          TRUE   TRUE    TRUE
+PoissonTIa         TRUE   TRUE    TRUE
+\end{Soutput}
+\end{Schunk}
 Three convergence criteria are considered.
 The first criterion, \code{maxSgrad},
   verifies whether the maximum gradient is small enough.
@@ -623,9 +677,24 @@ Two parameters can be used to tune the thresholds
 
 If the values of the minimum gradient and of the maximum eigenvalues are needed,
   the function \code{convals()} can be used:
-<<>>=
-  convals(allSurroRes)
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   convals(allSurroRes)
+\end{Sinput}
+\begin{Soutput}
+               maxSgrad   minHev minREev
+Clayton unadj   1.5e+00 -6.1e+00     ---
+Clayton adj     1.5e+00 -6.1e+00 9.8e-03
+Plackett unadj  4.1e+02 -5.2e+00     ---
+Plackett adj    4.1e+02 -5.2e+00 8.7e-03
+Hougaard unadj  1.4e+01  7.7e-01     ---
+Hougaard adj    1.4e+01  7.7e-01 7.7e-03
+PoissonT        1.3e-05  1.3e+02 6.3e-12
+PoissonI        2.0e-05  6.8e+01     ---
+PoissonTI       7.1e-06  6.7e+01 2.0e-02
+PoissonTIa      5.0e-05  9.4e+07 1.0e-01
+\end{Soutput}
+\end{Schunk}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -641,9 +710,19 @@ The function \code{predict()}, applied to an object of class \code{surrosurv},
   for each trial.
 The minimal syntax is \code{predict(allSurroRes)},
   but one can be interested in prediction of only one of the fitted models:
-<<>>=
-  predict(allSurroRes, models = 'PoissonTI')
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   predict(allSurroRes, models = 'PoissonTI')
+\end{Sinput}
+\begin{Soutput}
+Treatment effect prediction for surrosurv object
+
+   Poisson TI 
+                            1     2     3     4     5     6        
+    Treatment effects on S: -0.52 -0.42 -0.38 -0.08 -0.51 -0.38 ...
+    Treatment effects on T: -0.26 -0.08 -0.27  0.41 -0.41 -0.15 ...
+\end{Soutput}
+\end{Schunk}
 This function returns an object of class \code{predictSurrosurv}.
 
 The predicted treatment effects can also be vizualied graphically
@@ -654,13 +733,16 @@ For example, the surrogacy plots
   for the adjusted Clayton copula and the Poisson TI models
   in the advanced GASTRIC meta-analysis (Fig.~ref{fig:predictions})
   can be obtained as follows:
-<<predictions, echo=FALSE, fig.env='figure', fig.lp='fig:', fig.cap='Predictions for the advanced GASTRIC meta-analysis \\citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.'>>=
-  plot(allSurroRes, c('Clayton adj', 'PoissonTI'), 
-       xlim = c(.35, 1.4), ylim = c(.4, 1.8), mfrow=1:2)
-@
-<<eval=FALSE>>=
-  plot(allSurroRes, c('Clayton adj', 'PoissonTI'))
-@
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=\textwidth]{figure/predictions-1} \caption[Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged]{Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.}\label{fig:predictions}
+\end{figure}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+R>   plot(allSurroRes, c('Clayton adj', 'PoissonTI'))
+\end{Sinput}
+\end{Schunk}
 
 
 The argument \code{surro.stats} controls whether the estimated
@@ -676,9 +758,23 @@ The value of the STE estimated by each surrogacy model can be obtained
   via the function \code{ste()},
   both in terms of regression parameter (\code{beta})
   and in terms of hazard ratio (\code{HR}):
-<<>>=
-  ste(allSurroRes)
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   ste(allSurroRes)
+\end{Sinput}
+\begin{Soutput}
+                beta   HR
+Clayton.unadj  -0.61 0.54
+Clayton.adj    -0.30 0.74
+Plackett.unadj -0.61 0.54
+Plackett.adj   -0.30 0.74
+Hougaard.unadj -0.61 0.54
+Hougaard.adj   -0.28 0.76
+PoissonT       -0.12 0.88
+PoissonTI      -0.41 0.66
+PoissonTIa     -1.04 0.36
+\end{Soutput}
+\end{Schunk}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -703,29 +799,53 @@ The argument \code{parallel} is a logical for allowing or not such a paralleliza
   whereas $nCores$ allows specifying the number of cores to use.
 By default, \code{parallel = TRUE} and \code{nCores} is set to the minimum
   between $N$ and the maximum number of cores on the machine.
-<<label=LOOCV, echo=TRUE, cache=TRUE>>=
-  loocvRes <- loocv(gastadv, models = c('Clayton', 'PoissonTI'))
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   loocvRes <- loocv(gastadv, models = c('Clayton', 'PoissonTI'))
+\end{Sinput}
+\begin{Soutput}
+Parallel computing on 8 cores (the total number of cores detected)
+\end{Soutput}
+\end{Schunk}
 The results of the crossvalidation can be easily printed
-<<echo = 1>>=
-  loocvRes
-  loocvLegend <- paste(
-    "Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \\citep{GASTRIC13}.",
-    # "The symbol \`\\textbf{X}\' means that the surrogacy model could not be fitted due to numerical problems."
-    "Vertical lines are the 95\\% prediction intervals (PI)",
-    "of the treatment effect on overall survival (OS).",
-    "Dots are the observed treatment effects on OS",
-    "(green = within the PI, magenta = out of the PI)."
-    )
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   loocvRes
+\end{Sinput}
+\begin{Soutput}
+
+   Clayton copula (Unadjusted) 
+        1     2     3     4     5     6        
+obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.34 ...
+lwr     -0.76 -0.65 -0.42 -0.51 -0.48 -0.62 ...
+upr     -0.05  0.02  0.28  0.17  0.21  0.09 ...
+
+   Clayton copula (Adjusted) 
+        1      2      3      4      5      6         
+obsBeta -0.309 -0.212 -0.095 -0.023 -0.222 -0.342 ...
+lwr     -0.571 -0.491 -0.277 -0.358 -0.332 -0.448 ...
+upr     -0.213 -0.130  0.105 -0.001  0.042 -0.078 ...
+
+   Poisson TI 
+        1     2     3     4     5     6        
+obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.34 ...
+lwr     -0.87 -0.67 -0.42 -0.59 -0.29 -0.54 ...
+upr     -0.45 -0.21  0.57  0.23  0.23 -0.22 ...
+\end{Soutput}
+\end{Schunk}
 and plotted (Fig.~\ref{fig:loocv}) by showing, 
   for each trial, the comparison between the observed 
   treatment effect on $T$, and its prediction interval,
   based on the observed treatment effect on $S$ for the same trial
   and the surrogacy model fitted on the other $N-1$ trials:
-<<loocv, fig.width=6, fig.height=8, fig.lp='fig:', fig.env='figure', fig.cap=loocvLegend>>=
-  plot(loocvRes)
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   plot(loocvRes)
+\end{Sinput}
+\begin{figure}
+\includegraphics[width=\textwidth]{figure/loocv-1} \caption[Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}. Vertical lines are the 95\% prediction intervals (PI) of the treatment effect on overall survival (OS). Dots are the observed treatment effects on OS (green = within the PI, magenta = out of the PI).}\label{fig:loocv}
+\end{figure}
+\end{Schunk}
 
 
 
@@ -945,50 +1065,79 @@ The last argument (\code{compress}) is a logical
 In the advanced GASTRIC cancer example,
   we first change the column names in order to match the ones needed by
   \code{poissonize()}:
-<<>>=
-  gastadv.poi <- gastadv
-  gastadv.poi$time <- gastadv.poi$timeT / 365.25
-  gastadv.poi$status <- gastadv.poi$statusT
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   gastadv.poi <- gastadv
+R>   gastadv.poi$time <- gastadv.poi$timeT / 365.25
+R>   gastadv.poi$status <- gastadv.poi$statusT
+\end{Sinput}
+\end{Schunk}
 We fit the proportional hazard model, to which we will compare
   the results of the auxiliary Poisson model.
-<<>>=
-  fitcox <- coxph(Surv(time, status) ~ trt, data = gastadv.poi)
-  cox.base <- basehaz(fitcox, centered = FALSE)
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   fitcox <- coxph(Surv(time, status) ~ trt, data = gastadv.poi)
+R>   cox.base <- basehaz(fitcox, centered = FALSE)
+\end{Sinput}
+\end{Schunk}
 We `possonize' the data over 10 intervals (the default)
   and we fit the auxiliary Poisson model.
-<<>>=
-  gastadv.poi <- poissonize(gastadv.poi, nInts = 10, factors = 'trt')
-  gastadv.poi
-  
-  fitpoi <- glm(m ~ -1 + interval + trt + offset(log(Rt)), 
-                data = gastadv.poi, fam = 'poisson')
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   gastadv.poi <- poissonize(gastadv.poi, nInts = 10, factors = 'trt')
+R>   gastadv.poi
+\end{Sinput}
+\begin{Soutput}
+            interval  trt   m  Rt    N
+1                  0 -0.5 181 292 1668
+2    0.1832128678987 -0.5 180 173 1475
+3   0.30921697467488 -0.5 192 149 1288
+4  0.435221081451061 -0.5 159 132 1088
+5  0.567018480492813 -0.5 154 114  912
+6  0.703885010266941 -0.5 156 108  751
+7  0.867545516769336 -0.5 157 103  584
+8   1.07320739219713 -0.5 143 101  414
+9   1.39328678986995 -0.5 117  97  239
+10  2.07255030800821 -0.5  60  87   94
+11                 0  0.5 216 421 2401
+12   0.1832128678987  0.5 221 258 2167
+13  0.30921697467488  0.5 213 229 1935
+14 0.435221081451061  0.5 247 207 1706
+15 0.567018480492813  0.5 237 181 1446
+16 0.703885010266941  0.5 225 176 1203
+17 0.867545516769336  0.5 228 171  965
+18  1.07320739219713  0.5 221 183  715
+19  1.39328678986995  0.5 211 205  460
+20  2.07255030800821  0.5 117 171  204
+\end{Soutput}
+\begin{Sinput}
+R>   fitpoi <- glm(m ~ -1 + interval + trt + offset(log(Rt)), 
++                 data = gastadv.poi, fam = 'poisson')
+\end{Sinput}
+\end{Schunk}
 The function \code{plotsson()} can be used to draw the survival curves
   (or the instantaneous hazard) estimated by the auxiliary Poisson model:
-<<label=poissonize, echo=2:4, fig.env='figure', fig.cap='Overall survival curves in the advanced GASTRIC meta-analysis \\citep{GASTRIC13}. \\textbf{(a)} Comparison between the survival probability obtanied using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \\textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model', fig.lp='fig:'>>=
-  par(mar = c(4, 3, 3, .3) + .1)
-  plot(stepfun(cox.base$time[-nrow(cox.base)], 
-               exp(-cox.base$hazard)),
-       ylim = 0:1, xlim = c(0, 5), col = 1, lwd = 2, bty = 'l', yaxs = 'i',
-       do.points = FALSE, verticals = FALSE, xaxs = 'i',
-       main = 'Overall Survival\nAdvanced GASTRIC meta-analysis',
-       xlab = 'Years', ylab = 'Survival probability')
-  lines(stepfun(cox.base$time[-nrow(cox.base)],
-               exp(-cox.base$hazard * exp(coef(fitcox)['trt']))),
-       col = 2, pch = '', lwd = 2)
-
-  plotsson(fitpoi, 'Surv', add = TRUE, lty = 2, by = 'trt', lwd = 2) 
-  legend('topright', col = rep(1:2, each = 2), lty = 1:2, lwd = 3,
-         legend = t(outer(c('Cox', 'Poisson'),
-                          c('Control', 'Chemotherapy'), paste)))
-@
+\begin{Schunk}
+\begin{Sinput}
+R>   plot(stepfun(cox.base$time[-nrow(cox.base)], 
++                exp(-cox.base$hazard)),
++        ylim = 0:1, xlim = c(0, 5), col = 1, lwd = 2, bty = 'l', yaxs = 'i',
++        do.points = FALSE, verticals = FALSE, xaxs = 'i',
++        main = 'Overall Survival\nAdvanced GASTRIC meta-analysis',
++        xlab = 'Years', ylab = 'Survival probability')
+R>   lines(stepfun(cox.base$time[-nrow(cox.base)],
++                exp(-cox.base$hazard * exp(coef(fitcox)['trt']))),
++        col = 2, pch = '', lwd = 2)
+\end{Sinput}
+\begin{figure}
+\includegraphics[width=\textwidth]{figure/poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis \citep{GASTRIC13}. \textbf{(a)} Comparison between the survival probability obtanied using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
+\end{figure}
+\end{Schunk}
 The treatment effect estimated by the Cox model is
-  \Sexpr{coef(fitcox)} (SE = \Sexpr{sqrt(fitcox$var)}), 
+  \ensuremath{-0.14} (SE = 0.03), 
   and it is of 
-  \Sexpr{coef(fitpoi)['trt']} 
-  (SE = \Sexpr{summary(fitpoi)$coefficients['trt', 'Std. Error']})
+  \ensuremath{-0.14} 
+  (SE = 0.03)
   when using the auxiliary Poisson model.
 
 \end{document}
