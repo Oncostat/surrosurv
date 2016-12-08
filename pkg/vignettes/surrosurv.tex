@@ -541,7 +541,7 @@ the true endpoint $T$, and progression-free survival,
 the candiddate surrogate $S$.
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=\textwidth]{figure/survCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}}\label{fig:survCurves}
+\includegraphics[width=\textwidth]{./survCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}}\label{fig:survCurves}
 \end{figure}
 \end{Schunk}
 
@@ -735,7 +735,7 @@ For example, the surrogacy plots
   can be obtained as follows:
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=\textwidth]{figure/predictions-1} \caption[Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged]{Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.}\label{fig:predictions}
+\includegraphics[width=\textwidth]{./predictions-1} \caption[Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged]{Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.}\label{fig:predictions}
 \end{figure}
 \end{Schunk}
 \begin{Schunk}
@@ -843,7 +843,7 @@ and plotted (Fig.~\ref{fig:loocv}) by showing,
 R>   plot(loocvRes)
 \end{Sinput}
 \begin{figure}
-\includegraphics[width=\textwidth]{figure/loocv-1} \caption[Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}. Vertical lines are the 95\% prediction intervals (PI) of the treatment effect on overall survival (OS). Dots are the observed treatment effects on OS (green = within the PI, magenta = out of the PI).}\label{fig:loocv}
+\includegraphics[width=\textwidth]{./loocv-1} \caption[Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}. Vertical lines are the 95\% prediction intervals (PI) of the treatment effect on overall survival (OS). Dots are the observed treatment effects on OS (green = within the PI, magenta = out of the PI).}\label{fig:loocv}
 \end{figure}
 \end{Schunk}
 
@@ -1130,7 +1130,7 @@ R>   lines(stepfun(cox.base$time[-nrow(cox.base)],
 +        col = 2, pch = '', lwd = 2)
 \end{Sinput}
 \begin{figure}
-\includegraphics[width=\textwidth]{figure/poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis \citep{GASTRIC13}. \textbf{(a)} Comparison between the survival probability obtanied using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
+\includegraphics[width=\textwidth]{./poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis \citep{GASTRIC13}. \textbf{(a)} Comparison between the survival probability obtanied using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
 \end{figure}
 \end{Schunk}
 The treatment effect estimated by the Cox model is
