@@ -77,7 +77,7 @@ loocv <- function(data, nCores, parallel = TRUE,
     return(RES)
   }
   
-  if(sys.info()[1] == "Windows") {
+  if(Sys.info()[1] == "Windows") {
     cl <- makeCluster(nCores, type = 'PSOCK')
     clusterExport(cl, 'data')
   } else {

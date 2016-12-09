@@ -413,9 +413,9 @@ In the surrogacy assessment context,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Individual-level surrogacy.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The use of the a shared frailty $u_{ij}$,
-the estimated variance of which  is $\hat\sigma^2_\text{\tiny indiv}$,
-can be used to compute an estimate of the Kendall's
+Thanks to the shared frailty $u_{ij}$,
+  the estimated variance of which  is $\hat\sigma^2_\text{\tiny indiv}$,
+  can be used to estimate the Kendall's
 $\hat\tau = 4 \int_0^\infty s \mathcal L(s)\mathcal L^{(2)}(s) \textrm d s - 1$,
 where $\mathcal L(s)$ and $\mathcal L^{(2)}(s)$
 are the Laplace transform of the frailty distribution and its
@@ -431,27 +431,27 @@ in the \pkg{parfm} package \citep{parfmJSS, R:parfm}.
 \paragraph{Trial-level surrogacy.} \label{sec:trialDep}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In model (\ref{eq:biPoiMix}),
-the same assumptions (\ref{eq:trtEffs})
-as in the two-step copula model
-are done for the trial-specific treatment effects
+  the same assumptions (\ref{eq:trtEffs})
+  as in the two-step copula model
+  are done for the trial-specific treatment effects.
 Thus, the correlation $\rho_\text{\tiny trial}$
-between the two treatment effects provides us with 
-the coefficient of determination
-$R^2_\text{\tiny trial} = \rho^2_\text{\tiny trial}$,
-also referred to simply as $R^2$.
+  between the two treatment effects provides us with 
+  the coefficient of determination
+  $R^2_\text{\tiny trial} = \rho^2_\text{\tiny trial}$,
+  also referred to simply as $R^2$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Reduced Poisson models.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In order to deal with convergence issues,
-the \pkg{surrosurv} package computes four reduced versions 
-of the full model (\ref{eq:biPoiMix}).
+The \pkg{surrosurv} package can compute four reduced versions 
+  of the full model (\ref{eq:biPoiMix})
+  that may turn out useful in case of convergence issues with the full model.
 \begin{itemize}
 \item Model \textbf{Poisson T} has
-random trial-treatment interactions $\alpha_i$ and $\beta_i$,
-but does not incoroporate individual effects ($u_{ij} \equiv 0$)
-and it has common baselines between trials
+  random trial-treatment interactions $\alpha_i$ and $\beta_i$,
+  but does not incoroporate individual effects ($u_{ij} \equiv 0$).
+It has common baselines between trials
 ($\mu^{(k)}_{Si} = \mu^{(k)}_{S}$, $\mu^{(k)}_{Ti} = \mu^{(k)}_{T},
 \forall i$).
 This model provides only the trial-level measure of surrogacy
@@ -540,6 +540,9 @@ Figure~\ref{fig:survCurves} shows the survival curves for overall survival,
 the true endpoint $T$, and progression-free survival,
 the candiddate surrogate $S$.
 \begin{Schunk}
+\begin{Soutput}
+Warning: package 'survival' was built under R version 3.3.2
+\end{Soutput}
 \begin{figure}
 \includegraphics[width=\textwidth]{./survCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}}\label{fig:survCurves}
 \end{figure}
@@ -574,7 +577,7 @@ the candiddate surrogate $S$.
   
   Two further parameters, \code{intWidth} and \code{nInts},
   specify the width and the number of time intervals for data Poissonization.
-  These parameters are passes to the function \code{poissonize()},
+These parameters are passed to the function \code{poissonize()},
   described in the Appendix (Sec.~\ref{sec:poisson}).
   Only one of them can be specified.
   By default, \code{nInts = 8} which means that the study period is divided into
@@ -685,8 +688,8 @@ R>   convals(allSurroRes)
                maxSgrad   minHev minREev
 Clayton unadj   1.5e+00 -6.1e+00     ---
 Clayton adj     1.5e+00 -6.1e+00 9.8e-03
-Plackett unadj  4.1e+02 -5.2e+00     ---
-Plackett adj    4.1e+02 -5.2e+00 8.7e-03
+Plackett unadj  5.9e+02 -5.3e+00     ---
+Plackett adj    5.9e+02 -5.3e+00 8.7e-03
 Hougaard unadj  1.4e+01  7.7e-01     ---
 Hougaard adj    1.4e+01  7.7e-01 7.7e-03
 PoissonT        1.3e-05  1.3e+02 6.3e-12
@@ -796,7 +799,7 @@ As each model is usually very time-consuming to converge,
 For that reason, the function \code{loovc()} has been implemented to
   fit the $N$ models by parallel computing.
 The argument \code{parallel} is a logical for allowing or not such a parallelization,
-  whereas $nCores$ allows specifying the number of cores to use.
+  whereas \code{nCores} allows specifying the number of cores to use.
 By default, \code{parallel = TRUE} and \code{nCores} is set to the minimum
   between $N$ and the maximum number of cores on the machine.
 \begin{Schunk}
@@ -1130,7 +1133,7 @@ R>   lines(stepfun(cox.base$time[-nrow(cox.base)],
 +        col = 2, pch = '', lwd = 2)
 \end{Sinput}
 \begin{figure}
-\includegraphics[width=\textwidth]{./poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis \citep{GASTRIC13}. \textbf{(a)} Comparison between the survival probability obtanied using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
+\includegraphics[width=\textwidth]{./poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis \citep{GASTRIC13}. \textbf{(a)} Comparison between the survival probability obtained using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
 \end{figure}
 \end{Schunk}
 The treatment effect estimated by the Cox model is
