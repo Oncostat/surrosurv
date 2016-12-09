@@ -57,7 +57,7 @@ loocv <- function(data, nCores, parallel = TRUE,
           if (length(coppos) == 1) {
             models2predict <- c(
               models2predict[1:coppos - 1],
-              paste(cop, c('unadj', 'adj'), sep='.'),
+              paste(cop, c('unadj', 'adj'), sep = '.'),
               models2predict[(coppos + 1):length(models2predict)])
           }
         }
@@ -77,8 +77,12 @@ loocv <- function(data, nCores, parallel = TRUE,
     return(RES)
   }
   
-  cl <- makeCluster(nCores)
-  clusterExport(cl, 'data')
+  if(sys.info()[1] == "Windows") {
+    cl <- makeCluster(nCores, type = 'PSOCK')
+    clusterExport(cl, 'data')
+  } else {
+    cl <- makeCluster(nCores, type = 'FORK')
+  }
   clusterEvalQ(cl, library('survival'))
   clusterEvalQ(cl, library('surrosurv'))
   loocvRES <- clusterApplyLB(cl, levels(data$trialref), loof, ...) 
