@@ -1,8 +1,11 @@
 ################################################################################
-loocv <- function(data, nCores, parallel = TRUE, 
-                  models = c('Clayton', 'Plackett', 'Hougaard',
-                             'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
-                  ...) {
+loocv <- function(object, ...) UseMethod('loocv')
+loocv.surrosurv <- function(object, ...) loocv.data.frame(attr(object, 'data'))
+loocv.data.frame <- function(object, nCores, parallel = TRUE, 
+                             models = c('Clayton', 'Plackett', 'Hougaard',
+                                        'Poisson I', 'Poisson T',
+                                        'Poisson TI', 'Poisson TIa'),
+                             ...) {
   # ************************************************************************** #
   models <- tolower(noSpP(models))
   if ('poisson' %in% models) {
@@ -11,13 +14,13 @@ loocv <- function(data, nCores, parallel = TRUE,
   }
   models <- match.arg(models, several.ok = TRUE, choices = c(
     'clayton', 'plackett', 'hougaard', paste0('poisson', c('i', 't', 'ti', 'tia'))))
-  data$trialref <- factor(data$trialref)
+  object$trialref <- factor(object$trialref)
   
   # library('parallel')
   
   if (parallel) {
     totCores <- detectCores()
-    nTrials <- nlevels(data$trialref)
+    nTrials <- nlevels(object$trialref)
     
     if (missing(nCores)) {
       nCores <- min(nTrials, totCores)
@@ -41,14 +44,14 @@ loocv <- function(data, nCores, parallel = TRUE,
   
   loof <- function(TRIAL, models2predict = models, ...) {
     alpha <- coef(coxph(Surv(timeS, statusS) ~ trt, 
-                        data = data[data$trialref == TRIAL, ]))[['trt']]
+                        data = object[object$trialref == TRIAL, ]))[['trt']]
     beta <- coef(coxph(Surv(timeT, statusT) ~ trt, 
-                       data = data[data$trialref == TRIAL, ]))[['trt']]
-    reddata <- data[data$trialref != TRIAL, ]
-    reddata$trialref <- factor(reddata$trialref)
+                       data = object[object$trialref == TRIAL, ]))[['trt']]
+    redobject <- object[object$trialref != TRIAL, ]
+    redobject$trialref <- factor(redobject$trialref)
     predint <- tryCatch(
       expr = {
-        surrofit <- surrosurv(data = reddata, models = models2predict, ...)
+        surrofit <- surrosurv(data = redobject, models = models2predict, ...)
         lapply(attr(predict(surrofit), 'predf'), function(x) x(alpha))
       },
       error = function(e) {
@@ -77,19 +80,19 @@ loocv <- function(data, nCores, parallel = TRUE,
     return(RES)
   }
   
-  if(Sys.info()[1] == "Windows") {
+  if (Sys.info()[1] == "Windows") {
     cl <- makeCluster(nCores, type = 'PSOCK')
-    clusterExport(cl, 'data')
+    clusterExport(cl, 'object', environment())
   } else {
     cl <- makeCluster(nCores, type = 'FORK')
   }
   clusterEvalQ(cl, library('survival'))
   clusterEvalQ(cl, library('surrosurv'))
-  loocvRES <- clusterApplyLB(cl, levels(data$trialref), loof, ...) 
+  loocvRES <- clusterApplyLB(cl, levels(object$trialref), loof, ...) 
   stopCluster(cl)
   rm(cl)
   
-  names(loocvRES) <- levels(data$trialref)
+  names(loocvRES) <- levels(object$trialref)
   class(loocvRES) <- c('loocvSurrosurv', class(loocvRES))
   return(loocvRES)
 }
@@ -169,7 +172,7 @@ plot.loocvSurrosurv <- function(x,
       COLs[NC] <- 0
       points(1:ncol(x[[i]]), x[[i]][1, ], pch = 16, cex = 1.4, col = COLs)
       if (any(NC))
-        mtext('x', 1, -1, at = which(NC), col=2, font=2)
+        mtext('x', 1, -1, at = which(NC), col = 2, font = 2)
     }
   }
 }

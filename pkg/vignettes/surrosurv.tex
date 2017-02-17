@@ -13,6 +13,21 @@
 
 \usepackage{Sweave}
 
+\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\usepackage{Sweave}
+
 
 \usepackage{graphicx, color, amsmath, amssymb, bm, thumbpdf}
 %\VignetteEngine{knitr::knitr}
@@ -631,7 +646,7 @@ Clayton adj    0.61 0.42
 Plackett unadj 0.62 0.45
 Plackett adj   0.62 0.41
 Hougaard unadj 0.32 0.45
-Hougaard adj   0.32 0.38
+Hougaard adj   0.32 0.39
 PoissonT       -.-- 1   
 PoissonI       0.51 -.--
 PoissonTI      0.51 0.63
@@ -688,10 +703,10 @@ R>   convals(allSurroRes)
                maxSgrad   minHev minREev
 Clayton unadj   1.5e+00 -6.1e+00     ---
 Clayton adj     1.5e+00 -6.1e+00 9.8e-03
-Plackett unadj  5.9e+02 -5.3e+00     ---
-Plackett adj    5.9e+02 -5.3e+00 8.7e-03
-Hougaard unadj  1.4e+01  7.7e-01     ---
-Hougaard adj    1.4e+01  7.7e-01 7.7e-03
+Plackett unadj  1.8e+02 -5.2e+00     ---
+Plackett adj    1.8e+02 -5.2e+00 8.6e-03
+Hougaard unadj  1.4e+01  7.8e-01     ---
+Hougaard adj    1.4e+01  7.8e-01 7.7e-03
 PoissonT        1.3e-05  1.3e+02 6.3e-12
 PoissonI        2.0e-05  6.8e+01     ---
 PoissonTI       7.1e-06  6.7e+01 2.0e-02
@@ -827,7 +842,7 @@ upr     -0.05  0.02  0.28  0.17  0.21  0.09 ...
         1      2      3      4      5      6         
 obsBeta -0.309 -0.212 -0.095 -0.023 -0.222 -0.342 ...
 lwr     -0.571 -0.491 -0.277 -0.358 -0.332 -0.448 ...
-upr     -0.213 -0.130  0.105 -0.001  0.042 -0.078 ...
+upr     -0.212 -0.130  0.105 -0.001  0.042 -0.078 ...
 
    Poisson TI 
         1     2     3     4     5     6        

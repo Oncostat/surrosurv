@@ -26,8 +26,12 @@ export(convals,
        ste,
        surrosurv)
 
+S3method(loocv, data.frame)
+
 S3method(print, conv)
 
+S3method(confint, surrosurv)
+S3method(loocv, surrosurv)
 S3method(predict, surrosurv)
 S3method(print, surrosurv)
 S3method(plot, surrosurv)
@@ -39,3 +43,5 @@ S3method(plot, predictSurrosurv)
 
 S3method(print, loocvSurrosurv)
 S3method(plot, loocvSurrosurv)
+
+S3method(print, ciSurrosurv)

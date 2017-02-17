@@ -21,6 +21,21 @@
     \item{id:}{Patient identifier.}
     }
   }
+  
+\source{
+The authors thank the GASTRIC
+  (Global Advanced/Adjuvant Stomach Tumor Research International Collaboration)
+  Group for permission to use their data.
+The investigators who contributed to GASTRIC are listed in 
+  Paoletti et al (2013) and GASTRIC (2013).
+The GASTRIC Group data are available within the \inline{surrosurv} package
+  for research purposes, under the conditions that
+  (1) the research be scientifically appropriate,
+  (2) the confidentiality of individual patient data be protected,
+  (3) the results of the analyses be shared with the GASTRIC Group prior to public communication,
+  (4) the source of data be fully acknowledged as above, and
+  (5) resulting data and results be further shared with the research community.
+}
 \references{
   Paoletti X, Oba K, Bang Y-J, et al.
     Progression-free survival as a surrogate for overall survival
@@ -43,7 +58,7 @@
 \examples{
   \dontrun{
     data('gastadv')
-    allSurroRes <- surrosurv(gastadv, c('Clayton', 'Poisson'), verbose = TRUE)
+    allSurroRes <- surrosurv(gastadv, c('Clayton', 'PoissonTIa'), verbose = TRUE)
     convergence(allSurroRes)
     allSurroRes
     predict(allSurroRes)

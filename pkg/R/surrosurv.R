@@ -1,14 +1,17 @@
-#####################################################################################
-#####################################################################################
-#####################################################################################
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+# surrosurv() ##################################################################
 surrosurv <- function(
   data, 
-  models = c('Clayton', 'Plackett', 'Hougaard',
-             'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
-  intWidth = NULL,  nInts = 8,
+  models        = c('Clayton', 'Plackett', 'Hougaard',
+                    'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
+  intWidth      = NULL,
+  nInts         = 8,
   cop.OPTIMIZER = 'bobyqa',
-  poi.OPTIMIZER = 'bobyqa',
-  verbose = FALSE) {
+  poi.OPTIMIZER = 'nloptwrap',
+  verbose       = TRUE,
+  twoStep       = FALSE,
+  keep.data     = TRUE) {
   # ************************************************************************** #
   models <- tolower(noSpP(models))
   if ('poisson' %in% models) {
@@ -20,39 +23,36 @@ surrosurv <- function(
   Poissons <- models[grepl('poisson', models)]
   begin <- Sys.time()
   W <- options()$warn
-  options(warn=-1)
+  options(warn = -1)
   
-  ### *** Parameter estimation *** #############################################
-  #   if (missing(intWidth)) {
-  #     times <- c(data$timeT, data$timeS)
-  #     status <- c(data$statusT, data$statusS)
-  #     sfit <- survfit(Surv(times, status) ~ 1)
-  #     intWidth <- #quantile(c(data$timeT, data$timeS), .4)
-  #       sfit$time[which(sfit$surv <= .6)[1]]
-  #     rm(times, status, sfit)
-  #   }  
-  
+  ####  Parameter estimation ####
   if (any(!grepl('poisson', models))) {
     # library('SurvCorr')
     INIrho <- survcorr(Surv(timeS, statusS) ~ 1, 
-                        Surv(timeT, statusT) ~ 1, data = data)$rho
+                       Surv(timeT, statusT) ~ 1, data = data)$rho
   } else INIkTau <- NULL
   
   # Copula approach
   copulas <- function(cop) {
     f <- function(){
+      if (verbose) message(paste0(
+        '- Estimating model: ', toupper(substr(cop, 1, 1)), substr(cop, 2, 100)),
+        appendLF = FALSE)
       res <- try(copuSurr(data = data, family = cop, 
                           optimx.method = cop.OPTIMIZER, 
                           varcor1 = TRUE,
                           #INIkTau = INIkTau
-                          INIrho = INIrho
-                          ), silent = TRUE)
+                          INIrho = INIrho,
+                          twoStep = twoStep
+      ), silent = FALSE) #TRUE)
       if (class(res) == 'try-error') {
         res <- list(kTau = NA, alpha = NA, beta = NA,
                     R2 = NA, ranef = NA, 
                     VarCor2 = NA, VarCor1 = NA)
         res <- list(unadj = res, adj = res)
       }
+      if (verbose)
+        message(paste0(' (', format(res$adj$runTime, digits = 2), ')'))
       return(res)
     }
     return(f)
@@ -65,7 +65,8 @@ surrosurv <- function(
   poisson = function(poissons = Poissons){
     res <- try(poisSurr(data = data, 
                         intWidth = intWidth, nInts = nInts,
-                        OPTIMIZER = poi.OPTIMIZER, models = poissons), 
+                        OPTIMIZER = poi.OPTIMIZER, models = poissons,
+                        verbose = verbose), 
                silent = TRUE)
     if (class(res) == 'try-error') 
       res <- list(modelT = list(R2 = NA, kTau = NA), 
@@ -75,22 +76,17 @@ surrosurv <- function(
                     sub('poisson ', 'model', Poissons)]
     return(res)
   }
-  ##############################################################################
+  # -------------------------------------------------------------------------- #
   models <- c(models[!grepl('poisson', models)],
-              ifelse(any(grepl('poisson', models)), 'poisson', ''))
-  fitRES <- lapply(models, function(x, verb = verbose) {
-    if (verbose) message(paste('Estimating model:', x))
+              if (any(grepl('poisson', models))) 'poisson')
+  if (verbose) message('Computation may take very long. Please wait...')
+  fitRES <- lapply(models, function(x) {
     eval(call(paste(x)))
   })
   names(fitRES) <- models
   
   if ('poisson' %in% models)
     fitRES <- c(fitRES[!(names(fitRES) == 'poisson')], 
-                # list(
-                #   PoissonT = fitRES$Poisson$modelT,
-                #   PoissonI = fitRES$Poisson$modelI,
-                #   PoissonTI  = fitRES$Poisson$modelTI,
-                #   PoissonTIa = fitRES$Poisson$modelTIa)
                 fitRES$poisson)
   names(fitRES) <- sapply(names(fitRES), function(x) paste0(
     toupper(substr(x, 1, 1)), substr(x, 2, 100)))
@@ -100,17 +96,19 @@ surrosurv <- function(
   } else 
     RES <- list()
   
-  RES <- c(RES, fitRES, list(intWidth = intWidth,
-                             runTime = Sys.time() - begin))
+  RES <- c(RES, fitRES)
   class(RES) <- c('surrosurv', class(RES))
-  attr(RES, 'trialSizes') <- table(data$trialref)
+  attributes(RES) <- c(
+    attributes(RES),
+    list(intWidth   = intWidth,
+         runTime    = Sys.time() - begin,
+         trialSizes = table(data$trialref)))
+  if (keep.data) attr(RES, 'data') <- data
   options(warn = W)
   return(RES)
 }
 
-#####################################################################################
-#####################################################################################
-#####################################################################################
+# print.surrosurv ##############################################################
 print.surrosurv <- function(x, silent=FALSE, digits=2, na.print='-.--', ...) {
   models <- c('Clayton', 'Plackett', 'Hougaard', 'Poisson')
   models <- names(which(sapply(models, function(y) any(grepl(y, names(x))))))
@@ -131,12 +129,7 @@ print.surrosurv <- function(x, silent=FALSE, digits=2, na.print='-.--', ...) {
   Hougaard = copulas('Hougaard')
   # Poisson approach
   Poisson = function(){
-    res <- 
-      # rbind(PoissonT = x[['PoissonT']][c('kTau', 'R2')],
-      #            PoissonI = x[['PoissonI']][c('kTau', 'R2')],
-      #            PoissonTI  = x[['PoissonTI']][c('kTau', 'R2')],
-      #            PoissonTIa  = x[['PoissonTIa']][c('kTau', 'R2')])
-      t(sapply(x[grepl('Poisson', names(x ))], function(y) y[c('kTau', 'R2')]))
+    res <- t(sapply(x[grepl('Poisson', names(x ))], function(y) y[c('kTau', 'R2')]))
     res[sapply(res, is.null)] <- NA
     return(res)
   }
@@ -145,9 +138,106 @@ print.surrosurv <- function(x, silent=FALSE, digits=2, na.print='-.--', ...) {
   
   RES <- fitRES
   if (('True Values' %in% names(x)) &
-        (!all(sapply(x[['True Values']], is.null))))
+      (!all(sapply(x[['True Values']], is.null))))
     RES <- rbind('True Values' = x[['True Values']][c('kTau', 'R2')], RES)
   
-  #   RES <- lapply(RES, function(x) {x[is.null(x)] <- NA; return(x)})
-  if(silent) return(RES) else print(RES, na.print=na.print, digits=digits, ...)
+  if (silent) return(RES) else print(
+    RES, na.print = na.print, digits = digits, ...)
+}
+
+
+# confint.surrosurv ############################################################
+confint.surrosurv <- function(
+  object,
+  parm,
+  level = 0.95,
+  method = c('boot'),
+  nsim = 100,
+  parallel = TRUE, 
+  nCores, 
+  models = names(object),
+  intWidth,
+  keep.allRes = FALSE,
+  ...) {
+  models <- tolower(noSpP(models))
+  if ('poisson' %in% models) {
+    models <- setdiff(models, 'poisson')
+    models <- unique(c(models, paste0('poisson', c('i', 't', 'ti', 'tia'))))
+  }
+  models <- match.arg(models, several.ok = TRUE, choices = c(
+    'clayton', 'plackett', 'hougaard', paste0('poisson', c('i', 't', 'ti', 'tia'))))
+  intWidth <- attr(object, 'intWidth')
+  
+  # library('parallel')
+  
+  if (parallel) {
+    totCores <- detectCores()
+    
+    if (missing(nCores)) {
+      nCores <- min(nsim, totCores)
+      message(paste0(
+        'Parallel computing on ', nCores,
+        ' cores (the total number of ', 
+        ifelse(nsim < totCores, 'trials', 'cores detected'),
+        ')'))
+    } else {
+      if (nCores > min(nsim, totCores))
+        message(paste0(
+          'The number of cores (nCores=', nCores, ') is greater than',
+          'the number of ', 
+          ifelse(nsim < totCores, 'trials', 'cores detected'),
+          ')'))
+      
+      nCores <- min(nCores, nsim, totCores)
+      message(paste('Parallel computing on', nCores,'cores'))
+    }
+  } else nCores <- 1
+  
+  if ('data' %in% names(attributes(object))) {
+    data <- attr(object, 'data')
+  } else {
+    stop(paste(
+      "The fitted models 'obect' must have an attribute 'data'",
+      "containing the original data.",
+      "See the option 'keep.data' for the surrosurv() function."))
+  }
+  
+  if (Sys.info()[1] == "Windows") {
+    cl <- makeCluster(nCores, type = 'PSOCK')
+    clusterExport(cl, c('data', 'models', 'intWidth'), envir = environment())
+  } else {
+    cl <- makeCluster(nCores, type = 'FORK')
+  }
+  clusterEvalQ(cl, library('survival'))
+  clusterEvalQ(cl, library('surrosurv'))
+  ciRES <- clusterApplyLB(cl, 1:nsim, function(x) {
+    return(surrosurv(data, models = models, intWidth = intWidth))
+  }, ...) 
+  stopCluster(cl)
+  rm(cl)
+  
+  ciRES <- lapply(ciRES, print, silent = TRUE)
+  arrayRES <- array(unlist(ciRES), dim = c(nrow(ciRES[[1]]), 
+                                           ncol(ciRES[[1]]), 
+                                           length(ciRES)))
+  LCL <- apply(arrayRES, 1:2, quantile, p = .025)
+  UCL <- apply(arrayRES, 1:2, quantile, p = .975)
+  dimnames(LCL) <- dimnames(UCL) <- dimnames(ciRES[[1]])
+  
+  res <- list(LCL = LCL, UCL = UCL)
+  if (keep.allRes) res <- c(res, allRes = ciRES)
+  
+  class(res) <- c('ciSurrosurv', class(res))
+  return(res)
+}
+
+print.ciSurrosurv <- function(x, ...) {
+  res <- list(kTau = cbind(' 2.5 %' = x$LCL[, 1],
+                           '97.5 %' = x$UCL[, 1]),
+              R2   = cbind(' 2.5 %' = x$LCL[, 2],
+                           '97.5 %' = x$UCL[, 2]))
+  lapply(names(res), function(p) {
+    cat(paste('\n', p, '\n'))
+    print(res[[p]])
+    })
 }

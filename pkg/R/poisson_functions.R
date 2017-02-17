@@ -1,9 +1,10 @@
 poisSurr <- function(data,
-                     OPTIMIZER = 'bobyqa',
+                     OPTIMIZER, # = 'bobyqa',
                      MAXFUN = 1e8,
                      intWidth = NULL,
                      nInts = NULL,
-                     models = paste('Poisson', c('I', 'T', 'TI', 'TIa'))) {
+                     models = paste('Poisson', c('I', 'T', 'TI', 'TIa')),
+                     verbose = TRUE) {
   models <- tolower(noSpP(models))
   models <- match.arg(models, several.ok = TRUE, 
                       choices = paste0('poisson', c('i', 't', 'ti', 'tia')))
@@ -12,19 +13,23 @@ poisSurr <- function(data,
   #     library('msm')
   #     library('lme4')
   
-  GLMERCONTROL <- glmerControl(optimizer='optimx', 
+  GLMERCONTROL <- glmerControl(optimizer = 'optimx', 
+                               # calc.derivs = FALSE,
                                boundary.tol = 0,
                                optCtrl = list(maxfun = MAXFUN,
                                               dowarn = FALSE,
-                                              method = OPTIMIZER))
-  
-  #   GLMERCONTROL <- glmerControl(optimizer='bobyqa',
-  #                                optCtrl = list(maxfun=MAXFUN, dowarn=FALSE),
-  #                                boundary.tol=0)
+                                              method = OPTIMIZER,
+                                              starttests = FALSE,
+                                              kkt = FALSE))
   
   ############################################################################
   ### *** Data poissonization *** ############################################
   ############################################################################
+  if (verbose) {
+    message('- Data poissonization', appendLF = FALSE)
+    startTime <- Sys.time()
+  }
+  
   T <- S <- JOINT <- list()
   
   if ((min(data$trt) == 0) & (max(data$trt) == 1)) {
@@ -47,7 +52,7 @@ poisSurr <- function(data,
   colnames(data)[colnames(data) == "statusS"] <- 'status'
   S$poidata <- poissonize(data, all.breaks = all.breaks, 
                           interval.width = intWidth, nInts = nInts,
-                          factors = c('trialref', 'trt', 'id'), compress=TRUE)
+                          factors = c('trialref', 'trt', 'id'), compress = TRUE)
   colnames(data)[colnames(data) == "time"] <- 'timeS'
   colnames(data)[colnames(data) == "status"] <- 'statusS'
   
@@ -55,20 +60,25 @@ poisSurr <- function(data,
   colnames(data)[colnames(data) == "statusT"] <- 'status'
   T$poidata <- poissonize(data, all.breaks = all.breaks, 
                           interval.width = intWidth, nInts = nInts, 
-                          factors = c('trialref', 'trt', 'id'), compress=TRUE)
+                          factors = c('trialref', 'trt', 'id'), compress = TRUE)
   colnames(data)[colnames(data) == "time"] <- 'timeT'
   colnames(data)[colnames(data) == "status"] <- 'statusT'
+  
+  if (verbose) {
+    execTime <- Sys.time() - startTime
+    message(paste0(' (', format(execTime, digits = 2), ')'))
+  }
   ############################################################################
   
   
   ############################################################################
   ### *** Mixed Poisson model estimation *** #################################
   ############################################################################
-  JOINT$poidata <- rbind(cbind(S$poidata, ep='S'),
-                         cbind(T$poidata, ep='T'))
+  JOINT$poidata <- rbind(cbind(S$poidata, ep = 'S'),
+                         cbind(T$poidata, ep = 'T'))
   
-  JOINT$poidata$trtT <- JOINT$poidata$trt * (JOINT$poidata$ep=="T")
-  JOINT$poidata$trtS <- JOINT$poidata$trt * (JOINT$poidata$ep=="S")
+  JOINT$poidata$trtT <- JOINT$poidata$trt * (JOINT$poidata$ep == "T")
+  JOINT$poidata$trtS <- JOINT$poidata$trt * (JOINT$poidata$ep == "S")
   
   JOINT$poidata$trialrefT <- JOINT$poidata$trialrefS <-
     JOINT$poidata$trialref
@@ -78,7 +88,7 @@ poisSurr <- function(data,
     levels(JOINT$poidata$trialref)[1]
   
   W <- options()$warn
-  options(warn=-1)
+  options(warn = -1)
   
   if (nlevels(JOINT$poidata$interval) > 1) {
     baseform <- m~ -1 +interval*ep-ep + trtT + trtS + offset(log(Rt))
@@ -94,6 +104,8 @@ poisSurr <- function(data,
   # * Model T: Poisson model with
   #             - random treatment-trial interaction
   if ('poissont' %in% models) {
+    if (verbose) message('- Estimating model: Poisson T', appendLF = FALSE)
+    
     system.time({
       JOINT$poifitT <- glmer(
         update(baseform, .~. +
@@ -111,13 +123,21 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitT)$trialref)),
       ranef = ranef(JOINT$poifitT),
       VarCor = VarCorr(JOINT$poifitT),
-      optinfo = JOINT$poifitT@optinfo)
+      optinfo = JOINT$poifitT@optinfo,
+      runTime = as.difftime(
+        round(attr(JOINT$poifitT, 'exec.time')[3] / 60, 1), units = 'mins'))
+    
+    if (verbose) 
+      message(paste0(' (', format(RES$PoissonT$runTime, digits = 2), ')'))
   }#############################################################################
   
   ##############################################################################
   # * Model I: Poisson model with
   #             - individual random intercept
   if ('poissoni' %in% models) {
+    if (verbose) 
+      message('- Estimating model: Poisson I', appendLF = FALSE)
+    
     system.time({
       JOINT$poifitI <-  glmer(
         update(baseform, .~. +
@@ -138,7 +158,12 @@ poisSurr <- function(data,
       R2 = NULL,
       ranef = ranef(JOINT$poifitI),
       VarCor = VarCorr(JOINT$poifitI),
-      optinfo = JOINT$poifitI@optinfo)
+      optinfo = JOINT$poifitI@optinfo,
+      runTime = as.difftime(
+        round(attr(JOINT$poifitI, 'exec.time')[3] / 60, 1), units = 'mins'))
+    
+    if (verbose) 
+      message(paste0(' (', format(RES$PoissonI$runTime, digits = 2), ')'))
   }#############################################################################
   
   ##############################################################################
@@ -146,6 +171,9 @@ poisSurr <- function(data,
   #            - random treatment-trial interaction
   #            - individual random intercept 
   if ('poissonti' %in% models) {
+    if (verbose) 
+      message('- Estimating model: Poisson TI', appendLF = FALSE)
+    
     system.time({
       JOINT$poifitTI <- glmer(
         update(baseform, .~. +
@@ -168,7 +196,12 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitTI)$trialref)),
       ranef = ranef(JOINT$poifitTI),
       VarCor = VarCorr(JOINT$poifitTI),
-      optinfo = JOINT$poifitTI@optinfo)
+      optinfo = JOINT$poifitTI@optinfo,
+      runTime = as.difftime(
+        round(attr(JOINT$poifitTI, 'exec.time')[3] / 60, 1), units = 'mins'))
+    
+    if (verbose) 
+      message(paste0(' (', format(RES$PoissonTI$runTime, digits = 2), ')'))
   }#############################################################################
   
   ##############################################################################
@@ -177,6 +210,9 @@ poisSurr <- function(data,
   #             - individual random intercept 
   #             - random trial intercept (shared by the two EndPoints)
   if ('poissontia' %in% models) {
+    if (verbose) 
+      message('- Estimating model: Poisson TIa', appendLF = FALSE)
+    
     system.time({
       JOINT$poidata$trialrefSH <- JOINT$poidata$trialref
       JOINT$poifitTIa <-  glmer(
@@ -201,7 +237,12 @@ poisSurr <- function(data,
         prod(diag(VarCorr(JOINT$poifitTIa)$trialref)),
       ranef = ranef(JOINT$poifitTIa),
       VarCor = VarCorr(JOINT$poifitTIa),
-      optinfo = JOINT$poifitTIa@optinfo)
+      optinfo = JOINT$poifitTIa@optinfo,
+      runTime = as.difftime(attr(JOINT$poifitTIa, 'exec.time')[3] / 60,
+                            units = 'mins'))
+    
+    if (verbose) 
+      message(paste0(' (', format(RES$PoissonTIa$runTime, digits = 2), ')'))
   }#############################################################################
   ##############################################################################
   

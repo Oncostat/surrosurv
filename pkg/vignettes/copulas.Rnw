@@ -16,7 +16,6 @@
 ?Subject=R:::surrosurv}{Federico Rotolo}}
 \usepackage{Sweave}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 \maketitle
 \hrule~\\[1em]
 
