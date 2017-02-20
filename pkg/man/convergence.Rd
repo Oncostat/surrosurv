@@ -21,11 +21,11 @@
     The fitted models, an object of class \code{\link{surrosurv}}.
   }
   \item{kkttol}{
-    The tolerance thresholds for the assessing whether
-      the maximum scaled gradient is small enough.
+    The tolerance threshold for the assessing whether
+      the maximum (absolute) scaled gradient is small enough.
   }
   \item{kkt2tol}{
-    The tolerance thresholds for checking whether
+    The tolerance threshold for checking whether
       the Hessian matrix and
       the variance-covariance matrix of random treatment effects
       are positive definite.
