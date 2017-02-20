@@ -28,7 +28,7 @@ The authors thank the GASTRIC
   Group for permission to use their data.
 The investigators who contributed to GASTRIC are listed in 
   Oba et al (2013) and GASTRIC (2010).
-The GASTRIC Group data are available within the \inline{surrosurv} package
+The GASTRIC Group data are available within the \code{surrosurv} package
   for research purposes, under the conditions that
   (1) the research be scientifically appropriate,
   (2) the confidentiality of individual patient data be protected,

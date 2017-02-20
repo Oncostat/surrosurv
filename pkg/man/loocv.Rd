@@ -14,10 +14,11 @@
     (Michiels et al, 2009).
 }
 \usage{
-loocv(data, nCores, parallel = TRUE,
-      models = c('Clayton', 'Plackett', 'Hougaard',
-                 'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'), 
-      ...)
+\method{loocv}{surrosurv}(object, ...)
+\method{loocv}{data.frame}function(object, nCores, parallel = TRUE, 
+                             models = c('Clayton', 'Plackett', 'Hougaard',
+                                        'Poisson I', 'Poisson T',
+                                        'Poisson TI', 'Poisson TIa'), ...)
 
 \method{print}{loocvSurrosurv}(x, n = 6, silent = FALSE, ...)
           
@@ -25,8 +26,9 @@ loocv(data, nCores, parallel = TRUE,
 }
 
 \arguments{
-  \item{data}{
-    A \link{data.frame} with columns
+  \item{object}{
+    Either an object of class \code{surrosurv} with an attribute \code{data}
+      of class \link{data.frame} or a \link{data.frame} with columns
     \itemize{
       \item \code{trialref}, the trial reference
       \item \code{trt}, the treatment arm (-0.5 or 0.5)

@@ -18,10 +18,10 @@
 surrosurv(data,
           models = c('Clayton', 'Plackett', 'Hougaard',
                      'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
-          intWidth,  nInts = 8,
+          intWidth = NULL,  nInts = 8,
           cop.OPTIMIZER = "bobyqa",
-          poi.OPTIMIZER = "bobyqa",
-          verbose = FALSE,
+          poi.OPTIMIZER = "nloptwrap",
+          verbose = TRUE,
           twoStep = FALSE,
           keep.data = TRUE)
 
