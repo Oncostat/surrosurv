@@ -20,7 +20,7 @@ convals <- function(x) {
             error = function(x) return(-1)),
           minREev = tryCatch(
             min(eigen(y$VarCor2)$values),
-            error=function(x) return(-1))
+            error = function(x) return(-1))
         )
         return(vals)
       }))
@@ -36,7 +36,7 @@ convals <- function(x) {
     which_models <- x[grepl('Poisson', names(x))]
     convres <- t(sapply(
       which_models,
-      function (y) tryCatch({
+      function(y) tryCatch({
         vals <- c(
           maxSgrad = tryCatch(
             max(abs(with(y$optinfo$derivs,solve(Hessian, gradient)))),
@@ -49,7 +49,7 @@ convals <- function(x) {
             error = function(x) return(-1))
         )
         return(vals)
-      }, error=function(x) return(c(Inf, -1, -1))))
+      }, error = function(x) return(c(Inf, -1, -1))))
     )
     names(convres) <- names(which_models)
     return(convres)
@@ -64,14 +64,14 @@ convals <- function(x) {
 #####################################################################################
 #####################################################################################
 #####################################################################################
-convergence <- function(x, kkttol = 1e-2, kkt2tol = 1e-8) {
+convergence <- function(x, kkttol = 1e-2, kkt2tol = 0) {
   if (!'surrosurv' %in% class(x))
     stop('x must be of class surrosurv')
   
   ConvRES <- convals(x)
   checkConvRES <- cbind(
-    ConvRES[, 1, drop=FALSE] <= kkttol,
-    ConvRES[, 2:3] >= kkt2tol)
+    ConvRES[, 1, drop = FALSE] <= kkttol,
+    ConvRES[, 2:3] > kkt2tol)
   
   class(checkConvRES) <- 'conv'
   return(checkConvRES)
