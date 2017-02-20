@@ -1,11 +1,11 @@
 ################################################################################
 loocv <- function(object, ...) UseMethod('loocv')
-loocv.surrosurv <- function(object, ...) loocv.data.frame(attr(object, 'data'))
-loocv.data.frame <- function(object, nCores, parallel = TRUE, 
-                             models = c('Clayton', 'Plackett', 'Hougaard',
-                                        'Poisson I', 'Poisson T',
-                                        'Poisson TI', 'Poisson TIa'),
-                             ...) {
+loocv.surrosurv <- function(object, nCores, parallel = TRUE, 
+                            models = c('Clayton', 'Plackett', 'Hougaard',
+                                       'Poisson I', 'Poisson T',
+                                       'Poisson TI', 'Poisson TIa'),
+                            ...) loocv.data.frame(attr(object, 'data'))
+loocv.data.frame <- function(object, nCores, parallel, models, ...) {
   # ************************************************************************** #
   models <- tolower(noSpP(models))
   if ('poisson' %in% models) {
