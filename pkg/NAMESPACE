@@ -26,8 +26,6 @@ export(convals,
        ste,
        surrosurv)
 
-S3method(loocv, data.frame)
-
 S3method(print, conv)
 
 S3method(confint, surrosurv)

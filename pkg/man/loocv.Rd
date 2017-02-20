@@ -14,8 +14,7 @@
     (Michiels et al, 2009).
 }
 \usage{
-\method{loocv}{surrosurv}(object, ...)
-\method{loocv}{data.frame}function(object, nCores, parallel = TRUE, 
+\method{loocv}{surrosurv}(object, nCores, parallel = TRUE, 
                              models = c('Clayton', 'Plackett', 'Hougaard',
                                         'Poisson I', 'Poisson T',
                                         'Poisson TI', 'Poisson TIa'), ...)
