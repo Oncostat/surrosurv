@@ -1,4 +1,4 @@
-\documentclass[article,shortnames, nojss]{jss}\usepackage[]{graphicx}\usepackage[]{color}
+\documentclass[]{scrartcl}\usepackage[]{graphicx}\usepackage[]{color}
 %% maxwidth is the original width if it is less than linewidth
 %% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -11,173 +11,220 @@
 }
 \makeatother
 
-\usepackage{Sweave}
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
 
-\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\usepackage{framed}
 \makeatletter
-\def\maxwidth{ %
-  \ifdim\Gin@nat@width>\linewidth
-    \linewidth
-  \else
-    \Gin@nat@width
-  \fi
-}
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
 \makeatother
 
-\usepackage{Sweave}
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[square,numbers]{natbib}
+\usepackage[]{fullpage}
+\usepackage{setspace}
+% \doublespacing
 
 
-\usepackage{graphicx, color, amsmath, amssymb, bm, thumbpdf}
-%\VignetteEngine{knitr::knitr}
+\usepackage{listings}
+\usepackage{graphicx, color, doi, xcolor, graphicx, color, amsmath, amssymb, bm, hyperref, textcomp, thumbpdf}
+\usepackage{lineno}
 
-%\VignetteIndexEntry{Parameterization of copula functions}
-
-%\VignetteKeyword{copula}
-%\VignetteKeyword{Clayton}
-%\VignetteKeyword{Palckett}
-%\VignetteKeyword{Hougaard}
-%\VignetteKeyword{Poisson}
-%\VignetteKeyword{GLM}
-%\VignetteKeyword{auxiliary Poisson model}
-%\VignetteKeyword{poissonize}
-%\VignetteKeyword{data poissonization}
-%\VignetteKeyword{surrogate endpoint}
-%\VignetteKeyword{surrogate}
-%\VignetteKeyword{prediction}
-%\VignetteKeyword{leave-one-out}
-%\VignetteKeyword{leave-one-trial-out}
-%\VignetteKeyword{loocv}
-%\VignetteKeyword{cross-validation}
-%\VignetteKeyword{clinical trials}
-%\VignetteKeyword{random effects}
-%\VignetteKeyword{mixed models}
-
-
-\makeatletter
-\def\maxwidth{ %
-  \ifdim\Gin@nat@width>\linewidth
-    \linewidth
-  \else
-    \Gin@nat@width
-  \fi
-}
-\makeatother
-
-
-\usepackage{amsmath, amssymb, bm, thumbpdf}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% almost as usual
-\author{
-  % Federico Rotolo\\Gustave Roussy\\INSERM U1018 \And
-  % Xavier Paoletti\\Gustave Roussy\\INSERM U1018 \And 
-  % Marc Buyse\\Universiteit Hasselt\\IDDI\AND
-  % Tomasz Burzykowski\\Universiteit Hasselt\\IDDI \And 
-  % Stefan Michiels\\Gustave Roussy\\INSERM U1018
-}
-\title{\pkg{surrosurv}: an \proglang{R} Package for the Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses of Randomized Clinical Trials}
-
-\Plainauthor{
-  % Federico Rotolo, Xavier Paoletti, Tomasz Burzykowsi, 
-  % Marc Buyse, Stefan Michiels
-}
-\Plaintitle{surrosurv:
-            an R Package for the Evaluation of Failure Time Surrogate Endpoints
-            in Individual Patient Data Meta-Analyses of Randomized Clinical Trials}
-\Shorttitle{\pkg{surrosurv}: Evaluation of Failure Time Surrogate Endpoints in \proglang{R}} 
-
-%% an abstract and keywords
-\Abstract{
-  Surrogate endpoints are endpoints which are attractive for use in clinical trials
-  instead of well-established endpoints because of practical convenience.
-  Two measures of surrogacy can be obtained in a meta-analytic context:
-  the individual-level $R^2_\text{indiv}$
-  and the trial-level $R^2_\text{trial}$.
-  % 
-  In the case of failure time endpoints,
-  the usual two-step approach estimates 
-  a Kendall's $\tau$ at the individual level using a copula model,
-  and then computes the $R^2_\text{trial}$ via a weighted regression.
-  Recently, we also developped an approach based on bivariate survival models with
-  individual random effects to measure the $\tau$ and
-  treatment-by-trial interactions to measure the $R^2_\text{trial}$.
-  We used auxiliary mixed Poisson models to fit such a model.
-  
-  The \proglang{R} package \pkg{surrosurv} implements the two-step method
-  with Clayton, Plackett, and Hougaard copulas
-  (with and without measurement-error adjustment),
-  as well as the mixed Poisson approach.
-  In this paper, we present the package and we show its use in practice
-  on individual patient data from a meta-analysis of 4069 patients with advanced/recurrent
-  gastric cancer from 20 trials of chemotherapy.
-}
-
-\Keywords{surrogate endpoint,
-          survival,
-          time-to-event,
-          randomized clinical trials,
-          individual patient data meta-anaysis,
-          copula,
-          mixed proportional hazard models,
-          Poisson regression,
-          \pkg{surrosurv},
-          \proglang{R}}
-\Plainkeywords{surrogate endpoint,
-              randomized clinical trials, 
-              individual patient data meta-anaysis, 
-              copula,
-              mixed proportional hazard models,
-              Poisson regression,
-              surrosurv, 
-              R}
-
-
-%% publication information
-%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
-%% \Volume{50}
-%% \Issue{9}
-%% \Month{June}
-%% \Year{2012}
-%% \Submitdate{2012-06-04}
-%% \Acceptdate{2012-06-04}
-
-%% The address of (at least) one author should be given
-%% in the following format:
-\Address{
-  Federico Rotolo, Xavier Paoletti, and Stefan Michiels\\[.4em]
-  Service de Biostatistique et d'\'Epid\'emiologie, Gustave Roussy\\
-  INSERM U1018 OncoStat, CESP\\
-  114, Rue Edouard Vaillant -- Villejuif, F-94805, France\\
-  E-mail: \email{federico.rotolo@gustaveroussy.fr}\\
-  % 
-  % Marc Buyse and Tomasz Burzykowski\\[.4em]
-  % I-BioStat, Universiteit Hasselt\\
-  % Agoralaan building D --
-  % Diepenbeek, B-3590, Belgium\\[.4em]
-  % International Drug Development Institute (IDDI)\\
-  % Avenue Provinciale 30 --
-  % Louvain-la-Neuve, B-1348, Belgium
-}
-%% Telephone: +43/512/507-7103
-%% Fax: +43/512/507-2851
-
-%% for those who use Sweave please include the following line (with % symbols):
-%% need no \usepackage{Sweave.sty}
-
-%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
+\definecolor{darkgray}{rgb}{.15, .12, .11}
+\lstset{ %
+  language=R,                     % the language of the code
+  upquote=true,
+  basicstyle=\small\ttfamily\color{darkgray},       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{darkgray},  % the style that is used for the line-numbers
+  stepnumber=5,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  % frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  % keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{dkgreen},   % comment style
+  stringstyle=\color{brown},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+}
+\def\inline{\lstinline[basicstyle=\ttfamily\color{darkgray}]}
+
+
+\author{Federico Rotolo$^{1, 2,}$\footnote{
+  114, Rue Edouard Vaillant -- Villejuif, F-94805, France.
+  \href{mailto:federico.rotolo@gustaveroussy.fr}{federico.rotolo@gustaveroussy.fr}.
+  +33~1~42~11~61~28},
+  Xavier Paoletti$^{1, 2}$, Stefan Michiels$^{1, 2}$}
+\date{\footnotesize{$^1$ Service de Biostatistique et d'\'Epid\'emiologie, Gustave Roussy\\
+      $^2$ INSERM U1018 OncoStat, CESP}}
+
+\title{\inline{surrosurv}:
+      an \inline{R} Package for the Evaluation of Failure Time Surrogate Endpoints
+      in Individual Patient Data Meta-Analyses of Randomized Clinical Trials}
+
+% \maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{%Title}
+\inline{surrosurv}:
+an \inline{R} Package for the Evaluation of Failure Time Surrogate Endpoints
+in Individual Patient Data Meta-Analyses of Randomized Clinical Trials
+}
+% \subsection*{Authors}
+Federico Rotolo$^{1, 2}$ %\newline
+Xavier Paoletti$^{1, 2}$ %\newline
+Stefan Michiels$^{1, 2}$
+
+% \subsection*{Affiliations}
+$^1$ Service de Biostatistique et d'\'Epid\'emiologie, Gustave Roussy, Univ. Paris-Saclay
+\newline
+$^2$ INSERM U1018 OncoStat, CESP, Univ. Paris-Sud, Univ. Paris-Saclay
+
+% \subsection*{Full contact of the corresponding author}
+% Federico Rotolo, PhD\newline
+% Service de Biostatistique et d'\'Epid\'emiologie\newline
+% Gustave Roussy Cancer Campus\newline
+% 114, Rue Edouard Vaillant -- Villejuif, CEDEX\newline
+% F-94805, France.\newline
+% \href{mailto:federico.rotolo@gustaveroussy.fr}{federico.rotolo@gustaveroussy.fr}
+% \newline
+% +33~1~42~11~61~28
+%     
+% \subsection*{Target journal}
+% Computer Methods and Programs in Biomedicine\newline
+% Section II. Systems and Programs.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+% \newpage
+\onehalfspacing
+\section*{Abstract}
+  \paragraph{Background and Objective.}
+  Surrogate endpoints are attractive for use in clinical trials
+    instead of well-established endpoints because of practical convenience.
+  To validate a surrogate endpoint,
+    two important measures can be estimated in a meta-analytic context
+    when individual patient data are available:
+    the $R^2_\text{indiv}$ or the Kendall's $\tau$ at the individual level,
+    and the  $R^2_\text{trial}$ at the trial level.
+  We aimed at providing an \inline{R} implementation of
+    classical and well-established as well as more recent statistical methods
+    for surrogacy assessment with failure time endpoints.
+  We also intended incorporating utilities for model checking and visualization
+    and data generating methods described in the literature to date.
+  % 
+  \paragraph{Methods.}
+  In the case of failure time endpoints,
+    the classical approach is based on two steps.
+  First,  a Kendall's $\tau$ is estimated as measure of individual level surrogacy
+    using a copula model.
+  Then, the $R^2_\text{trial}$ is computed via a linear regression of the estimated treatment effects;
+    at this second step, the estimation uncertainty can be accounted for
+    via measurement-error model or via weights.
+  In addition to the classical approach,
+    we recently developped an approach based on bivariate 
+    auxiliary Poisson models with
+    individual random effects to measure the Kendall's $\tau$ and
+    treatment-by-trial interactions to measure the $R^2_\text{trial}$.
+  The most common data simulation models described in the literature
+    are based on: copula models,
+    mixed proportional hazard models, and 
+    mixture of half-normal and exponential random variables.
+  %
+  \paragraph{Results.}
+  The \inline{R} package \inline{surrosurv} implements
+    the classical two-step method with Clayton, Plackett, and Hougaard copulas.
+  It also allows to optionally adjust the second-step linear regression 
+    for measurement-error.
+  The mixed Poisson approach is implemented 
+    with different reduced models in addition to the full model.
+  We present the package functions for estimating the surrogacy models,
+    for checking their convergence, 
+    for performing leave-one-trial-out cross-validation,
+    and for plotting the results.
+  We illustrate their use in practice
+    on individual patient data from a meta-analysis of 4069 patients with advanced
+    gastric cancer from 20 trials of chemotherapy.
+  %
+  \paragraph{Conclusions.}
+  The \inline{surrosurv} package provides an \inline{R} implementation of
+  classical and recent statistical methods for surrogacy assessment
+    of failure time endpoints.
+  Flexible simulation functions are available
+    to generate data according to the methods described in the literature.
+  
+%   \paragraph{Keywords.}
+%     surrogate endpoints;
+%     survival;
+%     % time-to-event;
+%     % randomized clinical trials;
+%     individual patient data meta-anayses;
+%     \inline{R};
+%     copula;
+%     mixed %proportional hazard 
+%       models
+%     % Poisson regression
+% \clearpage
+% \doublespacing
+\linenumbers
+
+
+
 
 % \SweaveOpts{prefix.string=figs/fig}
 % \SweaveOpts{height=4}
 % \SweaveOpts{width=7}
 % \setkeys{Gin}{width=\textwidth}
 % \SweaveOpts{concordance=FALSE}
-%% Use the \pkg{}, \proglang{} and \code{} commands.
+%% Use the \inline{}, \inline{} and \inline{} commands.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -187,51 +234,58 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Surrogate endpoints are endpoints which can reliably used
-  instead of well-established endpoints
+Surrogate endpoints are endpoints which can reliably be used
+  instead of well-established (true) endpoints
   and which yield improved practical convenience
-  in terms of cost, rapidity or ease of assessment, 
+  in terms of lower cost,
+  more rapid occurrence,
+  increased ease of assessment, 
   or reduced invasiveness \citep{Burzykowski2006}.
-A reliable surrogate endpoint must be strongly associatied with
-  the true endpoints at the individual level and
-  the effect of the treatment on the surrogate
-  must be assciated with the effect on the true endpoint.
-In a meta-analytic context,
-  the usual measure of individual level surrogacy for continuous endpoints is
-  the $R^2_\text{\tiny indiv}$ 
-  and the ususal measure of trial level surrogacy
-  is the  $R^2_\text{\tiny trial}$ \citep{BuyseEtal00}.
+Two conditions must be fulfilled for surrogate endpoint to be reliable:
+  it must be strongly associatied with
+  the true endpoint at the individual level and
+  the effect of the treatment on it
+  must be strongly assciated with the effect on the true endpoint.
+In a meta-analytic context and when the endpoints are gaussian \citep{BuyseEtal00},
+  the usual measure of individual level surrogacy is
+  the $R^2_\text{\tiny indiv}$ between the \textit{endpoints},
+  which measures the part of variability of the true endpoint $T$
+  explained by the surrogate endpoint $S$.
+At the trial level, the usual measure of surrogacy
+  is given by the $R^2_\text{\tiny trial}$
+  between the \textit{treatment effects} on the two endpoints,
+  that measures the part of variability of the \textit{treatment effect} on $T$
+  explained by the \textit{treatment effect} on $S$.
 
 In the case of failure time (survival) endpoints,
   the classical methods developped for normally-distributed endpoints
   cannot be used because of right censoring.
-\cite{BurzykowskiEtal01} proposed a meta-analytic model
+Burzykowski and colleagues \cite{BurzykowskiEtal01} developped a meta-analytic model
   for failure time endpoints that measures
-  individual level surrogacy in terms of \cite{Kendall38}'s $\tau$
+  individual level surrogacy in terms of Kendall's $\tau$ \citep{Kendall38}
   and trial level surrogacy in terms of $R^2_\text{\tiny trial}$.
-Despite the numerous applications of this approach in the medical literature,
-  difficults exists to fit the whole model directly and
-  a two-step procedure is commonly employed.
-Such a procedure has some limitations 
-  preventing its applicability in a number of applications,
-  including convergence issues which can make the interpretation of the results difficult
+This method is largely employed in numerous applications in the medical literature.
+Because of some limitations including convergence issues,
+  the interpretation of the results is difficult in some cases
   \citep{Oba2013, BurzykowskiCortinas05}.
-In principle, the most natural framework for adapting the meta-analytic approach
-  by \cite{BuyseEtal00} to the survival case
-  is the use of bivariate mixed proportional hazard models,
-  also known as frailty models \citep{DuchateauJanssen08}.
-Since the estimation of frailty models with complex structures
-  of random effects is computationally intensive and can fail to converge,
-  we previously exploited \citep{RotoloPoissurogate}
-  the well-known connection between the proportional hazard models
-  and the Poisson log-linear models  \citep{Whitehead80, LairdOlivier81},
-  which has also been used more recently for individual patient data meta-analyses
-  \citep{crowtherEtal12}.
+Recently, we considered using bivariate mixed proportional hazard models
+   \citep{DuchateauJanssen08},
+  which are the most natural adaptation of the above-mentioned
+  meta-analytic approach by Buyse et al.~\cite{BuyseEtal00} to the survival case.
+We exploited \citep{RotoloPoissurogate}
+  the connection between the proportional hazard models
+  and the Poisson log-linear models \citep{Whitehead80, LairdOlivier81}
+  to build the joint model for the two treatment effects adjusted
+  for individual dependence and baseline heterogeneity across trials.
 
-In the present paper, we show how all these models can be fitted by use 
-  of the \proglang{R} \citep{R}
-  package \pkg{surrosurv} \citep{R:surrosurv}.
-We illustrate the use of the available functions 
+In the present paper, we show how the classical and more recent models
+  can be fitted by use of the \inline{R} \citep{R}
+  package \inline{surrosurv} \citep{R:surrosurv}.
+Model checking can be performed thanks to utilities for convergence assessment
+    and leave-one-trial-out crossvalidation.
+User-friendly functions allow the user to clearly show the results of the 
+    estimated models.
+We illustrate the available functions 
   using individual data of a meta-analysis of 20 randomized trials of chemotherapy,
   including 4069 patients with advanced/recurrent gastric cancer
   \citep{GASTRIC13, Paoletti2013}.
@@ -240,7 +294,7 @@ We illustrate the use of the available functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The evaluation of failure time surrogate endpoints}
+\section{Computational methods and theory}
 \label{sec:methods}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -260,13 +314,13 @@ Let $Z_{ij}$ be the indicator of the treatment arm
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:copulaApp}
-The model proposed by \cite{BurzykowskiEtal01} for failure time endpoints
+The model proposed by {Burzykowski et al.~\cite{BurzykowskiEtal01} for failure time endpoints
   consists in two steps, one for the individual and one for the trial level.
 
 \paragraph{Individual-level.}
-At the first the bivariate proportional hazard model is defined
-  by means of the marginal hazard functions and the copula function
-  accounting for their dependence:
+At the first step, the bivariate proportional hazard model is defined
+  by means of the marginal hazard functions and
+  of the copula function to account for their dependence:
   \begin{equation}
     \begin{cases}
       h_{Sij}(s; Z_{ij}) = h_{Si}(s) \exp\big\{
@@ -282,33 +336,33 @@ At the first the bivariate proportional hazard model is defined
   where $h_{Si}(s)$ and $h_{Ti}(s)$ are the trial-specific baseline hazards,
   $\alpha_i$ and $\beta_i$ the treatment effects,
   and $S_{Sij}(s)$ and $S_{Tij}(t)$ the survival functions associated to
-  of $h_{Tij}$ and $h_{Tij}$.
+  $h_{Tij}$ and $h_{Tij}$.
 The dependence parameter $\theta$
   is reparametrized into the individual-level Kendall's $\tau$,
   according to the copula function
-  thanks to the \code{tau()} function in the 
-  \pkg{copula} package \citep{R:copula, Yan07}.
+  thanks to the \inline{tau()} function in the 
+  \inline{copula} package \citep{R:copula, Yan07}.
 
-In the \pkg{surrosurv} package,
+In the \inline{surrosurv} package,
   Weibull marginal hazards are implemented,
   together with three copula functions:
   \begin{itemize}
-    \item the \cite{Clayton78} copula
+    \item the Clayton copula \citep{Clayton78}
       \begin{equation}
         C_\theta(u, v)= \left(u^{-\theta} + v^{-\theta} - 1\right)^{-1/\theta},
         \label{eq:clayton}
       \end{equation}
       with $\theta > 0$
       and Kendall's $\tau = \theta/(\theta+2)$;
-    \item the \cite{Plackett65} copula
+    \item the Plackett copula \citep{Plackett65}
       \begin{align}
         C_\theta(u,v) &= \big[ Q - R^{1/2} \big] / \big[2 (\theta - 1) \big],\\
         Q &= 1 +(\theta-1)(u+v), \nonumber\\
         R &= Q^2 - 4 \theta(\theta-1)uv, \nonumber
       \end{align}
-      with $\theta > 0$ and Kendall's $\tau$ computed numerically
+      with $\theta > 0$ and Kendall's $\tau$ computed using numerical integration
       as no analytical expression is available;
-    \item the \cite{Hougaard86} copula
+    \item the Hougaard copula \citep{Hougaard86}
       \begin{equation}
         C_\theta(u,v) = \exp\left(-\left[(- \ln u)^{1/\theta} +
         (- \ln v)^{1/\theta}\right]^\theta \right),
@@ -317,8 +371,7 @@ In the \pkg{surrosurv} package,
       and Kendall's $\tau = 1 - \theta$.
   \end{itemize}
 Further details on these three copula models can be found in the 
-  \code{vignette(}\verb|'|\code{copula}\verb|'|\code{, package =}
-  \verb|'|\code{surrosurv}\verb|')|.
+  \inline{vignette('copula', package = 'surrosurv')}.
 
 \paragraph{Trial level.}
 At the second step, the estimates of the treatment effects 
@@ -358,19 +411,19 @@ At the second step, the estimates of the treatment effects
 
 The trial-level surrogacy measure is
   $R_\text{\tiny trial}^2 = \rho_\text{\tiny trial}^2$.
-In practice, the $\rho_\text{\tiny trial}$ is computed
+In practice, we compute the $\rho_\text{\tiny trial}$ 
   via a linear regression of the $\beta_i$'s over the $\alpha_i$'s
   adjusted by measurement error by fixing the $\bm\Omega_i$'s at their estimates
   from the first step \citep{vanHouwelingenEtal02}
-  by using the \pkg{mvmeta} package \citep{GasparriniEtal12, R:mvmeta}.
+  by using the \inline{mvmeta} package \citep{GasparriniEtal12, R:mvmeta}.
 This adjusted (for measurement error) model is sometimes computationally challenging
   and does not always converge.
-The \pkg{surrosurv} package returns also the so-called
+The \inline{surrosurv} package returns also the so-called
   unadjusted $R_\text{\tiny trial}^2$,
   obtained using a linear regression ---
   equivalent to fixing all the elements of $\bm\Omega_i$ equal to 0 ---
   by weigthing the observations $(\alpha_i, \beta_i)^\prime$ by the trial size,
-  in order to account somehow indirectly and approximately for measurement error.
+  in order to account somehow indirectly and approximately for estimation uncertainty.
 
 
 
@@ -397,7 +450,7 @@ Note that this corresponds to a  shared frailty model with
   bivariate clusters \citep{DuchateauJanssen08}.
 The shared frailty term $u_{ij}$ accounts for individual level dependence.
 
-It is well-known \cite[see for instance][]{Whitehead80, crowtherEtal12}
+It is well-known (see for instance \cite{Whitehead80, crowtherEtal12})
   that the parameters of Cox models can be estimated by fitting
   a so-called `auxiliary' Poisson log-linear regression model,
   by dividing the time scale into intervals $k=1, \ldots, K$.
@@ -428,8 +481,8 @@ In the surrogacy assessment context,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Individual-level surrogacy.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Thanks to the shared frailty $u_{ij}$,
-  the estimated variance of which  is $\hat\sigma^2_\text{\tiny indiv}$,
+The estimated variance of the shared frailties $u_{ij}$
+  is $\hat\sigma^2_\text{\tiny indiv}$ and 
   can be used to estimate the Kendall's
 $\hat\tau = 4 \int_0^\infty s \mathcal L(s)\mathcal L^{(2)}(s) \textrm d s - 1$,
 where $\mathcal L(s)$ and $\mathcal L^{(2)}(s)$
@@ -438,17 +491,16 @@ second derivative.
 As an analytic expression of $\mathcal L(s)$
 is not available for the log-normal frailty distribution,
 we approximated it using the Laplace method \citep{GoutisCasella99},
-implemented in the \code{fr.lognormal()} function
-in the \pkg{parfm} package \citep{parfmJSS, R:parfm}.
+implemented in the \inline{fr.lognormal()} function
+in the \inline{parfm} package \citep{parfmJSS, R:parfm}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Trial-level surrogacy.} \label{sec:trialDep}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In model (\ref{eq:biPoiMix}),
-  the same assumptions (\ref{eq:trtEffs})
-  as in the two-step copula model
-  are done for the trial-specific treatment effects.
+  the trial-specific treatment effects are again assumed to follow
+  the binormal distribution (\ref{eq:trtEffs}).
 Thus, the correlation $\rho_\text{\tiny trial}$
   between the two treatment effects provides us with 
   the coefficient of determination
@@ -459,14 +511,14 @@ Thus, the correlation $\rho_\text{\tiny trial}$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Reduced Poisson models.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The \pkg{surrosurv} package can compute four reduced versions 
+The \inline{surrosurv} package can compute four reduced versions 
   of the full model (\ref{eq:biPoiMix})
-  that may turn out useful in case of convergence issues with the full model.
+  that may turn out to be useful in case of convergence issues with the full model.
 \begin{itemize}
 \item Model \textbf{Poisson T} has
   random trial-treatment interactions $\alpha_i$ and $\beta_i$,
-  but does not incoroporate individual effects ($u_{ij} \equiv 0$).
-It has common baselines between trials
+  but does not incorporate individual effects ($u_{ij} \equiv 0$).
+It assumes common baselines between trials
 ($\mu^{(k)}_{Si} = \mu^{(k)}_{S}$, $\mu^{(k)}_{Ti} = \mu^{(k)}_{T},
 \forall i$).
 This model provides only the trial-level measure of surrogacy
@@ -499,172 +551,148 @@ with $m_i\sim\mathcal N(0, \sigma^2_m)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section[A data example within the surrosurv package]{A data example within the \pkg{surrosurv} package}
+\section{Program description with a data example}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We illustrate the use of the function in the \pkg{surrosurv} package
-by means of the individual patient data of the advanced GASTRIC meta-analysis
+We illustrate the use of the functions in the \inline{surrosurv} package
+  on the individual patient data of the advanced GASTRIC meta-analysis
 \citep{GASTRIC13, Paoletti2013}.
-\begin{Schunk}
-\begin{Sinput}
-R> library('surrosurv')
-\end{Sinput}
-\begin{Soutput}
+\begin{lstlisting}
+> library(surrosurv)
 Loading required package: optimx
-\end{Soutput}
-\begin{Sinput}
-R> packageVersion('surrosurv')
-\end{Sinput}
-\begin{Soutput}
+> packageVersion('surrosurv')
 [1] '1.1.5'
-\end{Soutput}
-\end{Schunk}
+\end{lstlisting}
 
 The individual data of the 4069 patients,
-already made public by \cite{BuyseEtal15},
-are also available directly in \proglang{R} in the \pkg{surrosurv} package:
-\begin{Schunk}
-\begin{Sinput}
-R> data('gastadv')
-R> nrow(gastadv)
-\end{Sinput}
-\begin{Soutput}
+  already made public by \cite{BuyseEtal15},
+are also available directly in \inline{R} in the \inline{surrosurv} package:
+\begin{lstlisting}
+> data('gastadv')
+> nrow(gastadv)
 [1] 4069
-\end{Soutput}
-\end{Schunk}
+\end{lstlisting}
 
 The data set contains the following variables:
-\begin{Schunk}
-\begin{Sinput}
-R> names(gastadv)
-\end{Sinput}
-\begin{Soutput}
-[1] "timeT"    "statusT"  "statusS"  "timeS"    "trialref" "trt"      "id"      
-\end{Soutput}
-\end{Schunk}
-where \code{timeT} and \code{timeS} are the (possibly censored) times 
-for overall survival (\code{T}) and
-for progression-fre survival (\code{S}) expressed in days,
-\code{statusT} and \code{statusS} are the associated indicators of
-censoring (\code{0}) or event (\code{1}),
-\code{trialref} is the trial indicator ($i$),
-\code{trt} is the treatment arm (\code{-0.5} for control and \code{0.5} for chemotherapy),
-and \code{id} is the patient indicator ($j$).
-Figure~\ref{fig:survCurves} shows the survival curves for overall survival,
+\begin{lstlisting}
+> names(gastadv)
+[1] "timeT"  "statusT"  "statusS"  "timeS"  "trialref"  "trt"  "id"      
+\end{lstlisting}
+where \inline{timeT} and \inline{timeS} are the (possibly censored) times 
+for overall survival (\inline{T}) and
+for progression-fre survival (\inline{S}) expressed in days,
+\inline{statusT} and \inline{statusS} are the associated indicators of
+censoring (\inline{0}) or event (\inline{1}),
+\inline{trialref} is the trial indicator ($i$),
+\inline{trt} is the treatment arm (\inline{-0.5} for control and \inline{0.5} for chemotherapy),
+and \inline{id} is the patient indicator ($j$).
+Figure~\ref{fig:survCurves} shows the Kaplan--Meier curves for overall survival,
 the true endpoint $T$, and progression-free survival,
 the candiddate surrogate $S$.
-\begin{Schunk}
-\begin{Soutput}
-Warning: package 'survival' was built under R version 3.3.2
-\end{Soutput}
+
 \begin{figure}
-\includegraphics[width=\textwidth]{./survCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis \citep{GASTRIC13}}\label{fig:survCurves}
+\includegraphics[width=\textwidth]{./survCurves-1} \caption[Kaplan--Meier curves for overall survival (T) and progression-free survival (S) in the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Kaplan--Meier curves for overall survival ($T$) and progression-free survival ($S$) in the advanced GASTRIC meta-analysis \citep{GASTRIC13}}\label{fig:survCurves}
 \end{figure}
-\end{Schunk}
 
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Fitting the surrogacy models}
+\subsection{Fitting the surrogacy models}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   The surrogacy models presented in Section~\ref{sec:methods}
-  can be fitted via the \code{surrosurv()} function.
+  can be fitted via the \inline{surrosurv()} function.
   
-  The only mandatory argument for the \code{surrosurv()} function is
-  \code{data}, which has to be a data.frame with columns
+  The only mandatory argument for the \inline{surrosurv()} function is
+  \inline{data}, which has to be a data.frame with columns
   \begin{itemize}
-  \item \code{trialref}, a factor containing the trial identifier;
-  \item \code{trt}, the treatment arm, coded as \code{-0.5} \textit{vs.} \code{0.5};
-  \item \code{id}, a factor containing the patient id;
-  \item \code{timeT} and \code{timeS}, two positive-valued numerical variables,
-  containing the observed or censoring times of the true endpoint $T$
+  \item \inline{trialref}, a factor containing the trial identifier;
+  \item \inline{trt}, the treatment arm, coded as \inline{-0.5} \textit{vs.} \inline{0.5};
+  \item \inline{id}, a factor containing the patient id;
+  \item \inline{timeT} and \inline{timeS}, two positive-valued numerical variables,
+  containing the observed or censored times of the true endpoint $T$
   and of the candidate surrogate $S$, respectively;
-  \item \code{statusT} and \code{statusS},
-  the censoring/event (\code{0}/\code{1}) indicators of $T$ and $S$, respectively.
+  \item \inline{statusT} and \inline{statusS},
+  the censoring/event (\inline{0}/\inline{1}) indicators of $T$ and $S$, respectively.
   \end{itemize}
   
-  A second argument, \code{models}, can optionally contain the list of the models to fit.
-  It can contain  ny value of 
-  \code{clayton}, \code{plackett}, \code{hougaard}, or \code{poisson}).
+  A second argument, \inline{models}, can optionally contain the list of the models to fit
+  (any of \inline{clayton}, \inline{plackett}, \inline{hougaard}, or \inline{poisson}).
   If not specified, all of them are fitted.
   
-  Two further parameters, \code{intWidth} and \code{nInts},
+  Two further parameters, \inline{intWidth} and \inline{nInts},
   specify the width and the number of time intervals for data Poissonization.
-These parameters are passed to the function \code{poissonize()},
+These parameters are passed to the function \inline{poissonize()},
   described in the Appendix (Sec.~\ref{sec:poisson}).
-  Only one of them can be specified.
-  By default, \code{nInts = 8} which means that the study period is divided into
+  At most one of them can be specified.
+  By default, \inline{nInts = 8} which means that the study period is divided into
   eight periods, the length of which is fixed so that 1/8th of the observed
   events falls in each interval.
   
   The optimizer used for optimization of the copula models and the Poisson models
-  can be passed via the arguments \code{cop.OPTIMIZER} and \code{poi.OPTIMIZER},
-  passed to the \pkg{optimx} package \citep{optimxJSS, R:optimx}.
+  can be passed to the \inline{optimx} package \citep{optimxJSS, R:optimx}
+  via the arguments \inline{cop.OPTIMIZER} and \inline{poi.OPTIMIZER}.
   
-  The last parameter, \code{verbose}, is a logical value
+  The last parameter, \inline{verbose}, is a logical value
   stating whether the function should print out the model being fitted
-  (default: \code{FALSE}).
+  (default: \inline{FALSE}).
   
   
   The surrogacy models for the advanced GASTRIC cancer meta-analysis
   are obtained as follows:
-\begin{Schunk}
-\begin{Sinput}
-R> allSurroRes <-  surrosurv(gastadv, verbose = TRUE)
-\end{Sinput}
-\begin{Soutput}
+\begin{lstlisting}
+> allSurroRes <-  surrosurv(gastadv, verbose = TRUE)
 Estimating model: clayton
-\end{Soutput}
-\begin{Soutput}
 Estimating model: plackett
-\end{Soutput}
-\begin{Soutput}
 Estimating model: hougaard
-\end{Soutput}
-\begin{Soutput}
 Estimating model: poisson
-\end{Soutput}
-\end{Schunk}
-Note that, the computation time of the surrogacy models can be long.
+\end{lstlisting}
+Note that the computation time of the surrogacy model estimation can be long.
 In this example, the computations required
   38
   mins
   on a PC with an Intel\textsuperscript{\textregistered} quad-core CPU E3-1280 V2
   with 3.60 GHz clock speed and 16GB of RAM.
-The results are an object of class \code{surrosurv}
-  and the estimated Kendall's $\tau$ and $R^2$ can be easily shown:
-\begin{Schunk}
-\begin{Sinput}
-R>   allSurroRes
-\end{Sinput}
-\begin{Soutput}
+The results are an object of class \inline{surrosurv}
+  and the estimated Kendall's $\tau$ and $R^2$ can be easily displayed:
+\begin{lstlisting}
+>   allSurroRes
                kTau R2  
 Clayton unadj  0.61 0.45
 Clayton adj    0.61 0.42
 Plackett unadj 0.62 0.45
 Plackett adj   0.62 0.41
 Hougaard unadj 0.32 0.45
-Hougaard adj   0.32 0.39
+Hougaard adj   0.32 0.38
 PoissonT       -.-- 1   
 PoissonI       0.51 -.--
 PoissonTI      0.51 0.63
 PoissonTIa     0.51 0.83
-\end{Soutput}
-\end{Schunk}
+\end{lstlisting}
 For each copula model,
-  both the results with measurement error adjustment (\code{adj})
-  and without adjustment (\code{unadj}) are shown.
+  both the results with measurement error adjustment (\inline{adj})
+  and without adjustment (\inline{unadj}) are shown.
 
-\subsection{Assessing convergence}
-The function \code{convergence()} checks whether convergence criteria
-  are met by each of the fitted models:
-\begin{Schunk}
-\begin{Sinput}
-R>   convergence(allSurroRes)
-\end{Sinput}
-\begin{Soutput}
+\subsubsection{Assessing convergence}
+The function \inline{convergence()} checks whether convergence criteria
+  are met by each of the fitted models.
+Three convergence criteria are considered.
+The first criterion, \inline{maxSgrad},
+  verifies whether the maximum gradient is small enough.
+The two other criteria, \inline{minHev} and \inline{minREev},
+  verify whether the minimum eigenvalue
+  of the Hessian matrix of the fixed parameters (\inline{H})
+  and of the covariance matrix of the random effects (\inline{RE})
+  are big enough,
+  in order to assure the positive definitess of the two matrices.
+Two parameters can be used to tune the thresholds
+  for `small enough' maximum gradient and 
+  for `big enough' minmum eigen value:
+  \inline{kkttol} (\inline{1e-2} by default),
+  and \inline{kkt2tol} (\inline{1e-8} by default).
+\begin{lstlisting}
+>   convergence(allSurroRes)
                maxSgrad minHev minREev
 Clayton unadj     FALSE  FALSE     ---
 Clayton adj       FALSE  FALSE    TRUE
@@ -676,111 +704,79 @@ PoissonT           TRUE   TRUE   FALSE
 PoissonI           TRUE   TRUE     ---
 PoissonTI          TRUE   TRUE    TRUE
 PoissonTIa         TRUE   TRUE    TRUE
-\end{Soutput}
-\end{Schunk}
-Three convergence criteria are considered.
-The first criterion, \code{maxSgrad},
-  verifies whether the maximum gradient is small enough.
-The two other criteria, \code{minHev} and \code{minREev},
-  verify whether the minimum eigenvalue
-  of the Hessian matrix of the fixed parameters (\code{H})
-  and of the covariance matrix of the random effects (\code{RE})
-  are big enough,
-  in order to assure the positive definitess of the two matrices.
-Two parameters can be used to tune the thresholds
-  for `small enough' maximum gradient and 
-  for `big enough' minmum eigen value:
-  \code{kkttol} (\code{1e-2} by default),
-  and \code{kkt2tol} (\code{1e-8} by default).
+\end{lstlisting}
 
 If the values of the minimum gradient and of the maximum eigenvalues are needed,
-  the function \code{convals()} can be used:
-\begin{Schunk}
-\begin{Sinput}
-R>   convals(allSurroRes)
-\end{Sinput}
-\begin{Soutput}
+  the function \inline{convals()} can be used:
+\begin{lstlisting}
+>   convals(allSurroRes)
                maxSgrad   minHev minREev
 Clayton unadj   1.5e+00 -6.1e+00     ---
 Clayton adj     1.5e+00 -6.1e+00 9.8e-03
-Plackett unadj  1.8e+02 -5.2e+00     ---
-Plackett adj    1.8e+02 -5.2e+00 8.6e-03
-Hougaard unadj  1.4e+01  7.8e-01     ---
-Hougaard adj    1.4e+01  7.8e-01 7.7e-03
+Plackett unadj  5.9e+02 -5.3e+00     ---
+Plackett adj    5.9e+02 -5.3e+00 8.7e-03
+Hougaard unadj  1.4e+01  7.7e-01     ---
+Hougaard adj    1.4e+01  7.7e-01 7.7e-03
 PoissonT        1.3e-05  1.3e+02 6.3e-12
 PoissonI        2.0e-05  6.8e+01     ---
 PoissonTI       7.1e-06  6.7e+01 2.0e-02
 PoissonTIa      5.0e-05  9.4e+07 1.0e-01
-\end{Soutput}
-\end{Schunk}
+\end{lstlisting}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Prediction of the treatment effect}
+\subsection{Prediction of the treatment effect}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 When fitting surrogacy models,
   an estimate of the treatment effects on the two endpoints
-  is computed internally for each trial.
-The function \code{predict()}, applied to an object of class \code{surrosurv},
-  returns the treatment effect predictions
-  for each trial.
-The minimal syntax is \code{predict(allSurroRes)},
+  is computed for each trial.
+The function \inline{predict()}, applied to an object of class \inline{surrosurv},
+  returns the predictions of the treatment effects for each trial.
+The minimal syntax is \inline{predict(allSurroRes)},
   but one can be interested in prediction of only one of the fitted models:
-\begin{Schunk}
-\begin{Sinput}
-R>   predict(allSurroRes, models = 'PoissonTI')
-\end{Sinput}
-\begin{Soutput}
+\begin{lstlisting}
+>   predict(allSurroRes, models = 'PoissonTI')
 Treatment effect prediction for surrosurv object
-
    Poisson TI 
                             1     2     3     4     5     6        
     Treatment effects on S: -0.52 -0.42 -0.38 -0.08 -0.51 -0.38 ...
     Treatment effects on T: -0.26 -0.08 -0.27  0.41 -0.41 -0.15 ...
-\end{Soutput}
-\end{Schunk}
-This function returns an object of class \code{predictSurrosurv}.
+\end{lstlisting}
+This function returns an object of class \inline{predictSurrosurv}.
 
 The predicted treatment effects can also be vizualied graphically
   using the linear regression of the effect on $T$ given the effect on $S$.
-The usual surrogacy plot is obtained using the function \code{plot()}
-  for the classes \code{surrosurv} and \code{predictSurrosurv}.
+The usual surrogacy plot is obtained using the function \inline{plot()}
+  for the classes \inline{surrosurv} and \inline{predictSurrosurv}.
 For example, the surrogacy plots
   for the adjusted Clayton copula and the Poisson TI models
-  in the advanced GASTRIC meta-analysis (Fig.~ref{fig:predictions})
+  in the advanced GASTRIC meta-analysis (Fig.~\ref{fig:predictions})
   can be obtained as follows:
-\begin{Schunk}
 \begin{figure}
-\includegraphics[width=\textwidth]{./predictions-1} \caption[Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged]{Predictions for the advanced GASTRIC meta-analysis \citep{GASTRIC13}, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.}\label{fig:predictions}
+\includegraphics[width=\textwidth]{./predictions-1} \caption[Predictions for the advanced GASTRIC meta-analysis, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged]{Predictions for the advanced GASTRIC meta-analysis, as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.}\label{fig:predictions}
 \end{figure}
-\end{Schunk}
-\begin{Schunk}
-\begin{Sinput}
-R>   plot(allSurroRes, c('Clayton adj', 'PoissonTI'))
-\end{Sinput}
-\end{Schunk}
+\begin{lstlisting}
+>   plot(allSurroRes, c('Clayton adj', 'PoissonTI'))
+\end{lstlisting}
 
 
-The argument \code{surro.stats} controls whether the estimated
+The argument \inline{surro.stats} controls whether the estimated
   Kendall's $\tau$ and $R^2$ must be displayed on the plots;
-  \code{pred.ints} controls whether the prediction intervals
+  \inline{pred.ints} controls whether the prediction intervals
   must be plotted;
-  \code{show.ste} controls whether the surrogate threshold effect (STE)
+  \inline{show.ste} controls whether the surrogate threshold effect (STE)
   must be displayed on the plots.
 The STE is the minimal treatment effect to be observed 
   on the surrogate endpoint $S$ to predict a statistically significant effect
   on the true endpoint $T$ \citep{BurzykowskiBuyse06}.
 The value of the STE estimated by each surrogacy model can be obtained
-  via the function \code{ste()},
-  both in terms of regression parameter (\code{beta})
-  and in terms of hazard ratio (\code{HR}):
-\begin{Schunk}
-\begin{Sinput}
-R>   ste(allSurroRes)
-\end{Sinput}
-\begin{Soutput}
+  via the function \inline{ste()},
+  both in terms of regression parameter (\inline{beta})
+  and in terms of hazard ratio (\inline{HR}):
+\begin{lstlisting}
+>   ste(allSurroRes)
                 beta   HR
 Clayton.unadj  -0.61 0.54
 Clayton.adj    -0.30 0.74
@@ -791,47 +787,38 @@ Hougaard.adj   -0.28 0.76
 PoissonT       -0.12 0.88
 PoissonTI      -0.41 0.66
 PoissonTIa     -1.04 0.36
-\end{Soutput}
-\end{Schunk}
+\end{lstlisting}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Leave-one-trial-out cross-validation}
+\subsubsection{Leave-one-trial-out cross-validation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 One technique used to assess the validity of the surrogacy model
-  is to apply the leave-one-out principle to the trials in the meta-analysis
-  and to cross-validate the results of the model fitted on
-  $N-1$ trials thanks to the prediction in the left-out trial
-  of the treatment effect on $T$, based on the observed effect on $S$
+  is to apply the leave-one-out principle to the trials in the meta-analysis.
+This means that, for each trial, the observed treatment effect on $S$
+  is compared to its prediction obtained by
+  entering the observed effect on $T$
+  in the surrogacy model fitted on the other $N-1$ trials.
 \citep{Michiels09, Mauguen13, Rotolo17}.
-The function \code{loovc()} allows performing this evaluation for
+The function \inline{loovc()} allows performing this evaluation for
   a given list of models.
 The cross-validation requires fitting as many models as the number of trials $N$.
 As each model is usually very time-consuming to converge,
-  a fortiori the cross-validation is too.
-For that reason, the function \code{loovc()} has been implemented to
+  the function \inline{loovc()} has been implemented to
   fit the $N$ models by parallel computing.
-The argument \code{parallel} is a logical for allowing or not such a parallelization,
-  whereas \code{nCores} allows specifying the number of cores to use.
-By default, \code{parallel = TRUE} and \code{nCores} is set to the minimum
+The argument \inline{parallel} is a logical for allowing or not such a parallelization,
+  whereas \inline{nCores} allows specifying the number of cores to use.
+By default, \inline{parallel = TRUE} and \inline{nCores} is set to the minimum
   between $N$ and the maximum number of cores on the machine.
-\begin{Schunk}
-\begin{Sinput}
-R>   loocvRes <- loocv(gastadv, models = c('Clayton', 'PoissonTI'))
-\end{Sinput}
-\begin{Soutput}
+\begin{lstlisting}
+>   loocvRes <- loocv(gastadv, models = c('Clayton', 'PoissonTI'))
 Parallel computing on 8 cores (the total number of cores detected)
-\end{Soutput}
-\end{Schunk}
-The results of the crossvalidation can be easily printed
-\begin{Schunk}
-\begin{Sinput}
-R>   loocvRes
-\end{Sinput}
-\begin{Soutput}
-
+\end{lstlisting}
+The results of the crossvalidation can be printed
+\begin{lstlisting}
+>   loocvRes
    Clayton copula (Unadjusted) 
         1     2     3     4     5     6        
 obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.34 ...
@@ -842,28 +829,26 @@ upr     -0.05  0.02  0.28  0.17  0.21  0.09 ...
         1      2      3      4      5      6         
 obsBeta -0.309 -0.212 -0.095 -0.023 -0.222 -0.342 ...
 lwr     -0.571 -0.491 -0.277 -0.358 -0.332 -0.448 ...
-upr     -0.212 -0.130  0.105 -0.001  0.042 -0.078 ...
+upr     -0.213 -0.130  0.105 -0.001  0.042 -0.078 ...
 
    Poisson TI 
         1     2     3     4     5     6        
 obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.34 ...
 lwr     -0.87 -0.67 -0.42 -0.59 -0.29 -0.54 ...
 upr     -0.45 -0.21  0.57  0.23  0.23 -0.22 ...
-\end{Soutput}
-\end{Schunk}
+\end{lstlisting}
 and plotted (Fig.~\ref{fig:loocv}) by showing, 
   for each trial, the comparison between the observed 
   treatment effect on $T$, and its prediction interval,
   based on the observed treatment effect on $S$ for the same trial
   and the surrogacy model fitted on the other $N-1$ trials:
-\begin{Schunk}
-\begin{Sinput}
-R>   plot(loocvRes)
-\end{Sinput}
+\begin{lstlisting}
+>   plot(loocvRes)
+\end{lstlisting}
+
 \begin{figure}
-\includegraphics[width=\textwidth]{./loocv-1} \caption[Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}]{Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis \citep{GASTRIC13}. Vertical lines are the 95\% prediction intervals (PI) of the treatment effect on overall survival (OS). Dots are the observed treatment effects on OS (green = within the PI, magenta = out of the PI).}\label{fig:loocv}
+\includegraphics[width=\textwidth]{./loocv-1} \caption[Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis]{Leave-one-trial-out cross-validation results for the advanced GASTRIC meta-analysis. Vertical lines are the 95\% prediction intervals (PI) of the treatment effect on overall survival (OS). Dots are the observed treatment effects on OS (green = within the PI, magenta = out of the PI).}\label{fig:loocv}
 \end{figure}
-\end{Schunk}
 
 
 
@@ -871,23 +856,30 @@ R>   plot(loocvRes)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Utilities for data simulation}
+\subsection{Utilities for data simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Most of the publications that discuss
-statistical methods for evaluating failure time surrogate endpoints
-do not show simulations till date.
-To our knowledge, rare exceptions are those papers by
-\cite{BurzykowskiCortinas05, ShiEtal11, RenfroEtal12, Renfro2014, Renfro2015}.
+Few publications present simulation approaches adapted to discuss
+  statistical methods for evaluating failure time surrogate endpoints
+  \cite{BurzykowskiCortinas05, ShiEtal11, RenfroEtal12, Renfro2014, Renfro2015}.
+To our knowledge, the data generation methods used to date are based
+  either on the use of a Clayton copula or on a mixture of half-normal and
+  exponential random variables.
+Thanks to the \inline{surrosurv} package,
+  data can be generated using these two methods, 
+  in addition to an approach based
+  on mixed proportional hazard models that we employed recently
+  \citep{RotoloPoissurogate}.
+These three data generation algorithms are detailed here below.
 
-\subsection{Data generation based on a Clayton copula}
-The data geration method used by \cite{BurzykowskiCortinas05}
-  and by \cite{Renfro2014, Renfro2015} reflects the data generating process 
+\subsubsection{Data generation based on a Clayton copula}
+The data geration method used in \cite{BurzykowskiCortinas05}
+  and in \cite{Renfro2014, Renfro2015} reflects the data generating process 
   underlying the two-step copula model (Sec.~\ref{sec:copulaApp}).
 
 We implemented this approach for the Clayton family (Eq.~(\ref{eq:clayton})),
-  which is available using the function \code{simData.cc()}.
+  which is available using the function \inline{simData.cc()}.
 This function generates data as follows:
   \begin{itemize}
     \item trial-specific random effects are generated from
@@ -927,7 +919,7 @@ This function generates data as follows:
       for $T\mid S$, conditionally on the random effects generated before
       \textit{and on the value of $S$}
       \begin{align*}
-      T_{ij} = -\log(U^\prime_{Tij}) / \lambda_{Tij},
+      T_{ij} \mid S_{ij} = -\log(U^\prime_{Tij}) / \lambda_{Tij},
       \quad \text{with }
       \lambda_{Tij} &= \exp(\mu_T + m_{T_i} + \beta_i  Z_{ij}), \\
       U_{Tij}^\prime &= \left[\left(U_{Tij}^{-\theta/(1+\theta)} - 1
@@ -935,18 +927,18 @@ This function generates data as follows:
       U_{Tij} &\sim U(0,1).
     \end{align*}
   \end{itemize}
-The details of the arguments of the \code{simData.cc()} function can be 
-  obtained using \code{help(simData.cc)}.
+The details of the arguments of the \inline{simData.cc()} function can be 
+  obtained using \inline{help(simData.cc)}.
 
-\subsection{Data generation based on a mixture of half-normal and exponential random variables}
-The data geration method used by \cite{ShiEtal11}
-  and by \cite{RenfroEtal12} is based on the results by \cite{Cowles04},
+\subsubsection{Data generation based on a mixture of half-normal and exponential random variables}
+The data geration method used in \cite{ShiEtal11}
+  and in \cite{RenfroEtal12} is based on the results by Cowles \cite{Cowles04},
   which showed that a Weibull distribution can be expressed as a scaled mixture
   of half-normal distribution and an exponential distribution
   with unit rate parameter.
 
-This approach, implemented in the function \code{simData.mx()},
-  which generates data as follows:
+This approach is implemented in the function \inline{simData.mx()}
+  and generates data as follows:
   \begin{itemize}
     \item trial-specific random effects are generated from
       $$
@@ -994,12 +986,13 @@ This approach, implemented in the function \code{simData.mx()},
         \right) \exp(\mu_S + m_{T_i} + \alpha_i Z_{ij}).
       \end{align*}
   \end{itemize}
-The details of the arguments can be obtained using \code{help(simData.mx)}.
+The details of the arguments can be obtained using \inline{help(simData.mx)}.
 
-\subsection{Data generation based on mixed proportional hazard models}
-In \cite{RotoloPoissurogate}, we also generated data using
-  individual random effects to control individual-level surrogacy.
-  This approach is implemented in the function \code{simData.re()}
+\subsubsection{Data generation based on mixed proportional hazard models}
+Recently we also generated data using
+  individual random effects to control individual-level surrogacy
+  \citep{RotoloPoissurogate}.
+  This approach is implemented in the function \inline{simData.re()}
   and generates data as follows:
   \begin{itemize}
     \item trial-specific random effects and 
@@ -1028,8 +1021,22 @@ In \cite{RotoloPoissurogate}, we also generated data using
         \text{ and } U_{Tij} \sim U(0,1). 
       \end{align*}
   \end{itemize}
-The details of the arguments can be obtained using \code{help(simData.re)}.
+The details of the arguments can be obtained using \inline{help(simData.re)}.
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Mode of availability of the \inline{surrosurv} package}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The \inline{surrosurv} package is an open-source project.
+Stable versions are released via the Comprehensive \inline{R} Archive Network
+    (CRAN, \url{https://cran.r-project.org/package=surrosurv}).
+Source code is available on the R-forge platform
+  (\url{https://r-forge.r-project.org/projects/surrosurv/}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1039,10 +1046,26 @@ The details of the arguments can be obtained using \code{help(simData.re)}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The present work has been supported
-  by the French National Cancer Institute (Institut National du Cancer, INCa),
+  by the Institut National du Cancer (INCa),
   Grant SHS 2014-141, and by the Ligue Nationale Contre le Cancer.
+The study sponsors had no involvement in either the study design;
+  the collection, analysis and interpretation of data; 
+  the writing of the manuscript; 
+  nor in the decision to submit the manuscript for publication. 
+The authors thank the GASTRIC
+  (Global Advanced/Adjuvant Stomach Tumor Research International Collaboration)
+  Group for permission to use their data.
+The investigators who contributed to GASTRIC are listed in references
+  \cite{Oba2013, Paoletti2013, GASTRIC10, GASTRIC13}╦.
+The GASTRIC Group data are available within the \inline{surrosurv} package
+  for research purposes, under the conditions that
+  (1) the research be scientifically appropriate,
+  (2) the confidentiality of individual patient data be protected,
+  (3) the results of the analyses be shared with the GASTRIC Group prior to public communication,
+  (4) the source of data be fully acknowledged as above, and
+  (5) resulting data and results be further shared with the research community.
 
-% \bibliographystyle{jss}
+\bibliographystyle{abbrvnat}
 \bibliography{refs}{}
 
 \appendix
@@ -1052,60 +1075,67 @@ Fitting auxiliary Poisson models for estimating the parameters of
   needs that data are rearranged in order to provide,
   for each time period, the number of events and the 
   total time passed at risk.
-The function \code{poissonize()}in the \pkg{surrosurv} package
-  allows to easily perform the necesasry data manipulaton
-  easily and quickly.
+The function \inline{poissonize()} in the \inline{surrosurv} package
+  allows to perform the necesasry data manipulaton.
 The core of the function has been derived from the original code
   publicly shared by \cite{Koval}.
 
-The main argument of the \code{poissonize()} function is
-  \code{data}, a data frame with columns: 
-  \code{id}, the patient identifyier;
-  \code{time}, the event/censoring time;
-  \code{status}, the event (\code{1}) or censoring (\code{0}) indicator;
-  \code{...}, other factors such like the covariables needed
+The main argument of the \inline{poissonize()} function is
+  \inline{data}, a data frame with columns: 
+  \inline{id}, the patient identifyier;
+  \inline{time}, the event/censoring time;
+  \inline{status}, the event (\inline{1}) or censoring (\inline{0}) indicator;
+  \inline{...}, other factors such like the covariables needed
   in the regression model.
 
 The breakpoints between time intervals can be entered in the second argument,
-  \code{all.breaks}.
-Otherwise, if \code{all.breaks} is not specified,
-  one can specify either the width of the time intervals \code{interval.width},
-  or their number \code{nInts}
-  (used only also if \code{is.null(interval.width)}).
+  \inline{all.breaks}.
+Otherwise, if \inline{all.breaks} is not specified,
+  one can specify either the width of the time intervals \inline{interval.width},
+  or their number \inline{nInts}
+  (used only if also \inline{is.null(interval.width)}).
 
 Any other variables to be kept in the poissonized data frame can be entered in
-  \code{factors}.
-The last argument (\code{compress}) is a logical
+  \inline{factors}.
+The last argument (\inline{compress}) is a logical value
   indicating whether the record with the same factor profile
   should be summarized into one record,
   i.~e.\ whether the data should be expressed in a short form.
 
 In the advanced GASTRIC cancer example,
   we first change the column names in order to match the ones needed by
-  \code{poissonize()}:
-\begin{Schunk}
-\begin{Sinput}
-R>   gastadv.poi <- gastadv
-R>   gastadv.poi$time <- gastadv.poi$timeT / 365.25
-R>   gastadv.poi$status <- gastadv.poi$statusT
-\end{Sinput}
-\end{Schunk}
+  \inline{poissonize()}:
+\begin{lstlisting}
+>   gastadv.poi <- gastadv
+>   gastadv.poi$time <- gastadv.poi$timeT / 365.25
+>   gastadv.poi$status <- gastadv.poi$statusT
+\end{lstlisting}
 We fit the proportional hazard model, to which we will compare
-  the results of the auxiliary Poisson model.
-\begin{Schunk}
-\begin{Sinput}
-R>   fitcox <- coxph(Surv(time, status) ~ trt, data = gastadv.poi)
-R>   cox.base <- basehaz(fitcox, centered = FALSE)
-\end{Sinput}
-\end{Schunk}
+  the results of the auxiliary Poisson model
+\begin{lstlisting}
+>   fitcox <- coxph(Surv(time, status) ~ trt, data = gastadv.poi)
+>   cox.base <- basehaz(fitcox, centered = FALSE)
+\end{lstlisting}
+and we plot the estimated survival curves.
+\begin{lstlisting}
+>   plot(stepfun(cox.base$time[-nrow(cox.base)], 
++                exp(-cox.base$hazard)),
++        ylim = 0:1, yaxs = 'i',
++        xlim = c(0, 5), xaxs = 'i',
++        col = 1, lwd = 2, bty = 'l',
++        do.points = FALSE, verticals = FALSE,
++        main = 'Overall Survival\nAdvanced GASTRIC meta-analysis',
++        xlab = 'Years', ylab = 'Survival probability')
+>   lines(stepfun(cox.base$time[-nrow(cox.base)],
++                exp(-cox.base$hazard * exp(coef(fitcox)['trt']))),
++        col = 2, pch = '', lwd = 2)
+\end{lstlisting}
+
 We `possonize' the data over 10 intervals (the default)
   and we fit the auxiliary Poisson model.
-\begin{Schunk}
-\begin{Sinput}
-R>   gastadv.poi <- poissonize(gastadv.poi, nInts = 10, factors = 'trt')
-R>   gastadv.poi
-\end{Sinput}
-\begin{Soutput}
+\begin{lstlisting}
+>   gastadv.poi <- poissonize(gastadv.poi, nInts = 10, factors = 'trt')
+>   gastadv.poi
             interval  trt   m  Rt    N
 1                  0 -0.5 181 292 1668
 2    0.1832128678987 -0.5 180 173 1475
@@ -1127,35 +1157,28 @@ R>   gastadv.poi
 18  1.07320739219713  0.5 221 183  715
 19  1.39328678986995  0.5 211 205  460
 20  2.07255030800821  0.5 117 171  204
-\end{Soutput}
-\begin{Sinput}
-R>   fitpoi <- glm(m ~ -1 + interval + trt + offset(log(Rt)), 
+
+>   fitpoi <- glm(m ~ -1 + interval + trt + offset(log(Rt)), 
 +                 data = gastadv.poi, fam = 'poisson')
-\end{Sinput}
-\end{Schunk}
-The function \code{plotsson()} can be used to draw the survival curves
+\end{lstlisting}
+The function \inline{plotsson()} can be used to draw the survival curves
   (or the instantaneous hazard) estimated by the auxiliary Poisson model:
-\begin{Schunk}
-\begin{Sinput}
-R>   plot(stepfun(cox.base$time[-nrow(cox.base)], 
-+                exp(-cox.base$hazard)),
-+        ylim = 0:1, xlim = c(0, 5), col = 1, lwd = 2, bty = 'l', yaxs = 'i',
-+        do.points = FALSE, verticals = FALSE, xaxs = 'i',
-+        main = 'Overall Survival\nAdvanced GASTRIC meta-analysis',
-+        xlab = 'Years', ylab = 'Survival probability')
-R>   lines(stepfun(cox.base$time[-nrow(cox.base)],
-+                exp(-cox.base$hazard * exp(coef(fitcox)['trt']))),
-+        col = 2, pch = '', lwd = 2)
-\end{Sinput}
+\begin{lstlisting}
+>   plotsson(fitpoi, 'Surv', add = TRUE, lty = 2, by = 'trt', lwd = 2) 
+>   legend('topright', col = rep(1:2, each = 2), lty = 1:2, lwd = 3,
++          legend = t(outer(c('Cox', 'Poisson'),
++                           c('Control', 'Chemotherapy'), paste)))
+\end{lstlisting}
+The option \inline{add = TRUE} is used to add the curves to the plot
+  from the Cox estimates drawn previously.
+
 \begin{figure}
-\includegraphics[width=\textwidth]{./poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis \citep{GASTRIC13}. \textbf{(a)} Comparison between the survival probability obtained using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
+\includegraphics[width=\textwidth]{./poissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis. Comparison between the survival probability obtained using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines).}\label{fig:poissonize}
 \end{figure}
-\end{Schunk}
 The treatment effect estimated by the Cox model is
   \ensuremath{-0.14} (SE = 0.03), 
-  and it is of 
+  and it is
   \ensuremath{-0.14} 
   (SE = 0.03)
   when using the auxiliary Poisson model.
-
 \end{document}

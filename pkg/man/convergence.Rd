@@ -14,7 +14,7 @@
 }
 \usage{
   convals(x)
-  convergence(x, kkttol = 1e-2, kkt2tol = 0)
+  convergence(x, kkttol = 1e-2, kkt2tol = 1e-8)
 }
 \arguments{
   \item{x}{

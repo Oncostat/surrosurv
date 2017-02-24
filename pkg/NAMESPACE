@@ -28,6 +28,8 @@ export(convals,
 
 S3method(print, conv)
 
+S3method(loocv, data.frame)
+
 S3method(confint, surrosurv)
 S3method(loocv, surrosurv)
 S3method(predict, surrosurv)
