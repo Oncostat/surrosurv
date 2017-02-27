@@ -10,7 +10,7 @@ surrosurv <- function(
   cop.OPTIMIZER = 'bobyqa',
   poi.OPTIMIZER = 'nloptwrap',
   verbose       = TRUE,
-  twoStep       = FALSE,
+  twoStage       = FALSE,
   keep.data     = TRUE) {
   # ************************************************************************** #
   models <- tolower(noSpP(models))
@@ -43,7 +43,7 @@ surrosurv <- function(
                           varcor1 = TRUE,
                           #INIkTau = INIkTau
                           INIrho = INIrho,
-                          twoStep = twoStep
+                          twoStage = twoStage
       ), silent = FALSE) #TRUE)
       if (class(res) == 'try-error') {
         res <- list(kTau = NA, alpha = NA, beta = NA,

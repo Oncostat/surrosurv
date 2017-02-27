@@ -22,7 +22,7 @@ surrosurv(data,
           cop.OPTIMIZER = "bobyqa",
           poi.OPTIMIZER = "nloptwrap",
           verbose = TRUE,
-          twoStep = FALSE,
+          twoStage = FALSE,
           keep.data = TRUE)
 
 \method{predict}{surrosurv}(object, models = names(object), exact.models, ...)
@@ -94,7 +94,7 @@ surrosurv(data,
   \item{verbose}{
     should the function print out the model being fitted
   }
-  \item{twoStep}{
+  \item{twoStage}{
     should the parameters of the baseline hazard functions
     fixed to their marginal estimates (Shih and Louis, 1995)
   }
