@@ -1,5 +1,6 @@
 ################################################################################
 loocv <- function(object, ...) UseMethod('loocv')
+################################################################################
 loocv.surrosurv <- function(object, 
                             nCores, 
                             parallel = TRUE, 
@@ -14,13 +15,11 @@ loocv.surrosurv <- function(object,
   }
   loocv.data.frame(attr(object, 'data'), models = models, ...)
 }
-
+################################################################################
 loocv.data.frame <- function(object,
                              nCores,
                              parallel = TRUE,
-                             models = c('Clayton', 'Plackett', 'Hougaard',
-                                        'Poisson I', 'Poisson T',
-                                        'Poisson TI', 'Poisson TIa'),
+                             models = c('Clayton', 'Poisson TI'),
                              ...) {
   # ************************************************************************** #
   models <- tolower(noSpP(models))
@@ -32,11 +31,13 @@ loocv.data.frame <- function(object,
     'clayton', 'plackett', 'hougaard', paste0('poisson', c('i', 't', 'ti', 'tia'))))
   object$trialref <- factor(object$trialref)
   
+  nTrials <- nlevels(object$trialref)
+  if (nTrials < 3)
+    error('At least three trials are needed for cross-validation.')
   # library('parallel')
   
   if (parallel) {
     totCores <- detectCores()
-    nTrials <- nlevels(object$trialref)
     
     if (missing(nCores)) {
       nCores <- min(nTrials, totCores)
@@ -116,7 +117,8 @@ loocv.data.frame <- function(object,
 
 
 ################################################################################
-print.loocvSurrosurv <- function(x, n = 6, silent = FALSE, ...) {
+print.loocvSurrosurv <- function(x, n = min(length(x), 6),
+                                 silent = FALSE, ...) {
   # ************************************************************************** #
   models <- setdiff(names(x[[1]]), 'margPars')
   RES <- lapply(models, function(y) {
