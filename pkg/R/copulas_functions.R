@@ -6,7 +6,7 @@ fitClayton <- function(data, varcor = FALSE,
                        MAXFUN = 1e8, 
                        ini_rho = 0.5,
                        # ini_kTau = 0.5,
-                       twoStep = TRUE) {
+                       twoStage = TRUE) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE,
                          starttests = FALSE,
@@ -25,7 +25,7 @@ fitClayton <- function(data, varcor = FALSE,
   nTrials <- (length(INIpars) - 1) / 6
   
   # Possibly fix baseline hazard parameters to their marginal values 
-  if (twoStep) {
+  if (twoStage) {
     fixed <- c(NA,                 # copula dependence parameter
                log(Mpars$lambdaS), # baseline scales for S
                log(Mpars$rhoS),    # baseline shapes for S
@@ -43,7 +43,7 @@ fitClayton <- function(data, varcor = FALSE,
                 data = data, family = 'clayton',
                 method = optimx.method,
                 control = OPTIMX_CONTROL)
-  if (twoStep) {
+  if (twoStage) {
     RES[, which(!is.na(fixed))] <- fixed[!is.na(fixed)]
   }
   
@@ -100,7 +100,7 @@ fitPlackett <- function(data, varcor=FALSE,
                         MAXFUN = 1e8, 
                         ini_rho = 0.5,
                         # ini_kTau = 0.5, 
-                        twoStep = TRUE) {
+                        twoStage = TRUE) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE,
                          starttests = FALSE,
@@ -120,7 +120,7 @@ fitPlackett <- function(data, varcor=FALSE,
   nTrials <- (length(INIpars) - 1) / 6
   
   # Possibly fix baseline hazard parameters to their marginal values 
-  if (twoStep) {
+  if (twoStage) {
     fixed <- c(NA,                 # copula dependence parameter
                log(Mpars$lambdaS), # baseline scales for S
                log(Mpars$rhoS),    # baseline shapes for S
@@ -138,7 +138,7 @@ fitPlackett <- function(data, varcor=FALSE,
                 data = data, family = 'plackett',
                 method = optimx.method,
                 control = OPTIMX_CONTROL)
-  if (twoStep) {
+  if (twoStage) {
     RES[, which(!is.na(fixed))] <- fixed[!is.na(fixed)]
   }
   
@@ -194,7 +194,7 @@ fitHougaard <- function(data, varcor=FALSE,
                         MAXFUN = 1e8, 
                         ini_rho = 0.5, 
                         # ini_kTau = 0.5,
-                        twoStep = TRUE) {
+                        twoStage = TRUE) {
   OPTIMX_CONTROL <- list(maxit = MAXFUN,
                          dowarn = FALSE,
                          starttests = FALSE,
@@ -214,7 +214,7 @@ fitHougaard <- function(data, varcor=FALSE,
   nTrials <- (length(INIpars) - 1) / 6
   
   # Possibly fix baseline hazard parameters to their marginal values 
-  if (twoStep) {
+  if (twoStage) {
     fixed <- c(NA,                 # copula dependence parameter
                log(Mpars$lambdaS), # baseline scales for S
                log(Mpars$rhoS),    # baseline shapes for S
@@ -232,7 +232,7 @@ fitHougaard <- function(data, varcor=FALSE,
                 data = data, family = 'hougaard',
                 method = optimx.method,
                 control = OPTIMX_CONTROL)
-  if (twoStep) {
+  if (twoStage) {
     RES[, which(!is.na(fixed))] <- fixed[!is.na(fixed)]
   }
   
@@ -512,7 +512,7 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
                      optimx.method,
                      INIrho = 0.5,
                      # INIkTau = 0.5,
-                     twoStep = TRUE) {
+                     twoStage = TRUE) {
   startTime <- Sys.time()
   family <- tolower(family)
   family <- match.arg(family)
@@ -523,21 +523,21 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
                         optimx.method = optimx.method,
                         ini_rho = INIrho,
                         #ini_kTau = INIkTau
-                        twoStep = twoStep)
+                        twoStage = twoStage)
     kTau <- kTau.clay(step1)
   } else if (family == 'plackett') {
     step1 <- fitPlackett(data, varcor = varcor1,
                          optimx.method = optimx.method,
                          ini_rho = INIrho,
                          #ini_kTau = INIkTau
-                         twoStep = twoStep)
+                         twoStage = twoStage)
     kTau <- kTau.plack(step1)
   } else if (family == 'hougaard') {
     step1 <- fitHougaard(data, varcor = varcor1,
                          optimx.method = optimx.method,
                          ini_rho = INIrho,
                          #ini_kTau = INIkTau
-                         twoStep = twoStep)
+                         twoStage = twoStage)
     kTau <- kTau.houg(step1)
   }
   
