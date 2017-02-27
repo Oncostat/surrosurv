@@ -33,7 +33,7 @@ loocv.data.frame <- function(object,
   
   nTrials <- nlevels(object$trialref)
   if (nTrials < 3)
-    error('At least three trials are needed for cross-validation.')
+    stop('At least three trials are needed for cross-validation.')
   # library('parallel')
   
   if (parallel) {
@@ -51,8 +51,8 @@ loocv.data.frame <- function(object,
         message(paste0(
           'The number of cores (nCores=', nCores, ') is greater than',
           'the number of ', 
-          ifelse(nTrials < totCores, 'trials', 'cores detected'),
-          ')'))
+          ifelse(nTrials < totCores, 'trials', 'cores detected'), ' (', 
+          min(nTrials, totCores), ')'))
       
       nCores <- min(nCores, nTrials, totCores)
       message(paste('Parallel computing on', nCores,'cores'))
@@ -124,14 +124,14 @@ print.loocvSurrosurv <- function(x, n = min(length(x), 6),
   RES <- lapply(models, function(y) {
     preds <- sapply(x, function(trial) {
       trialRes <- if (is.null(trial[[y]])) {
-        rep(NA, 2)
+        rep(NA, 3)
       } else {
-        trial[[y]][-1]
+        trial[[y]][]
       }
       c(obsBeta = trial$margPars['beta'], trialRes)
       }
     )
-    rownames(preds) <- c('obsBeta', 'lwr', 'upr')
+    rownames(preds) <- c('obsBeta', 'predict', 'lwr', 'upr')
     return(preds)
   })
   names(RES) <- models
@@ -143,7 +143,7 @@ print.loocvSurrosurv <- function(x, n = min(length(x), 6),
     cat('\n  ', method, '\n')
     res2print <- format(RES[[i]][, 1:n], digits = 1, na.encode = FALSE)
     if (nrow(RES[[i]] > n))
-      res2print <- cbind(res2print, '  ' = rep('...', 3))
+      res2print <- cbind(res2print, '  ' = rep('...', 4))
     # rownames(res2print) <- paste0(
     #   sub('trt', '    Treatment effects on ', rownames(res2print)), ':')
     print(res2print, quote = FALSE, ...)
@@ -182,10 +182,12 @@ plot.loocvSurrosurv <- function(x,
            panel.first = abline(h = 0, col = 'grey'))
       axis(1, 1:ncol(x[[i]]), labels = colnames(x[[i]]))
       axis(2, axTicks(2), format(round(exp(axTicks(2)), 2)), las = 1)
-      segments(1:ncol(x[[i]]), x[[i]][2, ], y1 = x[[i]][3, ], 
-               col = rgb(.8, .8, .8, .8), lwd = 5)
-      COLs <- 2 - (colSums(apply(x[[i]], 2, function(x)
-        order(x) == c(2, 1, 3))) == 3)
+      segments(1:ncol(x[[i]]), x[[i]]['lwr', ], y1 = x[[i]]['upr', ], 
+               col = rgb(.5, .5, .5, .8), lwd = 5)
+      segments(1:ncol(x[[i]]) - .01, x[[i]]['predict', ], 1:ncol(x[[i]]) + .01,
+               col = rgb(.2, .2, .2, .9), lwd = 3, lend = 2)
+      COLs <- 2 - (colSums(apply(x[[i]][c('obsBeta', 'lwr', 'upr'), ], 2, 
+                                 function(x) order(x) == c(2, 1, 3))) == 3)
       NC <- is.na(x[[i]][2, ]) | is.na(x[[i]][3, ])
       COLs[NC] <- 0
       points(1:ncol(x[[i]]), x[[i]][1, ], pch = 16, cex = 1.4, col = COLs)

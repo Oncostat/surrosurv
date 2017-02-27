@@ -14,12 +14,9 @@
     (Michiels et al, 2009).
 }
 \usage{
-\method{loocv}{surrosurv}(object, nCores, parallel = TRUE, 
-                             models = c('Clayton', 'Plackett', 'Hougaard',
-                                        'Poisson I', 'Poisson T',
-                                        'Poisson TI', 'Poisson TIa'), ...)
+\method{loocv}{surrosurv}(object, nCores, parallel = TRUE, models, ...)
 
-\method{print}{loocvSurrosurv}(x, n = 6, silent = FALSE, ...)
+\method{print}{loocvSurrosurv}(x, n = min(length(x), 6), silent = FALSE, ...)
           
 \method{plot}{loocvSurrosurv}(x, models, exact.models, ...)
 }
@@ -45,7 +42,8 @@
     Should results be computed using parallelization?
   }
   \item{models, exact.models}{
-    Which models should be fitted (see \code{\link{surrosurv}()})
+    Which models should be fitted (see \code{\link{surrosurv}()}).
+    By default, the same models fitted in \code{object} (or \code{x}).
   }
   \item{x}{
     The fitted models, an object of class \code{\link{surrosurv}}

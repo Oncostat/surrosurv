@@ -39,7 +39,7 @@ surrosurv(data,
                       show.ste = TRUE,
                       surro.stats = TRUE, 
                       xlab, ylab, 
-                      xlim, ylim, mfrow, ...)
+                      xlim, ylim, mfrow, main, ...)
 }
 
 \arguments{
@@ -109,7 +109,7 @@ surrosurv(data,
   \item{silent}{
     Should the results be return for storing without printing them?
   }
-  \item{digits, na.print, xlab, ylab, xlim, ylim, ...}{
+  \item{digits, na.print, xlab, ylab, xlim, ylim, main, ...}{
     other parameters for \code{\link[base]{print}} or \code{\link[graphics]{plot}}
   }
   \item{mfrow}{
