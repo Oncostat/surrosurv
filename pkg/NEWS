@@ -1,5 +1,11 @@
+Changes in version 1.1.10 (2017-02-27)
+- fixed issues with loocv when few trials (added controls)
+- added data 'gastadj'
+- added twoStage parameter to surrosurv for Shih and Louis (1995) approach
+  to copula estimation
+
 Changes in version 1.1.4
-- added JSS manuscript as vignette('surrosurv')
+- added paper manuscript as vignette('surrosurv')
 
 Changes in version 1.1
 - Poisson models can be fitted each separately
@@ -10,7 +16,8 @@ Changes in version 0.1.1 (2016-09-28)
 - fixed examples for poissonize()
 
 Changes in version 0.1.0 (First Complete version, 2016-09-27)
-- new function loocv() (with print() and plot() functions) to compute leave-one-out cross-validation
+- new function loocv() (with print() and plot() functions)
+  to compute leave-one-out cross-validation
 
 ################################################################################
 
@@ -26,11 +33,15 @@ Changes in version 0.0.10 (2016-08-01)
   to positive min eigenvalue
 
 Changes in version 0.0.9 (2016-07-28)
-- bugfix in Poisson method, which did not return results because of mispelled model name
+- bugfix in Poisson method, which did not return results
+  because of mispelled model name
 
 Changes in version 0.0.7 (2016-07-25)
-- the Kendall's tau for copulas is now initialized using the SurvCorr package (much faster)
+- the Kendall's tau for copulas is now initialized
+  using the SurvCorr package (much faster)
 
 Changes in version 0.0.6 (2016-07-22)
-- added the function convals(), giving the values of the max abs gradient and the min eigenvalue of the variance-covariance matrix of the random treatment effects
-- the function convergence() uses explicit computation provided by covals(), instead of using the function optimx in the package optimx
+- added the function convals(), giving the values of the max abs gradient
+  and the min eigenvalue of the variance-covariance matrix of the random treatment effects
+- the function convergence() uses explicit computation provided by covals(),
+  instead of using the function optimx in the package optimx
