@@ -195,7 +195,6 @@ plot.predictSurrosurv <- function(
   if (missing(exact.models))
     exact.models <- all(sapply(tolower(noSpP(models)), function(m)
       any(tolower(noSpP(names(x))) %in% m)))
-  if (missing(main)) main <- format.methodNames(x)[i]
   w <- attr(x, 'trialSizes')
   if (var(w)) {
     w <- .8 + 3 * (w - min(w)) / (max(w) - min(w))
@@ -215,7 +214,7 @@ plot.predictSurrosurv <- function(
     SURRO.STATS <- round(matrix(as.numeric(attr(x, 'surro.stats')), ncol = 2), 
                          2)[ind, , drop = FALSE]
     SURRO.STATS[is.na(SURRO.STATS)] <- '\u2014'
-    }
+  }
   x <- x[ind]
   
   if(!missing('xlim')) xlims <- log(xlim)
@@ -257,7 +256,7 @@ plot.predictSurrosurv <- function(
                    col=rgb(.2, .2, .2, .8), lwd = 2, add=TRUE)
            },
            xaxt = 'n', yaxt = 'n',
-           main =  main, 
+           main =  ifelse(missing(main), format.methodNames(x)[i], main),
            xlab = xlab, ylab = ylab, ...)
       if (show.ste) {
         points(STE[i], 0, col = 2, pch = '|', font = 2)
