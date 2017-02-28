@@ -8,7 +8,7 @@ surrosurv <- function(
   intWidth      = NULL,
   nInts         = 8,
   cop.OPTIMIZER = 'bobyqa',
-  poi.OPTIMIZER = 'nloptwrap',
+  poi.OPTIMIZER = 'bobyqa',
   verbose       = TRUE,
   twoStage       = FALSE,
   keep.data     = TRUE) {
