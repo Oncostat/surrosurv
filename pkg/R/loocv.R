@@ -2,9 +2,9 @@
 loocv <- function(object, ...) UseMethod('loocv')
 ################################################################################
 loocv.surrosurv <- function(object, 
+                            models,
                             nCores, 
                             parallel = TRUE, 
-                            models,
                             ...) {
   if (missing(models)) {
     allmodels <- c('Clayton', 'Plackett', 'Hougaard',
@@ -17,9 +17,9 @@ loocv.surrosurv <- function(object,
 }
 ################################################################################
 loocv.data.frame <- function(object,
+                             models = c('Clayton', 'Poisson TI'),
                              nCores,
                              parallel = TRUE,
-                             models = c('Clayton', 'Poisson TI'),
                              ...) {
   # ************************************************************************** #
   models <- tolower(noSpP(models))
@@ -39,7 +39,8 @@ loocv.data.frame <- function(object,
   if (parallel) {
     totCores <- detectCores()
     
-    if (missing(nCores)) {
+    if (missing(nCores)) nCores <- NA
+    if (is.na(as.integer(nCores))) {
       nCores <- min(nTrials, totCores)
       message(paste0(
         'Parallel computing on ', nCores,
@@ -69,34 +70,39 @@ loocv.data.frame <- function(object,
     predint <- tryCatch(
       expr = {
         surrofit <- surrosurv(data = redobject, models = models2predict, ...)
-        lapply(attr(predict(surrofit), 'predf'), function(x) x(alpha))
+        res <- lapply(attr(predict(surrofit), 'predf'), function(x) x(alpha))
+        names <- names(res)
+        res <- lapply(1:length(res), function(i) rbind(
+          res[[i]], t(print(surrofit, silent = TRUE))[, i, drop = FALSE]))
+        names(res) <- names
+        res
       },
       error = function(e) {
-        for (cop in c('Clayton', 'Plackett', 'Hougaard')) {
+        for (cop in c('clayton', 'plackett', 'hougaard')) {
           coppos <- which(models2predict == cop)
           if (length(coppos) == 1) {
             models2predict <- c(
               models2predict[1:coppos - 1],
               paste(cop, c('unadj', 'adj'), sep = '.'),
-              models2predict[(coppos + 1):length(models2predict)])
+              as.character(na.omit(
+                models2predict[(coppos + 1):(length(models2predict) + 1)])))
           }
         }
         poipos <- which(models2predict == 'Poisson')
         if (length(poipos) == 1) {
           models2predict <- c(
-            models2predict[1:poipos - 1],
+            models2predict[0:(poipos - 1)],
             paste0('Poisson', c('T', 'TI', 'TIa')))
         }
-        models2predict
-        return(
-          mapply(function(i) return(c(fit = NA, lwr = NA, upr = NA)), 
-                 models2predict, SIMPLIFY = FALSE))
+        return(mapply(function(i) return(t(t(c(
+          fit = NA, lwr = NA, upr = NA, kTau = NA, R2 = NA)))), 
+          models2predict, SIMPLIFY = FALSE))
       })
     RES <- c(list(margPars = c(alpha = alpha, beta = beta)),
              predint)
     return(RES)
   }
-  
+    
   if (Sys.info()[1] == "Windows") {
     cl <- makeCluster(nCores, type = 'PSOCK')
     clusterExport(cl, 'object', environment())
@@ -124,26 +130,29 @@ print.loocvSurrosurv <- function(x, n = min(length(x), 6),
   RES <- lapply(models, function(y) {
     preds <- sapply(x, function(trial) {
       trialRes <- if (is.null(trial[[y]])) {
-        rep(NA, 3)
+        rep(NA, 5)
       } else {
-        trial[[y]][]
+        trial[[y]]
       }
       c(obsBeta = trial$margPars['beta'], trialRes)
-      }
-    )
-    rownames(preds) <- c('obsBeta', 'predict', 'lwr', 'upr')
+    })
+    preds <- matrix(unlist(preds), nrow = 6, dimnames = list(
+      c('obsBeta', 'predict', 'lwr', 'upr', 'kTau', 'R2'),
+      names(x)))
     return(preds)
   })
   names(RES) <- models
   
   if (silent) return(RES)
   
+  n <- min(n, ncol(RES[[1]]))
   for (i in 1:length(RES)) {
     method <- format.methodNames(RES)[i]
     cat('\n  ', method, '\n')
-    res2print <- format(RES[[i]][, 1:n], digits = 1, na.encode = FALSE)
-    if (nrow(RES[[i]] > n))
-      res2print <- cbind(res2print, '  ' = rep('...', 4))
+    res2print <- format(as.data.frame(RES[[i]][, 1:n, drop = FALSE]),
+                        digits = 1, nsmall = 2, na.encode = FALSE)
+    if (ncol(RES[[i]]) > n)
+      res2print <- cbind(res2print, '  ' = rep('...', nrow(res2print)))
     # rownames(res2print) <- paste0(
     #   sub('trt', '    Treatment effects on ', rownames(res2print)), ':')
     print(res2print, quote = FALSE, ...)
@@ -170,6 +179,13 @@ plot.loocvSurrosurv <- function(x,
       !all(is.na(pmatch(tolower(noSpP(models)), mod)))))
   }
   
+  mypalette <- c(orange = rgb(234, 104, 14, maxColorValue = 255, alpha = 180),
+                  blue = rgb( 28, 170, 155, maxColorValue = 255, alpha = 180),
+                  magenta = rgb(191,  22, 120, maxColorValue = 255, alpha = 180),
+                  green = rgb( 184*.7, 201, 27*.5, maxColorValue = 255, alpha = 180),
+                  grey = rgb(79, 71, 68, maxColorValue = 255, alpha = 180))
+  palette(mypalette[c(2:4, 1, 5)])
+  
   if (length(ind)) {
     par(mfrow = n2mfrow(length(ind)))
     for (i in ind) {
@@ -183,12 +199,12 @@ plot.loocvSurrosurv <- function(x,
       axis(1, 1:ncol(x[[i]]), labels = colnames(x[[i]]))
       axis(2, axTicks(2), format(round(exp(axTicks(2)), 2)), las = 1)
       segments(1:ncol(x[[i]]), x[[i]]['lwr', ], y1 = x[[i]]['upr', ], 
-               col = rgb(.5, .5, .5, .8), lwd = 5)
+               col = rgb(.6, .6, .6, .8), lwd = 5)
       segments(1:ncol(x[[i]]) - .01, x[[i]]['predict', ], 1:ncol(x[[i]]) + .01,
-               col = rgb(.2, .2, .2, .9), lwd = 3, lend = 2)
+               col = rgb(.2, .2, .2), lwd = 3, lend = 2)
       COLs <- 2 - (colSums(apply(x[[i]][c('obsBeta', 'lwr', 'upr'), ], 2, 
                                  function(x) order(x) == c(2, 1, 3))) == 3)
-      NC <- is.na(x[[i]][2, ]) | is.na(x[[i]][3, ])
+      NC <- is.na(x[[i]]['lwr', ]) | is.na(x[[i]]['upr', ])
       COLs[NC] <- 0
       points(1:ncol(x[[i]]), x[[i]][1, ], pch = 16, cex = 1.4, col = COLs)
       if (any(NC))

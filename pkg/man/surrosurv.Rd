@@ -20,7 +20,7 @@ surrosurv(data,
                      'Poisson I', 'Poisson T', 'Poisson TI', 'Poisson TIa'),
           intWidth = NULL,  nInts = 8,
           cop.OPTIMIZER = "bobyqa",
-          poi.OPTIMIZER = "nloptwrap",
+          poi.OPTIMIZER = "bobyqa",
           verbose = TRUE,
           twoStage = FALSE,
           keep.data = TRUE)

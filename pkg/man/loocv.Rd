@@ -14,7 +14,7 @@
     (Michiels et al, 2009).
 }
 \usage{
-\method{loocv}{surrosurv}(object, nCores, parallel = TRUE, models, ...)
+\method{loocv}{surrosurv}(object, models, nCores, parallel = TRUE, ...)
 
 \method{print}{loocvSurrosurv}(x, n = min(length(x), 6), silent = FALSE, ...)
           

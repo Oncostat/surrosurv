@@ -200,7 +200,6 @@ plot.predictSurrosurv <- function(
     w <- .8 + 3 * (w - min(w)) / (max(w) - min(w))
   } else w <- 1
   
-  
   if (exact.models) {
     ind <- which(tolower(noSpP(names(x))) %in% tolower(noSpP(models)))
   } else {
