@@ -13,6 +13,7 @@ surrosurv <- function(
   twoStage       = FALSE,
   keep.data     = TRUE) {
   # ************************************************************************** #
+  data$trialref <- factor(data$trialref)
   models <- tolower(noSpP(models))
   if ('poisson' %in% models) {
     models <- setdiff(models, 'poisson')

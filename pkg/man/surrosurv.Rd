@@ -56,18 +56,16 @@ surrosurv(data,
   }
 }
   \item{models}{
-  For \code{surrosurv()}, which models should be fitted/plotted/predicted: 
+  For \code{surrosurv()}, the models should be fitted/plotted/predicted.
+  Possible models are:
     Clayton copula (unadjusted and adjusted),
-    Plackett (unadjusted and adjusted),
-    Hougaard (unadjusted and adjusted),
+    Plackett copula (unadjusted and adjusted),
+    Hougaard copula (unadjusted and adjusted),
     Poisson (with individual-level heterogeneity only,
               with trial-level heterogeneity only,
               with both individual- and trial-level heterogeneity,
               with both individual- and trial-level heterogeneity 
-              and with random per-trial intercept)
-              
-  For \code{plot.surrosurv()}, 
-    the models for which plots must be drawn.
+              and with random per-trial intercept).
   }
   \item{exact.models}{
     If \code{TRUE}, plots or predictions are generated only
@@ -147,6 +145,11 @@ surrosurv(data,
   are used to estimate parameters of mixed proportional hazard models,
   as described for instance by Crowther et al (2014).
   The statistical details are provided in Rotolo et al (WP).
+  
+  The function \code{predict()} returns the estimated values
+    of the log-hazard ratios on the true and the surrogate endpoints.
+  The list of the prediction functions (for all the \code{models})
+    is available as \code{attr(predict.surrosurv(...), 'predf')}.
 }
 
 \value{
