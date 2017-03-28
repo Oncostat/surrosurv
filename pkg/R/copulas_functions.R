@@ -588,15 +588,50 @@ copuSurr <- function(data, family=c('clayton', 'plackett', 'hougaard'),
                           poss[ind_AlphaBeta])
 
   myS <- with(step1est, cbind(
-    alpha_Var = pmax(diag(step1$VarCor[ind_AlphaBeta[, 1], ind_AlphaBeta[, 1]]), 1e-2),
-    albe_Covar = diag(step1$VarCor[ind_AlphaBeta[, 1], ind_AlphaBeta[, 2]]),
-    beta_Var = pmax(diag(step1$VarCor[ind_AlphaBeta[, 2], ind_AlphaBeta[, 2]]), 1e-2)))
+    alpha_Var = pmax(diag(step1$VarCor[ind_AlphaBeta[, 1], 
+                                       ind_AlphaBeta[, 1]]), 1e-2),
+    albe_Covar = diag(step1$VarCor[ind_AlphaBeta[, 1]
+                                   , ind_AlphaBeta[, 2]]),
+    beta_Var = pmax(diag(step1$VarCor[ind_AlphaBeta[, 2],
+                                      ind_AlphaBeta[, 2]]), 1e-2)))
   #     library('mvmeta')
   bvmodel <- mvmeta(cbind(alpha, beta), S = myS, 
-                    data = as.data.frame(step1[c('alpha', 'beta')]))
+                    data = as.data.frame(step1[c('alpha', 'beta')]),
+                    control = list(hessian = TRUE))
   alpha <- bvmodel$coefficients[1]
   beta <- bvmodel$coefficients[2]
-  R2 <- bvmodel$Psi[1, 2]^2 / prod(diag(bvmodel$Psi))    
+  R2 <- bvmodel$Psi[1, 2]^2 / prod(diag(bvmodel$Psi))
+  
+  # -------------------------------------------------------------------------- #
+  # Regression parameters ####
+  PARS <- c(alpha = bvmodel$coefficients[, 'alpha'],
+            beta  = bvmodel$coefficients[, 'beta'],
+            Psi.aa = bvmodel$Psi['alpha', 'alpha'],
+            Psi.ab = bvmodel$Psi['alpha', 'beta'],
+            Psi.bb = bvmodel$Psi['beta', 'beta'])
+  # library(msm)
+  bvmodel$Psi.vcov <- deltamethod(
+    g = list(~ x1^2, ~ x1 * x2, ~ x2^2 + x3^2),
+    # for this tranformation, see the Remark on page 612 of
+    # van Houwelingen, Arends, Stijnen, Stat Med 2002; 21:589-624
+    mean = bvmodel$par, cov = solve(-bvmodel$hessian), ses = FALSE)
+  VCOV <- diag(5)
+  VCOV[1:2, 1:2] <- bvmodel$vcov
+  VCOV[3:5, 3:5] <- bvmodel$Psi.vcov
+  rownames(VCOV) <- colnames(VCOV) <- names(PARS)
+  
+  # The following parameter estimates are given by equations (18.23), page 331
+  # Burzykowski and Buyse, An alternative measure for surrogate 
+  # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
+  # The evaluation of surrogate endpoints, New York Springer
+  bvmodel$gamma <- c(gamma0 = as.numeric(PARS['beta'] - PARS['alpha'] * 
+                                         PARS['Psi.ab'] / PARS['Psi.aa']),
+                   gamma1 = as.numeric(PARS['Psi.ab'] / PARS['Psi.aa']))
+  bvmodel$gamma.vcov <- deltamethod(
+    g = list(~ x2 - x1 * x4 / x3, ~ x4 / x3),
+    mean = PARS, cov = VCOV, ses = FALSE)
+  bvmodel$sigma <- PARS['Psi.bb'] * (1 - R2)
+  # -------------------------------------------------------------------------- #
   
   runTime.Adj <- Sys.time() - startTime
   

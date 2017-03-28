@@ -68,15 +68,23 @@ predict.surrosurv <- function(object,
           return(res)
         }),
         adj = Vectorize(function(x) {
-          VCOV <- object[[cop]]$adj$step2$Psi + object[[cop]]$adj$step2$vcov
-          CORR <- VCOV[1, 2] / sqrt(prod(diag(VCOV)))
-          AVG <- object[[cop]]$adj$step2$coefficients
-          cMEAN <- AVG[, 'beta'] + (x - AVG[, 'alpha']) * CORR * 
-            # sqrt(VCOV['beta', 'beta'] / VCOV['alpha', 'alpha'])
-            sqrt(exp(diff(log(diag(VCOV)))))
-          res <- rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
-            sqrt(VCOV['beta', 'beta'] * (
-              1 - VCOV['alpha', 'beta'] / prod(sqrt(diag(VCOV)))))
+          # VCOV <- object[[cop]]$adj$step2$Psi + object[[cop]]$adj$step2$vcov
+          # CORR <- sqrt(object[[cop]]$adj$R2)
+          # AVG <- object[[cop]]$adj$step2$coefficients
+          # cMEAN <- AVG[, 'beta'] + (x - AVG[, 'alpha']) * CORR * 
+          #   # sqrt(VCOV['beta', 'beta'] / VCOV['alpha', 'alpha'])
+          #   sqrt(exp(diff(log(diag(VCOV)))))
+          cMEAN <- object[[cop]]$adj$step2$gamma %*% c(1, x) 
+          # The following varianve is given by equation (18.27), page 332
+          # Burzykowski and Buyse, An alternative measure for surrogate 
+          # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
+          # The evaluation of surrogate endpoints, New York Springer
+          pVAR <- object[[cop]]$adj$step2$gamma.vcov[1, 1] +
+            2 * x *  object[[cop]]$adj$step2$gamma.vcov[1, 2] +
+            x^2 * object[[cop]]$adj$step2$gamma.vcov[2, 2] +
+            object[[cop]]$adj$step2$sigma
+          res <- rep(cMEAN, 3) +
+            qnorm(c(fit = .5, lwr = .025, upr = .975)) * sqrt(pVAR)
           names(res) <- c('fit', 'lwr', 'upr')
           return(res)
         }))
