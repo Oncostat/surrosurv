@@ -200,7 +200,9 @@ plot.loocvSurrosurv <- function(x,
       axis(2, axTicks(2), format(round(exp(axTicks(2)), 2)), las = 1)
       segments(1:ncol(x[[i]]), x[[i]]['lwr', ], y1 = x[[i]]['upr', ], 
                col = rgb(.6, .6, .6, .8), lwd = 5)
-      segments(1:ncol(x[[i]]) - .01, x[[i]]['predict', ], 1:ncol(x[[i]]) + .01,
+      # segments(1:ncol(x[[i]]) - .01, x[[i]]['predict', ], 1:ncol(x[[i]]) + .01,
+      #          col = rgb(.2, .2, .2), lwd = 3, lend = 2)
+      points(1:ncol(x[[i]]), x[[i]]['predict', ], pch = 15,
                col = rgb(.2, .2, .2), lwd = 3, lend = 2)
       COLs <- 2 - (colSums(apply(x[[i]][c('obsBeta', 'lwr', 'upr'), ], 2, 
                                  function(x) order(x) == c(2, 1, 3))) == 3)

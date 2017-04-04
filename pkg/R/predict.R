@@ -253,7 +253,7 @@ plot.predictSurrosurv <- function(
                Xs <- seq(axTicks(1)[1] - 1, rev(axTicks(1))[1] + 1, length.out = 1e2)
                polygon(c(Xs, rev(Xs)),
                        c(PREDF[[i]](Xs)[2, ], rev(PREDF[[i]](Xs)[3, ])),
-                       col = rgb(.8, .8, .8, .5), border = NA)
+                       col = rgb(.8, .8, .8, .75), border = NA)
              }
              abline(h=0, v=0, col='grey')
              # if (all(is.finite(abcoeff)))
