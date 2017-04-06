@@ -113,17 +113,52 @@ poisSurr <- function(data,
         data = JOINT$poidata, family = poisson,
         control = GLMERCONTROL)
     }) -> attr(JOINT$poifitT, 'exec.time')
+    R2 <- VarCorr(JOINT$poifitT)$trialref[1, 2]^2 /
+      prod(diag(VarCorr(JOINT$poifitT)$trialref))
+    
+    # ------------------------------------------------------------------------ #
+    # Regression parameters ####
+    PARS <- c(alpha = fixef(JOINT$poifitT)[['trtS']],
+              beta  = fixef(JOINT$poifitT)[['trtT']],
+              Psi.aa = VarCorr(JOINT$poifitT)$trialref[['trtS', 'trtS']],
+              Psi.ab = VarCorr(JOINT$poifitT)$trialref[['trtS', 'trtT']],
+              Psi.bb = VarCorr(JOINT$poifitT)$trialref[['trtT', 'trtT']])
+    # library(msm)
+    Psi.vcov <- deltamethod(
+      g = list(~ x1^2, ~ x1 * x2, ~ x2^2 + x3^2),
+      # for this tranformation, see the Remark on page 612 of
+      # van Houwelingen, Arends, Stijnen, Stat Med 2002; 21:589-624
+      mean = JOINT$poifitT@theta,
+      cov = solve(-JOINT$poifitT@optinfo$derivs$Hessian[1:3, 1:3]), ses = FALSE)
+    VCOV <- diag(5)
+    VCOV[1:2, 1:2] <- vcov(JOINT$poifitT)[c('trtS', 'trtT'), c('trtS', 'trtT')]@x
+    VCOV[3:5, 3:5] <- Psi.vcov
+    rownames(VCOV) <- colnames(VCOV) <- names(PARS)
+    
+    # The following parameter estimates are given by equations (18.23), page 331
+    # Burzykowski and Buyse, An alternative measure for surrogate 
+    # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
+    # The evaluation of surrogate endpoints, New York Springer
+    regr <- list(
+      gamma = c(gamma0 = as.numeric(PARS['beta'] - PARS['alpha'] * 
+                                      PARS['Psi.ab'] / PARS['Psi.aa']),
+                gamma1 = as.numeric(PARS['Psi.ab'] / PARS['Psi.aa'])),
+      gamma.vcov = deltamethod(
+        g = list(~ x2 - x1 * x4 / x3, ~ x4 / x3),
+        mean = PARS, cov = VCOV, ses = FALSE))
+    regr$sigma <- PARS['Psi.bb'] * (1 - R2)
+    # ------------------------------------------------------------------------ #
     
     RES$PoissonT <- list(
       kTau = NULL,
       alpha = fixef(JOINT$poifitT)['trtS'],
       beta = fixef(JOINT$poifitT)['trtT'],
       fixVarCor = vcov(JOINT$poifitT)[c('trtS', 'trtT'), c('trtS', 'trtT')],
-      R2 = VarCorr(JOINT$poifitT)$trialref[1, 2]^2 /
-        prod(diag(VarCorr(JOINT$poifitT)$trialref)),
+      R2 = R2,
       ranef = ranef(JOINT$poifitT),
       VarCor = VarCorr(JOINT$poifitT),
       optinfo = JOINT$poifitT@optinfo,
+      regr = regr,
       runTime = as.difftime(
         round(attr(JOINT$poifitT, 'exec.time')[3] / 60, 1), units = 'mins'))
     
@@ -183,20 +218,56 @@ poisSurr <- function(data,
         control = GLMERCONTROL)
     }) -> attr(JOINT$poifitTI, 'exec.time')
     
+    
     attr(JOINT$poifitTI, 'kTau') <- parfm:::fr.lognormal(
       what = 'tau',
       sigma2 = as.double(summary(JOINT$poifitTI)$varcor$id))
+    R2 <- VarCorr(JOINT$poifitTI)$trialref[1, 2]^2 /
+      prod(diag(VarCorr(JOINT$poifitTI)$trialref))
+    
+    # ------------------------------------------------------------------------ #
+    # Regression parameters ####
+    PARS <- c(alpha = fixef(JOINT$poifitTI)[['trtS']],
+              beta  = fixef(JOINT$poifitTI)[['trtT']],
+              Psi.aa = VarCorr(JOINT$poifitTI)$trialref[['trtS', 'trtS']],
+              Psi.ab = VarCorr(JOINT$poifitTI)$trialref[['trtS', 'trtT']],
+              Psi.bb = VarCorr(JOINT$poifitTI)$trialref[['trtT', 'trtT']])
+    # library(msm)
+    Psi.vcov <- deltamethod(
+      g = list(~ x1^2, ~ x1 * x2, ~ x2^2 + x3^2),
+      # for this tranformation, see the Remark on page 612 of
+      # van Houwelingen, Arends, Stijnen, Stat Med 2002; 21:589-624
+      mean = JOINT$poifitTI@theta[2:4],
+      cov = solve(-JOINT$poifitTI@optinfo$derivs$Hessian[2:4, 2:4]), ses = FALSE)
+    VCOV <- diag(5)
+    VCOV[1:2, 1:2] <- vcov(JOINT$poifitTI)[c('trtS', 'trtT'), c('trtS', 'trtT')]@x
+    VCOV[3:5, 3:5] <- Psi.vcov
+    rownames(VCOV) <- colnames(VCOV) <- names(PARS)
+    
+    # The following parameter estimates are given by equations (18.23), page 331
+    # Burzykowski and Buyse, An alternative measure for surrogate 
+    # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
+    # The evaluation of surrogate endpoints, New York Springer
+    regr <- list(
+      gamma = c(gamma0 = as.numeric(PARS['beta'] - PARS['alpha'] * 
+                                      PARS['Psi.ab'] / PARS['Psi.aa']),
+                gamma1 = as.numeric(PARS['Psi.ab'] / PARS['Psi.aa'])),
+      gamma.vcov = deltamethod(
+        g = list(~ x2 - x1 * x4 / x3, ~ x4 / x3),
+        mean = PARS, cov = VCOV, ses = FALSE))
+    regr$sigma <- PARS['Psi.bb'] * (1 - R2)
+    # ------------------------------------------------------------------------ #
     
     RES$PoissonTI <- list(
       kTau = attr(JOINT$poifitTI, 'kTau'),
       alpha = fixef(JOINT$poifitTI)['trtS'],
       beta = fixef(JOINT$poifitTI)['trtT'],
       fixVarCor = vcov(JOINT$poifitTI)[c('trtS', 'trtT'), c('trtS', 'trtT')],
-      R2 = VarCorr(JOINT$poifitTI)$trialref[1, 2]^2 /
-        prod(diag(VarCorr(JOINT$poifitTI)$trialref)),
+      R2 = R2,
       ranef = ranef(JOINT$poifitTI),
       VarCor = VarCorr(JOINT$poifitTI),
       optinfo = JOINT$poifitTI@optinfo,
+      regr = regr,
       runTime = as.difftime(
         round(attr(JOINT$poifitTI, 'exec.time')[3] / 60, 1), units = 'mins'))
     
@@ -227,17 +298,52 @@ poisSurr <- function(data,
     attr(JOINT$poifitTIa, 'kTau') <- parfm:::fr.lognormal(
       what = 'tau',
       sigma2 = as.double(summary(JOINT$poifitTIa)$varcor$id))
+    R2 <- VarCorr(JOINT$poifitTIa)$trialref[1, 2]^2 /
+      prod(diag(VarCorr(JOINT$poifitTIa)$trialref))
+    
+    # ------------------------------------------------------------------------ #
+    # Regression parameters ####
+    PARS <- c(alpha = fixef(JOINT$poifitTIa)[['trtS']],
+              beta  = fixef(JOINT$poifitTIa)[['trtT']],
+              Psi.aa = VarCorr(JOINT$poifitTIa)$trialref[['trtS', 'trtS']],
+              Psi.ab = VarCorr(JOINT$poifitTIa)$trialref[['trtS', 'trtT']],
+              Psi.bb = VarCorr(JOINT$poifitTIa)$trialref[['trtT', 'trtT']])
+    # library(msm)
+    Psi.vcov <- deltamethod(
+      g = list(~ x1^2, ~ x1 * x2, ~ x2^2 + x3^2),
+      # for this tranformation, see the Remark on page 612 of
+      # van Houwelingen, Arends, Stijnen, Stat Med 2002; 21:589-624
+      mean = JOINT$poifitTIa@theta[3:5],
+      cov = solve(-JOINT$poifitTIa@optinfo$derivs$Hessian[3:5, 3:5]), ses = FALSE)
+    VCOV <- diag(5)
+    VCOV[1:2, 1:2] <- vcov(JOINT$poifitTIa)[c('trtS', 'trtT'), c('trtS', 'trtT')]@x
+    VCOV[3:5, 3:5] <- Psi.vcov
+    rownames(VCOV) <- colnames(VCOV) <- names(PARS)
+    
+    # The following parameter estimates are given by equations (18.23), page 331
+    # Burzykowski and Buyse, An alternative measure for surrogate 
+    # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
+    # The evaluation of surrogate endpoints, New York Springer
+    regr <- list(
+      gamma = c(gamma0 = as.numeric(PARS['beta'] - PARS['alpha'] * 
+                                      PARS['Psi.ab'] / PARS['Psi.aa']),
+                gamma1 = as.numeric(PARS['Psi.ab'] / PARS['Psi.aa'])),
+      gamma.vcov = deltamethod(
+        g = list(~ x2 - x1 * x4 / x3, ~ x4 / x3),
+        mean = PARS, cov = VCOV, ses = FALSE))
+    regr$sigma <- PARS['Psi.bb'] * (1 - R2)
+    # ------------------------------------------------------------------------ #
     
     RES$PoissonTIa <- list(
       kTau = attr(JOINT$poifitTIa, 'kTau'),
       alpha = fixef(JOINT$poifitTIa)['trtS'],
       beta = fixef(JOINT$poifitTIa)['trtT'],
       fixVarCor = vcov(JOINT$poifitTIa)[c('trtS', 'trtT'), c('trtS', 'trtT')],
-      R2 = VarCorr(JOINT$poifitTIa)$trialref[1, 2]^2 /
-        prod(diag(VarCorr(JOINT$poifitTIa)$trialref)),
+      R2 = R2,
       ranef = ranef(JOINT$poifitTIa),
       VarCor = VarCorr(JOINT$poifitTIa),
       optinfo = JOINT$poifitTIa@optinfo,
+      regr = regr,
       runTime = as.difftime(attr(JOINT$poifitTIa, 'exec.time')[3] / 60,
                             units = 'mins'))
     

@@ -68,20 +68,13 @@ predict.surrosurv <- function(object,
           return(res)
         }),
         adj = Vectorize(function(x) {
-          # VCOV <- object[[cop]]$adj$step2$Psi + object[[cop]]$adj$step2$vcov
-          # CORR <- sqrt(object[[cop]]$adj$R2)
-          # AVG <- object[[cop]]$adj$step2$coefficients
-          # cMEAN <- AVG[, 'beta'] + (x - AVG[, 'alpha']) * CORR * 
-          #   # sqrt(VCOV['beta', 'beta'] / VCOV['alpha', 'alpha'])
-          #   sqrt(exp(diff(log(diag(VCOV)))))
           cMEAN <- object[[cop]]$adj$step2$gamma %*% c(1, x) 
           # The following varianve is given by equation (18.27), page 332
           # Burzykowski and Buyse, An alternative measure for surrogate 
           # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
           # The evaluation of surrogate endpoints, New York Springer
-          pVAR <- object[[cop]]$adj$step2$gamma.vcov[1, 1] +
-            2 * x *  object[[cop]]$adj$step2$gamma.vcov[1, 2] +
-            x^2 * object[[cop]]$adj$step2$gamma.vcov[2, 2] +
+          pdVCOV <- nearPD(object[[cop]]$adj$step2$gamma.vcov)$mat
+          pVAR <- pdVCOV[1, 1] + 2 * x * pdVCOV[1, 2] + x^2 * pdVCOV +
             object[[cop]]$adj$step2$sigma
           res <- rep(cMEAN, 3) +
             qnorm(c(fit = .5, lwr = .025, upr = .975)) * sqrt(pVAR)
@@ -92,20 +85,30 @@ predict.surrosurv <- function(object,
     # Poisson models
     lapply(poissons, function(poi) {
       Vectorize(function(x) {
-        VCOV <- as.matrix(
-          object[[poi]]$VarCor$trialref[paste0('trt', c('S', 'T')),
-                                        paste0('trt', c('S', 'T'))] +
-            object[[poi]]$fixVarCor[paste0('trt', c('S', 'T')),
-                                    paste0('trt', c('S', 'T'))])
-        CORR <- VCOV[1, 2] / sqrt(prod(diag(VCOV)))
-        AVG <- unlist(object[[poi]][c('alpha', 'beta')])
-        cMEAN <- AVG['beta.trtT'] + (x - AVG['alpha.trtS']) * CORR *
-          # sqrt(VCOV['trtT', 'trtT'] / VCOV['trtS', 'trtS'])
-          sqrt(exp(diff(log(diag(VCOV)))))
-        res <- as.vector(
-          rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
-            sqrt(VCOV['trtS', 'trtS'] * (1 - VCOV[1, 2] / 
-                                           prod(sqrt(diag(VCOV))))))
+        # VCOV <- as.matrix(
+        #   object[[poi]]$VarCor$trialref[paste0('trt', c('S', 'T')),
+        #                                 paste0('trt', c('S', 'T'))] +
+        #     object[[poi]]$fixVarCor[paste0('trt', c('S', 'T')),
+        #                             paste0('trt', c('S', 'T'))])
+        # CORR <- VCOV[1, 2] / sqrt(prod(diag(VCOV)))
+        # AVG <- unlist(object[[poi]][c('alpha', 'beta')])
+        # cMEAN <- AVG['beta.trtT'] + (x - AVG['alpha.trtS']) * CORR *
+        #   # sqrt(VCOV['trtT', 'trtT'] / VCOV['trtS', 'trtS'])
+        #   sqrt(exp(diff(log(diag(VCOV)))))
+        # res <- as.vector(
+        #   rep(cMEAN, 3) + qnorm(c(fit=.5, lwr=.025, upr=.975)) * 
+        #     sqrt(VCOV['trtS', 'trtS'] * (1 - VCOV[1, 2] / 
+        #                                    prod(sqrt(diag(VCOV))))))
+        cMEAN <- object[[poi]]$regr$gamma %*% c(1, x) 
+        # The following varianve is given by equation (18.27), page 332
+        # Burzykowski and Buyse, An alternative measure for surrogate 
+        # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
+        # The evaluation of surrogate endpoints, New York Springer
+        pdVCOV <- nearPD(object[[poi]]$regr$gamma.vcov)$mat
+        pVAR <- pdVCOV[1, 1] + 2 * x *  pdVCOV[1, 2] + x^2 * pdVCOV[2, 2] +
+          object[[poi]]$regr$sigma
+        res <- rep(cMEAN, 3) +
+          qnorm(c(fit = .5, lwr = .025, upr = .975)) * sqrt(pVAR)
         names(res) <- c('fit', 'lwr', 'upr')
         return(res)
       })
@@ -250,7 +253,8 @@ plot.predictSurrosurv <- function(
            cex = w, pch = 21, bg = rgb(.5, .5, .5, .5),
            panel.first = {
              if (pred.ints) {
-               Xs <- seq(axTicks(1)[1] - 1, rev(axTicks(1))[1] + 1, length.out = 1e2)
+               Xs <- seq(axTicks(1)[1] - 1, rev(axTicks(1))[1] + 1, 
+                         length.out = 1e2)
                polygon(c(Xs, rev(Xs)),
                        c(PREDF[[i]](Xs)[2, ], rev(PREDF[[i]](Xs)[3, ])),
                        col = rgb(.8, .8, .8, .75), border = NA)

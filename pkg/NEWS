@@ -1,3 +1,6 @@
+Changes in version 1.1.14 (2017-04-06)
+- fixed issue in prediction intervals for mixed Poisson models
+
 Changes in version 1.1.13 (2017-03-28)
 - fixed issue in prediction intervals for adjusted copula models
 
