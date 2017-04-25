@@ -69,12 +69,13 @@ predict.surrosurv <- function(object,
         }),
         adj = Vectorize(function(x) {
           cMEAN <- object[[cop]]$adj$step2$gamma %*% c(1, x) 
-          # The following varianve is given by equation (18.27), page 332
+          # The following variance is given by equation (18.27), page 332
           # Burzykowski and Buyse, An alternative measure for surrogate 
           # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
           # The evaluation of surrogate endpoints, New York Springer
+          # library(Matrix)
           pdVCOV <- nearPD(object[[cop]]$adj$step2$gamma.vcov)$mat
-          pVAR <- pdVCOV[1, 1] + 2 * x * pdVCOV[1, 2] + x^2 * pdVCOV +
+          pVAR <- pdVCOV[1, 1] + 2 * x * pdVCOV[1, 2] + x^2 * pdVCOV[2, 2] +
             object[[cop]]$adj$step2$sigma
           res <- rep(cMEAN, 3) +
             qnorm(c(fit = .5, lwr = .025, upr = .975)) * sqrt(pVAR)
@@ -104,6 +105,7 @@ predict.surrosurv <- function(object,
         # Burzykowski and Buyse, An alternative measure for surrogate 
         # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
         # The evaluation of surrogate endpoints, New York Springer
+        # library(Matrix)
         pdVCOV <- nearPD(object[[poi]]$regr$gamma.vcov)$mat
         pVAR <- pdVCOV[1, 1] + 2 * x *  pdVCOV[1, 2] + x^2 * pdVCOV[2, 2] +
           object[[poi]]$regr$sigma

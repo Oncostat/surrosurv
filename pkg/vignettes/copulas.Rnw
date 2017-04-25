@@ -34,10 +34,10 @@ In the case of possibly right-censored data,
 \item $S(s, t) = \left.C(u,v)\right|_{S_S(s), S_T(t)}$
     if $S$ is censored at time $s$ and $T$ is censored at time $t$,
 \item $-\frac{\partial}{\partial t}S(s, t) = 
-    \left.\frac{\partial}{\partial v} C(u,v)\right|_{S_S(s), S_T(t)} f_S(s)$
+    \left.\frac{\partial}{\partial v} C(u,v)\right|_{S_S(s), S_T(t)} f_T(t)$
     if $S$ is censored at time $s$ and $T=t$,
 \item $-\frac{\partial}{\partial s}S(s, t) =
-    \frac{\partial}{\partial v}\left.C(u,v)\right|_{S_S(s), S_T(t)} f_T(t)$
+    \frac{\partial}{\partial v}\left.C(u,v)\right|_{S_S(s), S_T(t)} f_S(s)$
     if $S=s$ and $T$ is censored at time $t$,
 \item $\frac{\partial^2}{\partial s \partial t}S(s, t) = 
     \left.\frac{\partial^2}{\partial u \partial v}C(u,v)\right|_{S_S(s), S_T(t)}
