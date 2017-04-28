@@ -1,4 +1,54 @@
-\documentclass[]{scrartcl}
+\documentclass[]{scrartcl}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 \usepackage[square,numbers]{natbib}
 \usepackage[]{fullpage}
 \usepackage{setspace}
@@ -14,7 +64,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \definecolor{darkgray}{rgb}{.15, .12, .11}
 \lstset{ %
@@ -169,13 +219,7 @@ $^2$ INSERM U1018 OncoStat, CESP, Univ. Paris-Sud, Univ. Paris-Saclay
 \linenumbers
 
 
-<<echo=FALSE, results='hide'>>=
-library(knitr, quietly = TRUE)
-opts_chunk$set(fig.path = 'figs/fig',
-               fig.height = 4,
-               width = 7)
-dir.create('./figs', showWarnings = FALSE)
-@
+
 
 % \setkeys{Gin}{width=\textwidth}
 
@@ -511,30 +555,53 @@ with $m_i\sim\mathcal N(0, \sigma^2_m)$.
 We illustrate the use of the functions in the \inline{surrosurv} package
   on the individual patient data of the advanced GASTRIC meta-analysis
 \citep{GASTRIC13, Paoletti2013}.
-<<echo=1:2>>=
-library(surrosurv)
-packageVersion('surrosurv')
-paletteigr <- c(orange = rgb(234, 104, 14, max = 255),
-                blue = rgb( 28, 170, 155, max = 255),
-                magenta = rgb(191,  22, 120, max = 255),
-                green = rgb( 184, 201, 27, max = 255),
-                grey = rgb(79,71,68, max = 255))
-palette(paletteigr[c(4:1, 5)])
-LWD <- 3
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(surrosurv)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'surrosurv' was built under R version 3.2.5}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: optimx}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'optimx' was built under R version 3.2.5}}\begin{alltt}
+\hlkwd{packageVersion}\hlstd{(}\hlstr{'surrosurv'}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] '1.1.10'
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 The individual data of the 4069 patients,
   already made public by \cite{BuyseEtal15},
 are also available directly in \inline{R} in the \inline{surrosurv} package:
-<<>>=
-data('gastadv')
-nrow(gastadv)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{data}\hlstd{(}\hlstr{'gastadv'}\hlstd{)}
+\hlkwd{nrow}\hlstd{(gastadv)}
+\end{alltt}
+\begin{verbatim}
+## [1] 4069
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 The data set contains the following variables:
-<<>>=
-names(gastadv)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{names}\hlstd{(gastadv)}
+\end{alltt}
+\begin{verbatim}
+## [1] "timeT"    "statusT"  "statusS"  "timeS"    "trialref" "trt"     
+## [7] "id"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 where \inline{timeT} and \inline{timeS} are the (possibly censored) times 
 for overall survival (\inline{T}) and
 for progression-fre survival (\inline{S}) expressed in days,
@@ -546,25 +613,16 @@ and \inline{id} is the patient indicator ($j$).
 Figure~\ref{fig:survCurves} shows the Kaplan--Meier curves for overall survival,
 the true endpoint $T$, and progression-free survival,
 the candiddate surrogate $S$.
-<<survCurves, echo=FALSE, results='hide', fig.env='figure', fig.lp='fig:', fig.cap='Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis'>>=
-library(survival, quietly = TRUE, warn.conflicts = FALSE)
-par(mar = c(4, 4, 2, 0) + .1)
-# Overall Survival (T)
-plot(survfit(Surv(timeT, statusT) ~ trt, data = gastadv),
-     main = 'Advanced GASTRIC meta-analysis',
-     xlab = 'Years', ylab = 'Survival probability',
-     xmax = 365.25 * 4, xscale = 365.25,
-     col = 1, lty = 1:2, lwd = LWD, yaxs = 'i', bty = 'l')
-# Progression-free Survival (S)
-lines(survfit(Surv(timeS, statusS) ~ trt, data = gastadv),
-      xmax = 365.25 * 4, xscale = 365.25,
-      lty = 1:2, add = TRUE, col = 2, lwd = LWD)
-legend('topright',
-       t(outer(c('Overall Survival (T)', 'Progression-free Survival (S)'),
-               c('Control arm', 'Chemotherapy arm'),
-               paste, sep = ' - ')),
-       lty = 1:2, lwd = LWD,col = rep(1:2, each = 2), bty = 'n')
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'survival' was built under R version 3.2.5}}\end{kframe}\begin{figure}
+\includegraphics[width=\maxwidth]{figs/figsurvCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis}\label{fig:survCurves}
+\end{figure}
+
+
+\end{knitrout}
 
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -612,9 +670,47 @@ These parameters are passed to the function \inline{poissonize()},
   
   The surrogacy models for the advanced GASTRIC cancer meta-analysis
   are obtained as follows:
-<<label=SURROSURVfit, echo=TRUE, cache=TRUE>>=
-  allSurroRes <-  surrosurv(gastadv, verbose = TRUE)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{allSurroRes} \hlkwb{<-}  \hlkwd{surrosurv}\hlstd{(gastadv,} \hlkwc{verbose} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Computation may take very long. Please wait...}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Clayton}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (5.2 mins)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Plackett}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (4.7 mins)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Hougaard}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (7.2 mins)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Data poissonization}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (3.7 secs)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson T}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (1.2 mins)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson I}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (2.6 mins)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson TI}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (4 mins)}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson TIa}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (2.2 mins)}}\end{kframe}
+\end{knitrout}
 
 Note that the computation time of the surrogacy model estimation can be long.
 In this example, the computations required
@@ -624,9 +720,26 @@ In this example, the computations required
   with 3.60 GHz clock speed and 16GB of RAM.
 The results are an object of class \inline{surrosurv}
   and the estimated Kendall's $\tau$ and $R^2$ can be easily displayed:
-<<echo=TRUE>>=
-  allSurroRes
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{allSurroRes}
+\end{alltt}
+\begin{verbatim}
+##                kTau R2  
+## Clayton unadj  0.61 0.45
+## Clayton adj    0.61 0.41
+## Plackett unadj 0.62 0.45
+## Plackett adj   0.62 0.4 
+## Hougaard unadj 0.32 0.45
+## Hougaard adj   0.32 0.38
+## PoissonT       -.-- 1   
+## PoissonI       0.51 -.--
+## PoissonTI      0.51 0.63
+## PoissonTIa     0.51 0.83
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 For each copula model,
   both the results with measurement error adjustment (\inline{adj})
   and without adjustment (\inline{unadj}) are shown.
@@ -648,16 +761,50 @@ Two parameters can be used to tune the thresholds
   for `big enough' minmum eigen value:
   \inline{kkttol} (\inline{1e-2} by default),
   and \inline{kkt2tol} (\inline{1e-8} by default).
-<<echo=TRUE>>=
-  convergence(allSurroRes)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{convergence}\hlstd{(allSurroRes)}
+\end{alltt}
+\begin{verbatim}
+##                maxSgrad minHev minREev
+## Clayton unadj     FALSE  FALSE     ---
+## Clayton adj       FALSE  FALSE    TRUE
+## Plackett unadj    FALSE  FALSE     ---
+## Plackett adj      FALSE  FALSE    TRUE
+## Hougaard unadj    FALSE   TRUE     ---
+## Hougaard adj      FALSE   TRUE    TRUE
+## PoissonT           TRUE   TRUE   FALSE
+## PoissonI           TRUE   TRUE     ---
+## PoissonTI          TRUE   TRUE    TRUE
+## PoissonTIa         TRUE   TRUE    TRUE
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 If the values of the minimum gradient and of the maximum eigenvalues are needed,
   the function \inline{convals()} can be used:
-<<>>=
-  convals(allSurroRes)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{convals}\hlstd{(allSurroRes)}
+\end{alltt}
+\begin{verbatim}
+##                    maxSgrad        minHev      minREev
+## Clayton unadj  1.502752e+00 -6.075682e+00          ---
+## Clayton adj    1.502752e+00 -6.075682e+00 1.009980e-02
+## Plackett unadj 2.128613e+02 -5.188049e+00          ---
+## Plackett adj   2.128613e+02 -5.188049e+00 8.871677e-03
+## Hougaard unadj 1.400924e+01  7.781731e-01          ---
+## Hougaard adj   1.400924e+01  7.781731e-01 8.004824e-03
+## PoissonT       1.330468e-05  1.292091e+02 6.254547e-12
+## PoissonI       1.967051e-05  6.796358e+01          ---
+## PoissonTI      7.107817e-06  6.702261e+01 2.041760e-02
+## PoissonTIa     5.008972e-05  9.413611e+07 1.024342e-01
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -672,9 +819,21 @@ The function \inline{predict()}, applied to an object of class \inline{surrosurv
   returns the predictions of the treatment effects for each trial.
 The minimal syntax is \inline{predict(allSurroRes)},
   but one can be interested in prediction of only one of the fitted models:
-<<>>=
-  predict(allSurroRes, models = 'PoissonTI')
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{predict}\hlstd{(allSurroRes,} \hlkwc{models} \hlstd{=} \hlstr{'PoissonTI'}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## Treatment effect prediction for surrosurv object
+## 
+##    Poisson TI 
+##                             1     2     3     4     5     6        
+##     Treatment effects on S: -0.52 -0.42 -0.38 -0.08 -0.51 -0.38 ...
+##     Treatment effects on T: -0.26 -0.08 -0.27  0.41 -0.41 -0.15 ...
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 This function returns an object of class \inline{predictSurrosurv}.
 
 The predicted treatment effects can also be vizualied graphically
@@ -685,13 +844,19 @@ For example, the surrogacy plots
   for the adjusted Clayton copula and the Poisson TI models
   in the advanced GASTRIC meta-analysis (Fig.~\ref{fig:predictions})
   can be obtained as follows:
-<<predictions, echo=FALSE, fig.env='figure', fig.lp='fig:', fig.cap='Predictions for the advanced GASTRIC meta-analysis as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.'>>=
-  plot(allSurroRes, c('Clayton adj', 'PoissonTI'), 
-       xlim = c(.25, 1.4), ylim = c(.4, 1.8), mfrow = 1:2)
-@
-<<eval=FALSE>>=
-  plot(allSurroRes, c('Clayton adj', 'PoissonTI'))
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in plot.predictSurrosurv(predict(x), ...): objet 'i' introuvable}}\end{kframe}
+\end{knitrout}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{plot}\hlstd{(allSurroRes,} \hlkwd{c}\hlstd{(}\hlstr{'Clayton adj'}\hlstd{,} \hlstr{'PoissonTI'}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 
 The argument \inline{surro.stats} controls whether the estimated
@@ -707,9 +872,25 @@ The value of the STE estimated by each surrogacy model can be obtained
   via the function \inline{ste()},
   both in terms of regression parameter (\inline{beta})
   and in terms of hazard ratio (\inline{HR}):
-<<>>=
-  ste(allSurroRes)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{ste}\hlstd{(allSurroRes)}
+\end{alltt}
+\begin{verbatim}
+##                 beta   HR
+## Clayton.unadj  -0.61 0.54
+## Clayton.adj    -0.31 0.73
+## Plackett.unadj -0.61 0.54
+## Plackett.adj   -0.30 0.74
+## Hougaard.unadj -0.61 0.54
+## Hougaard.adj   -0.28 0.75
+## PoissonT       -0.12 0.88
+## PoissonTI      -0.41 0.66
+## PoissonTIa     -1.04 0.36
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -734,31 +915,39 @@ The argument \inline{parallel} is a logical for allowing or not such a paralleli
   whereas \inline{nCores} allows specifying the number of cores to use.
 By default, \inline{parallel = TRUE} and \inline{nCores} is set to the minimum
   between $N$ and the maximum number of cores on the machine.
-<<label=LOOCV, echo=TRUE, cache=TRUE>>=
-  loocvRes <- loocv(gastadv, models = c('Clayton', 'PoissonTI'))
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{loocvRes} \hlkwb{<-} \hlkwd{loocv}\hlstd{(gastadv,} \hlkwc{models} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'Clayton'}\hlstd{,} \hlstr{'PoissonTI'}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Parallel computing on 8 cores (the total number of cores detected)}}\end{kframe}
+\end{knitrout}
 The results of the crossvalidation can be printed
-<<echo = 1>>=
-  loocvRes
-  loocvLegend <- paste(
-    "Leave-one-trial-out cross-validation results for the advanced
-GASTRIC meta-analysis.",
-    "The symbol \`\\textbf{X}\' means that the surrogacy model could
-not be fitted due to numerical problems.",
-    "Vertical lines are the 95\\% prediction intervals (PI)",
-    "of the treatment effect on overall survival (OS).",
-    "Dots are the observed treatment effects on OS",
-    "(green = within the PI, magenta = out of the PI)."
-    )
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{loocvRes}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `rownames<-`(`*tmp*`, value = c("{}obsBeta"{}, "{}predict"{}, "{}lwr"{}, : attempt to set 'rownames' on an object with no dimensions}}\end{kframe}
+\end{knitrout}
 and plotted (Fig.~\ref{fig:loocv}) by showing, 
   for each trial, the comparison between the observed 
   treatment effect on $T$, and its prediction interval,
   based on the observed treatment effect on $S$ for the same trial
   and the surrogacy model fitted on the other $N-1$ trials:
-<<loocv, fig.width=6, fig.height=8, fig.lp='fig:', fig.env='figure', fig.cap=loocvLegend>>=
-  plot(loocvRes)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{plot}\hlstd{(loocvRes)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `rownames<-`(`*tmp*`, value = c("{}obsBeta"{}, "{}predict"{}, "{}lwr"{}, : attempt to set 'rownames' on an object with no dimensions}}\end{kframe}
+\end{knitrout}
 
 
 
@@ -1015,67 +1204,100 @@ The last argument (\inline{compress}) is a logical value
 In the advanced GASTRIC cancer example,
   we first change the column names in order to match the ones needed by
   \inline{poissonize()}:
-<<>>=
-  gastadv.poi <- gastadv
-  gastadv.poi$time <- gastadv.poi$timeT / 365.25
-  gastadv.poi$status <- gastadv.poi$statusT
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{gastadv.poi} \hlkwb{<-} \hlstd{gastadv}
+  \hlstd{gastadv.poi}\hlopt{$}\hlstd{time} \hlkwb{<-} \hlstd{gastadv.poi}\hlopt{$}\hlstd{timeT} \hlopt{/} \hlnum{365.25}
+  \hlstd{gastadv.poi}\hlopt{$}\hlstd{status} \hlkwb{<-} \hlstd{gastadv.poi}\hlopt{$}\hlstd{statusT}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 We fit the proportional hazard model, to which we will compare
   the results of the auxiliary Poisson model
-<<>>=
-  fitcox <- coxph(Surv(time, status) ~ trt, data = gastadv.poi)
-  cox.base <- basehaz(fitcox, centered = FALSE)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{fitcox} \hlkwb{<-} \hlkwd{coxph}\hlstd{(}\hlkwd{Surv}\hlstd{(time, status)} \hlopt{~} \hlstd{trt,} \hlkwc{data} \hlstd{= gastadv.poi)}
+  \hlstd{cox.base} \hlkwb{<-} \hlkwd{basehaz}\hlstd{(fitcox,} \hlkwc{centered} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 and we plot the estimated survival curves.
-<<eval=FALSE>>=
-  plot(stepfun(cox.base$time[-nrow(cox.base)], 
-               exp(-cox.base$hazard)),
-       ylim = 0:1, xlim = c(0, 5), col = 1, 
-       yaxs = 'i', xaxs = 'i', lwd = 2, bty = 'l', 
-       do.points = FALSE, verticals = FALSE, 
-       main = 'Overall Survival\nAdvanced GASTRIC meta-analysis',
-       xlab = 'Years', ylab = 'Survival probability')
-  lines(stepfun(cox.base$time[-nrow(cox.base)],
-               exp(-cox.base$hazard * exp(coef(fitcox)['trt']))),
-       col = 2, pch = '', lwd = 2)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{plot}\hlstd{(}\hlkwd{stepfun}\hlstd{(cox.base}\hlopt{$}\hlstd{time[}\hlopt{-}\hlkwd{nrow}\hlstd{(cox.base)],}
+               \hlkwd{exp}\hlstd{(}\hlopt{-}\hlstd{cox.base}\hlopt{$}\hlstd{hazard)),}
+       \hlkwc{ylim} \hlstd{=} \hlnum{0}\hlopt{:}\hlnum{1}\hlstd{,} \hlkwc{xlim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{5}\hlstd{),} \hlkwc{col} \hlstd{=} \hlnum{1}\hlstd{,}
+       \hlkwc{yaxs} \hlstd{=} \hlstr{'i'}\hlstd{,} \hlkwc{xaxs} \hlstd{=} \hlstr{'i'}\hlstd{,} \hlkwc{lwd} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{bty} \hlstd{=} \hlstr{'l'}\hlstd{,}
+       \hlkwc{do.points} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{verticals} \hlstd{=} \hlnum{FALSE}\hlstd{,}
+       \hlkwc{main} \hlstd{=} \hlstr{'Overall Survival\textbackslash{}nAdvanced GASTRIC meta-analysis'}\hlstd{,}
+       \hlkwc{xlab} \hlstd{=} \hlstr{'Years'}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{'Survival probability'}\hlstd{)}
+  \hlkwd{lines}\hlstd{(}\hlkwd{stepfun}\hlstd{(cox.base}\hlopt{$}\hlstd{time[}\hlopt{-}\hlkwd{nrow}\hlstd{(cox.base)],}
+               \hlkwd{exp}\hlstd{(}\hlopt{-}\hlstd{cox.base}\hlopt{$}\hlstd{hazard} \hlopt{*} \hlkwd{exp}\hlstd{(}\hlkwd{coef}\hlstd{(fitcox)[}\hlstr{'trt'}\hlstd{]))),}
+       \hlkwc{col} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{pch} \hlstd{=} \hlstr{''}\hlstd{,} \hlkwc{lwd} \hlstd{=} \hlnum{2}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 We `possonize' the data over 10 intervals (the default)
   and we fit the auxiliary Poisson model.
-<<>>=
-  gastadv.poi <- poissonize(gastadv.poi, nInts = 10, factors = 'trt')
-  gastadv.poi
-  
-  fitpoi <- glm(m ~ -1 + interval + trt + offset(log(Rt)), 
-                data = gastadv.poi, fam = 'poisson')
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{gastadv.poi} \hlkwb{<-} \hlkwd{poissonize}\hlstd{(gastadv.poi,} \hlkwc{nInts} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{factors} \hlstd{=} \hlstr{'trt'}\hlstd{)}
+  \hlstd{gastadv.poi}
+\end{alltt}
+\begin{verbatim}
+##             interval  trt   m        Rt    N
+## 1                  0 -0.5 181 291.80777 1668
+## 2    0.1832128678987 -0.5 180 173.32201 1475
+## 3   0.30921697467488 -0.5 192 149.06427 1288
+## 4  0.435221081451061 -0.5 159 131.90422 1088
+## 5  0.567018480492813 -0.5 154 113.92252  912
+## 6  0.703885010266941 -0.5 156 108.39170  751
+## 7  0.867545516769336 -0.5 157 103.16710  584
+## 8   1.07320739219713 -0.5 143 101.42690  414
+## 9   1.39328678986995 -0.5 117  96.88784  239
+## 10  2.07255030800821 -0.5  60  87.06117   94
+## 11                 0  0.5 216 420.75398 2401
+## 12   0.1832128678987  0.5 221 258.18594 2167
+## 13  0.30921697467488  0.5 213 229.38709 1935
+## 14 0.435221081451061  0.5 247 207.31889 1706
+## 15 0.567018480492813  0.5 237 180.90464 1446
+## 16 0.703885010266941  0.5 225 175.99845 1203
+## 17 0.867545516769336  0.5 228 170.74776  965
+## 18  1.07320739219713  0.5 221 183.46049  715
+## 19  1.39328678986995  0.5 211 205.02592  460
+## 20  2.07255030800821  0.5 117 170.63711  204
+\end{verbatim}
+\begin{alltt}
+  \hlstd{fitpoi} \hlkwb{<-} \hlkwd{glm}\hlstd{(m} \hlopt{~ -}\hlnum{1} \hlopt{+} \hlstd{interval} \hlopt{+} \hlstd{trt} \hlopt{+} \hlkwd{offset}\hlstd{(}\hlkwd{log}\hlstd{(Rt)),}
+                \hlkwc{data} \hlstd{= gastadv.poi,} \hlkwc{fam} \hlstd{=} \hlstr{'poisson'}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 The function \inline{plotsson()} can be used to draw the survival curves
   (or the instantaneous hazard) estimated by the auxiliary Poisson model:
-<<label=poissonize, echo=4:5, fig.env='figure', fig.cap='Overall survival curves in the advanced GASTRIC meta-analysis. \\textbf{(a)} Comparison between the survival probability obtained using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \\textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model', fig.lp='fig:'>>=
-  par(mar = c(4, 4, 3, .3) + .1)
-  plot(stepfun(cox.base$time[-nrow(cox.base)], 
-               exp(-cox.base$hazard)),
-       ylim = 0:1, xlim = c(0, 5), col = 1, 
-       yaxs = 'i', xaxs = 'i', lwd = 2, bty = 'l', 
-       do.points = FALSE, verticals = FALSE, 
-       main = 'Overall Survival\nAdvanced GASTRIC meta-analysis',
-       xlab = 'Years', ylab = 'Survival probability')
-  lines(stepfun(cox.base$time[-nrow(cox.base)],
-               exp(-cox.base$hazard * exp(coef(fitcox)['trt']))),
-       col = 2, pch = '', lwd = 2)
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlkwd{plotsson}\hlstd{(fitpoi,} \hlstr{'Surv'}\hlstd{,} \hlkwc{add} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{by} \hlstd{=} \hlstr{'trt'}\hlstd{,} \hlkwc{lwd} \hlstd{=} \hlnum{2}\hlstd{)}
+\end{alltt}
+\end{kframe}\begin{figure}
+\includegraphics[width=\maxwidth]{figs/figpoissonize-1} \caption{Overall survival curves in the advanced GASTRIC meta-analysis. \textbf{(a)} Comparison between the survival probability obtained using the Breslow estimator in the Cox model (solid lines) and those obtained using the auxiliary Poisson model (dashed lines). \textbf{(b)} Piecewise constant hazard estimated by the auxiliary Poisson model}\label{fig:poissonize}
+\end{figure}
 
-  plotsson(fitpoi, 'Surv', add = TRUE, lty = 2, by = 'trt', lwd = 2) 
-  legend('topright', col = rep(1:2, each = 2), lty = 1:2, lwd = 3,
-         legend = t(outer(c('Cox', 'Poisson'),
-                          c('Control', 'Chemotherapy'), paste)))
-@
+
+\end{knitrout}
 The option \inline{add = TRUE} is used to add the curves to the plot
   from the Cox estimates drawn previously.
 
 The treatment effect estimated by the Cox model is
-  \Sexpr{round(coef(fitcox), 2)} (SE = 
-  \Sexpr{round(vcov(fitcox)^.5, 2)}), 
-  and it is \Sexpr{round(coef(fitpoi)['trt'], 2)} (SE = 
-  \Sexpr{round(vcov(fitpoi)['trt','trt']^.5, 2)})
+  -0.14 (SE = 
+  0.03), 
+  and it is -0.14 (SE = 
+  0.03)
   when using the auxiliary Poisson model.
 \end{document}
