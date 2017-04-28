@@ -5,6 +5,7 @@
 % \doublespacing
 % \VignetteIndexEntry{The surrosurv package, use and examples}
 % \VignetteKeyword{Surrogate endpoints}
+% \VignetteEngine{knitr::knitr}
 
 \usepackage{listings}
 \usepackage{graphicx, color, doi, xcolor, graphicx, color, amsmath, amssymb, bm, hyperref, textcomp, thumbpdf}
