@@ -107,7 +107,7 @@ predict.surrosurv <- function(object,
         #     sqrt(VCOV['trtS', 'trtS'] * (1 - VCOV[1, 2] /
         #                                    prod(sqrt(diag(VCOV))))))
         cMEAN <- object[[poi]]$regr$gamma %*% c(1, x)
-        # The following varianve is given by equation (18.27), page 332
+        # The following variance is given by equation (18.27), page 332
         # Burzykowski and Buyse, An alternative measure for surrogate
         # endpoint validation, in Burzykowski, Molenberghs, Buyse, 2005
         # The evaluation of surrogate endpoints, New York Springer
