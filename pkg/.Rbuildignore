@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+vignette\surrosurv.Rnw
+vignette\surrosurv.bbl
+vignette\surrosurv.log
+vignette\surrosurv.syntex.gz
