@@ -36,6 +36,6 @@ Imports:
     survival,
     SurvCorr
 License: GPL-2
-VignetteBuilder: knitr, R.rsp
-Suggests: knitr, R.rsp
+VignetteBuilder: R.rsp
+Suggests: R.rsp
 Encoding: UTF-8
