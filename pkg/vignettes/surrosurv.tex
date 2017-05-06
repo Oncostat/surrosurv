@@ -559,18 +559,10 @@ We illustrate the use of the functions in the \inline{surrosurv} package
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(surrosurv)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'surrosurv' was built under R version 3.2.5}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: optimx}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'optimx' was built under R version 3.2.5}}\begin{alltt}
 \hlkwd{packageVersion}\hlstd{(}\hlstr{'surrosurv'}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] '1.1.10'
+## [1] '1.1.15'
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -614,10 +606,7 @@ Figure~\ref{fig:survCurves} shows the Kaplan--Meier curves for overall survival,
 the true endpoint $T$, and progression-free survival,
 the candiddate surrogate $S$.
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'survival' was built under R version 3.2.5}}\end{kframe}\begin{figure}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
 \includegraphics[width=\maxwidth]{figs/figsurvCurves-1} \caption[Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis]{Survival curves for overall survival ($T$) and progression-free survival $S$ in the advanced GASTRIC meta-analysis}\label{fig:survCurves}
 \end{figure}
 
@@ -679,37 +668,21 @@ These parameters are passed to the function \inline{poissonize()},
 
 {\ttfamily\noindent\itshape\color{messagecolor}{\#\# Computation may take very long. Please wait...}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Clayton}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Clayton\ (5.1 mins)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (5.2 mins)}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Plackett\ (4.6 mins)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Plackett}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Hougaard\ (6.7 mins)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (4.7 mins)}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Data poissonization\ (3.9 secs)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Hougaard}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson T\ (1.2 mins)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (7.2 mins)}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson I\ (1.9 mins)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Data poissonization}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson TI\ (4.2 mins)}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (3.7 secs)}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson T}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (1.2 mins)}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson I}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (2.6 mins)}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson TI}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (4 mins)}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson TIa}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\#\ \ (2.2 mins)}}\end{kframe}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# - Estimating model: Poisson TIa\ (2.2 mins)}}\end{kframe}
 \end{knitrout}
 
 Note that the computation time of the surrogacy model estimation can be long.
@@ -777,7 +750,7 @@ Two parameters can be used to tune the thresholds
 ## PoissonT           TRUE   TRUE   FALSE
 ## PoissonI           TRUE   TRUE     ---
 ## PoissonTI          TRUE   TRUE    TRUE
-## PoissonTIa         TRUE   TRUE    TRUE
+## PoissonTIa         TRUE  FALSE    TRUE
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -792,16 +765,16 @@ If the values of the minimum gradient and of the maximum eigenvalues are needed,
 \end{alltt}
 \begin{verbatim}
 ##                    maxSgrad        minHev      minREev
-## Clayton unadj  1.502752e+00 -6.075682e+00          ---
-## Clayton adj    1.502752e+00 -6.075682e+00 1.009980e-02
-## Plackett unadj 2.128613e+02 -5.188049e+00          ---
-## Plackett adj   2.128613e+02 -5.188049e+00 8.871677e-03
-## Hougaard unadj 1.400924e+01  7.781731e-01          ---
-## Hougaard adj   1.400924e+01  7.781731e-01 8.004824e-03
-## PoissonT       1.330468e-05  1.292091e+02 6.254547e-12
-## PoissonI       1.967051e-05  6.796358e+01          ---
-## PoissonTI      7.107817e-06  6.702261e+01 2.041760e-02
-## PoissonTIa     5.008972e-05  9.413611e+07 1.024342e-01
+## Clayton unadj  1.499287e+00 -6.118457e+00          ---
+## Clayton adj    1.499287e+00 -6.118457e+00 1.010837e-02
+## Plackett unadj 3.842114e+02 -5.235651e+00          ---
+## Plackett adj   3.842114e+02 -5.235651e+00 8.895006e-03
+## Hougaard unadj 1.416081e+01  7.729161e-01          ---
+## Hougaard adj   1.416081e+01  7.729161e-01 8.018467e-03
+## PoissonT       2.801471e-05  1.291134e+02 1.116468e-13
+## PoissonI       1.128738e-05  6.799117e+01          ---
+## PoissonTI      1.541625e-05  6.697215e+01 2.041620e-02
+## PoissonTIa     1.995408e-04 -1.456489e+07 1.024375e-01
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -845,10 +818,11 @@ For example, the surrogacy plots
   in the advanced GASTRIC meta-analysis (Fig.~\ref{fig:predictions})
   can be obtained as follows:
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
+\includegraphics[width=\maxwidth]{figs/figpredictions-1} \caption[Predictions for the advanced GASTRIC meta-analysis as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged]{Predictions for the advanced GASTRIC meta-analysis as computed by the adjusted Clayton copula model, which had poor convergence metrics, and by the Poisson TI model, which was deemed to have converged. HR = hazard ratio.}\label{fig:predictions}
+\end{figure}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in plot.predictSurrosurv(predict(x), ...): objet 'i' introuvable}}\end{kframe}
 \end{knitrout}
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -880,14 +854,14 @@ The value of the STE estimated by each surrogacy model can be obtained
 \begin{verbatim}
 ##                 beta   HR
 ## Clayton.unadj  -0.61 0.54
-## Clayton.adj    -0.31 0.73
+## Clayton.adj    -0.44 0.65
 ## Plackett.unadj -0.61 0.54
-## Plackett.adj   -0.30 0.74
+## Plackett.adj   -4.15 0.02
 ## Hougaard.unadj -0.61 0.54
-## Hougaard.adj   -0.28 0.75
-## PoissonT       -0.12 0.88
-## PoissonTI      -0.41 0.66
-## PoissonTIa     -1.04 0.36
+## Hougaard.adj   -1.30 0.27
+## PoissonT       -0.17 0.84
+## PoissonTI      -0.65 0.52
+## PoissonTIa     -1.16 0.31
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -922,7 +896,7 @@ By default, \inline{parallel = TRUE} and \inline{nCores} is set to the minimum
 \end{alltt}
 
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Parallel computing on 8 cores (the total number of cores detected)}}\end{kframe}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Parallel computing on 20 cores (the total number of trials)}}\end{kframe}
 \end{knitrout}
 The results of the crossvalidation can be printed
 \begin{knitrout}
@@ -930,9 +904,36 @@ The results of the crossvalidation can be printed
 \begin{alltt}
   \hlstd{loocvRes}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `rownames<-`(`*tmp*`, value = c("{}obsBeta"{}, "{}predict"{}, "{}lwr"{}, : attempt to set 'rownames' on an object with no dimensions}}\end{kframe}
+\begin{verbatim}
+## 
+##    Clayton copula (Unadjusted) 
+##             1     2     3     4     5     6    
+## obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.34 ...
+## predict -0.40 -0.31 -0.07 -0.17 -0.14 -0.27 ...
+## lwr     -0.76 -0.65 -0.42 -0.51 -0.48 -0.62 ...
+## upr     -0.05  0.02  0.28  0.17  0.21  0.09 ...
+## kTau     0.60  0.60  0.61  0.60  0.60  0.60 ...
+## R2       0.49  0.49  0.45  0.46  0.46  0.44 ...
+## 
+##    Clayton copula (Adjusted) 
+##             1     2     3     4     5      6    
+## obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.342 ...
+## predict -0.39 -0.31 -0.09 -0.18 -0.14 -0.261 ...
+## lwr     -0.69 -0.57 -0.35 -0.41 -0.39 -0.517 ...
+## upr     -0.09 -0.04  0.17  0.06  0.10 -0.004 ...
+## kTau     0.60  0.60  0.61  0.60  0.60  0.605 ...
+## R2       0.46  0.45  0.42  0.46  0.43  0.411 ...
+## 
+##    Poisson TI 
+##             1     2     3     4     5     6    
+## obsBeta -0.31 -0.21 -0.09 -0.02 -0.22 -0.34 ...
+## predict -0.69 -0.40  0.08 -0.11 -0.06 -0.38 ...
+## lwr     -1.22 -1.00 -0.76 -0.68 -0.72 -0.85 ...
+## upr     -0.15  0.20  0.92  0.47  0.61  0.09 ...
+## kTau     0.51  0.52  0.51  0.51  0.52  0.52 ...
+## R2       0.70  0.65  0.47  0.60  0.48  0.74 ...
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 and plotted (Fig.~\ref{fig:loocv}) by showing, 
   for each trial, the comparison between the observed 
@@ -944,9 +945,14 @@ and plotted (Fig.~\ref{fig:loocv}) by showing,
 \begin{alltt}
   \hlkwd{plot}\hlstd{(loocvRes)}
 \end{alltt}
+\end{kframe}\begin{figure}
+\includegraphics[width=\maxwidth]{figs/figloocv-1} \caption[Leave-one-trial-out cross-validation results for the advanced
+GASTRIC meta-analysis]{Leave-one-trial-out cross-validation results for the advanced
+GASTRIC meta-analysis. The symbol `\textbf{X}' means that the surrogacy model could
+not be fitted due to numerical problems. Vertical lines are the 95\% prediction intervals (PI) of the treatment effect on overall survival (OS). Dots are the observed treatment effects on OS (green = within the PI, magenta = out of the PI).}\label{fig:loocv}
+\end{figure}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `rownames<-`(`*tmp*`, value = c("{}obsBeta"{}, "{}predict"{}, "{}lwr"{}, : attempt to set 'rownames' on an object with no dimensions}}\end{kframe}
 \end{knitrout}
 
 
@@ -1295,9 +1301,9 @@ The option \inline{add = TRUE} is used to add the curves to the plot
   from the Cox estimates drawn previously.
 
 The treatment effect estimated by the Cox model is
-  -0.14 (SE = 
+  \ensuremath{-0.14} (SE = 
   0.03), 
-  and it is -0.14 (SE = 
+  and it is \ensuremath{-0.14} (SE = 
   0.03)
   when using the auxiliary Poisson model.
 \end{document}
