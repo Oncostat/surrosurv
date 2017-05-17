@@ -106,8 +106,8 @@ poisSurr <- function(data,
   JOINT$poidata$trialrefS[JOINT$poidata$ep != "S"]  <-
     levels(JOINT$poidata$trialref)[1]
   
-  W <- options()$warn
-  options(warn = -1)
+  # W <- options()$warn
+  # options(warn = -1)
   
   if (nlevels(JOINT$poidata$interval) > 1) {
     baseform <- m ~ -1 + interval * ep - ep + trtT + trtS + offset(log(Rt))
@@ -239,6 +239,13 @@ poisSurr <- function(data,
       message(paste0(' (', format(RES$PoissonI$runTime, digits = 2), ')'))
   }#############################################################################
   
+  # marpars <- surrosurv:::margFits(data)
+  # vcovmar <- matrix(c(var(marpars$alpha), cov(marpars$alpha, marpars$beta),
+  #                     cov(marpars$alpha, marpars$beta), var(marpars$beta)), 2)
+  # theta <- as.numeric((chol(vcovmar)))[-2] /
+  #   var(glm(baseform, data = JOINT$poidata, family = poisson)$residual)
+             
+  
   ##############################################################################
   # * Model TI: Poisson model with
   #            - random treatment-trial interaction
@@ -255,6 +262,7 @@ poisSurr <- function(data,
         data = JOINT$poidata,
         family = poisson,
         control = GLMERCONTROL
+        # , start = theta
       )
     }) -> attr(JOINT$poifitTI, 'exec.time')
     
@@ -420,7 +428,7 @@ poisSurr <- function(data,
   }#############################################################################
   ##############################################################################
   
-  options(warn = W)
+  # options(warn = W)
   
   attr(RES, 'intWidth') <- intWidth
   attr(RES, 'nInts') <- attr(RES, 'nInts')
