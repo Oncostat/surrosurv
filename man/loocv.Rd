@@ -18,7 +18,9 @@
 
 \method{print}{loocvSurrosurv}(x, n = min(length(x), 6), silent = FALSE, ...)
           
-\method{plot}{loocvSurrosurv}(x, models, exact.models, ...)
+\method{plot}{loocvSurrosurv}(x, models, exact.models, 
+                                plot.type = c('classic', 'regression'),
+                                main, ylab, xlab, ...)
 }
 
 \arguments{
@@ -54,7 +56,11 @@
   \item{silent}{
     Should the results be return for storing without printing them?
   }
-  \item{...}{
+  \item{plot.type}{
+    The type ox x-scale for the loocv plot: either the trial number (\code{classic})
+    or the log-HR on the surrogate endpoint (\code{regression}).
+  }
+  \item{main, ylab, xlab, ...}{
     Further parameters to be passed to \code{surrosurv}
      (for \code{loocv()})
      or to the generics \code{print()} and \code{plot()}
