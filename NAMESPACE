@@ -1,0 +1,53 @@
+import(eha, lme4, msm, mvmeta, optextras, optimx, parallel, stats, survival)
+importFrom(copula,
+           tau, claytonCopula, gumbelCopula, plackettCopula)
+importFrom(graphics,
+           curve, mtext, points, polygon, text)
+importFrom(grDevices, 
+           palette)
+importFrom(MASS, 
+           mvrnorm)
+importFrom(Matrix, 
+           nearPD)
+importFrom(msm, 
+           deltamethod, rtnorm)
+importFrom(SurvCorr, 
+           survcorr)
+importFrom(parfm, 
+           parfm)
+importFrom(graphics,
+           abline, axis, axTicks, par, plot, segments)
+importFrom(grDevices,
+           n2mfrow, rgb)
+importFrom(utils,
+           head)
+export(convals,
+       convergence,
+       loocv,
+       plotsson,
+       poissonize,
+       simData.mx,
+       simData.cc,
+       simData.re,
+       ste,
+       surrosurv)
+
+S3method(print, conv)
+
+S3method(loocv, data.frame)
+
+S3method(confint, surrosurv)
+S3method(loocv, surrosurv)
+S3method(predict, surrosurv)
+S3method(print, surrosurv)
+S3method(plot, surrosurv)
+
+S3method(print, steSurrosurv)
+
+S3method(print, predictSurrosurv)
+S3method(plot, predictSurrosurv)
+
+S3method(print, loocvSurrosurv)
+S3method(plot, loocvSurrosurv)
+
+S3method(print, ciSurrosurv)

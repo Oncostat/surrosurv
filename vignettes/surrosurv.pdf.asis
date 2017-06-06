@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Validation of time-to-event surrogate endpoints using the surrosurv package}
+%\VignetteEngine{R.rsp::asis}
+%\VignetteKeyword{surrogate endpoints}
+%\VignetteKeyword{copula}
+%\VignetteKeyword{poisson}
