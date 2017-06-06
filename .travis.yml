@@ -3,5 +3,3 @@
 language: R
 sudo: false
 cache: packages
-install:
-  - Rscript -e 'install.packages(c("plyr", "geepack", "snowfall"), repos = "http://cran.rstudio.com")'
