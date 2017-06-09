@@ -113,8 +113,8 @@ surrosurv <- function(data,
   models <- c(models[!grepl('poisson', models)],
               if (any(grepl('poisson', models)))
                 'poisson')
-  if (verbose)
-    message('Computation may take very long. Please wait...')
+  # if (verbose)
+  #   message('Computation may take very long. Please wait...')
   fitRES <- lapply(models, function(x) {
     eval(call(paste(x)))
   })
