@@ -115,7 +115,8 @@ loocv.data.frame <- function(object,
           if (length(coppos) == 1) {
             models2predict <- c(models2predict[1:coppos - 1],
                                 paste(cop, c('unadj', 'adj'), sep = '.'),
-                                as.character(na.omit(models2predict[(coppos + 1):(length(models2predict) + 1)])))
+                                as.character(na.omit(models2predict[
+                                  (coppos + 1):(length(models2predict) + 1)])))
           }
         }
         poipos <- which(models2predict == 'Poisson')
@@ -124,14 +125,11 @@ loocv.data.frame <- function(object,
                               paste0('Poisson', c('T', 'TI', 'TIa')))
         }
         return(mapply(function(i)
-          return(t(t(
-            c(
-              fit = NA,
-              lwr = NA,
-              upr = NA,
-              kTau = NA,
-              R2 = NA
-            )
+          return(t(t(c(fit = NA,
+                       lwr = NA,
+                       upr = NA,
+                       kTau = NA,
+                       R2 = NA)
           ))),
           models2predict, SIMPLIFY = FALSE))
       }
