@@ -188,8 +188,9 @@ ste <- function(x, models = names(x), exact.models) {
   
   res <- sapply(ind, function(i) {
     f <- function(y)
-      attr(x, 'predf')[[i]](y)[3, ] ^ 2
+      attr(x, 'predf')[[i]](y)['upr', ] ^ 2
     ste <- optimize(f, c(-1e8, 1e8))$minimum
+    ste <- ifelse(abs(f(ste)) > 1e-4, NA, ste)
     return(ste)
   })
   names(res) <- names(x)[ind]
