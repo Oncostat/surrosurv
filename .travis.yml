@@ -1,6 +1,8 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
+warnings_are_errors: TRUE
+r_check_args: --as-cran
 sudo: required
 cache: packages
 
