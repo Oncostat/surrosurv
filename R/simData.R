@@ -12,7 +12,7 @@ kTaus <- Vectorize(function(lnSigma2)
 # plot(exp(logsigma2), kTaus_ln(logsigma2))
 
 find.sigma2 <- function(tau) {
-  loss <- function(x)
+  loss <- function(x) 
     (kTaus(x) - tau) ^ 2
   RES <- optimize(loss, c(-10, 4))
   return(exp(RES$minimum))
@@ -49,9 +49,9 @@ simData <- function(method = c('re', 'cc', 'mx')) {
   ) {
     
     if (length(gammaWei) == 1)
-      gammaWei <- rep(gammaWei, 2) 
+      gammaWei <- rep(gammaWei, 2)
     
-    if (!nifix) ni <- round(runif(N, ni * .75, ni * 1.25))
+    if (!nifix) ni <- round(runif(N, ni * .5, ni * 1.5))
     trialref <- unlist(mapply(rep, 1:N, each = ni))
     
     data <- data.frame(trialref = factor(trialref),

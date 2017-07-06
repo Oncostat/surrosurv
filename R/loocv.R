@@ -96,17 +96,16 @@ loocv.data.frame <- function(object,
     redobject$trialref <- factor(redobject$trialref)
     predint <- tryCatch(
       expr = {
-        surrofit <-
-          surrosurv(data = redobject, models = models2predict, ...)
-        res <-
-          lapply(attr(predict(surrofit), 'predf'), function(x)
-            x(alpha))
+        surrofit <- surrosurv(data = redobject, models = models2predict, ...)
+        res <- lapply(attr(predict(surrofit), 'predf'), function(x) x(alpha))
         names <- names(res)
         res <- lapply(1:length(res), function(i)
           rbind(res[[i]], t(print(
             surrofit, silent = TRUE
           ))[, i, drop = FALSE]))
         names(res) <- names
+        attr(res, 'convergence') <- convergence(surrofit)
+        attr(res, 'convals') <- convals(surrofit)
         res
       },
       error = function(e) {
@@ -124,18 +123,23 @@ loocv.data.frame <- function(object,
           models2predict <- c(models2predict[0:(poipos - 1)],
                               paste0('Poisson', c('T', 'TI', 'TIa')))
         }
-        return(mapply(function(i)
+        res <- mapply(function(i)
           return(t(t(c(fit = NA,
                        lwr = NA,
                        upr = NA,
                        kTau = NA,
                        R2 = NA)
           ))),
-          models2predict, SIMPLIFY = FALSE))
+          models2predict, SIMPLIFY = FALSE)
+        attr(res, 'convergence') <- attr(res, 'convals') <- 
+          matrix(NA, length(models2predict), 3)
+        return(res)
       }
     )
     RES <- c(list(margPars = c(alpha = alpha, beta = beta)),
              predint)
+    attr(RES, 'convergence') <- attr(predint, 'convergence')
+    attr(RES, 'convals') <- attr(predint, 'convals')
     return(RES)
   }
   
@@ -147,8 +151,7 @@ loocv.data.frame <- function(object,
   }
   clusterEvalQ(cl, library('survival'))
   clusterEvalQ(cl, library('surrosurv'))
-  loocvRES <-
-    clusterApplyLB(cl, levels(object$trialref), loof, ...)
+  loocvRES <- clusterApplyLB(cl, levels(object$trialref), loof, ...)
   stopCluster(cl)
   rm(cl)
   

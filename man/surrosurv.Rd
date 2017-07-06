@@ -192,10 +192,12 @@ surrosurv(data,
   \emph{Journal of the America Statistical Association} 1965; \bold{60}:516--522.
   \doi{10.1080/01621459.1965.10480807}
   
-  Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
-  Evaluation of failure time surrogate endpoints in individual patient data
-  meta-analyses of randomized clinical trials. A Poisson approach.
-  \emph{Working paper}.
+ Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
+  A Poisson approach for the validation of failure time surrogate endpoints
+  in individual patient data meta-analyses.
+  \emph{Statistical Methhods in Medical Research} 2017;
+  \bold{In Press}.
+  \doi{10.1177/0962280217718582}
 
   Shih JH, Louis TA.
   Inferences on the Association Parameter in Copula Models

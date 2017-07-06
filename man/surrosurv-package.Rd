@@ -20,15 +20,17 @@
 }
 \references{
   Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
-  Evaluation of failure time surrogate endpoints in individual patient data meta-analyses
-  of randomized clinical trials. A Poisson approach.
-  \emph{Working paper}.
+  A Poisson approach for the validation of failure time surrogate endpoints
+  in individual patient data meta-analyses.
+  \emph{Statistical Methhods in Medical Research} 2017;
+  \bold{In Press}.
+  \doi{10.1177/0962280217718582}
   
   Burzykowski T, Molenberghs G, Buyse M et al.
   Validation of surrogate end points in multiple randomized clinical trials with failure time end points.
   \emph{Journal of the Royal Statistical Society C} 2001;
   \bold{50}:405--422.
-  \doi{10.1111/1467-9876.00244}.
+  \doi{10.1111/1467-9876.00244}
   
   Gasparrini A, Armstrong B, Kenward MG.
   Multivariate meta-analysis for non-linear and other multi-parameter associations.

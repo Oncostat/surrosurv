@@ -125,10 +125,18 @@ simData.mx(R2 = 0.6, N = 30, ni = 200,
 Burzykowski T, Cortinas Abrahantes J (2005). Validation in the case of two failure-time endpoints.
 In \emph{The Evaluation of Surrogate Endpoints} (pp. 163-194). Springer, New York.
 
+Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
+  A Poisson approach for the validation of failure time surrogate endpoints
+  in individual patient data meta-analyses.
+  \emph{Statistical Methhods in Medical Research} 2017;
+  \bold{In Press}.
+  \doi{10.1177/0962280217718582}
+  
 Shi Q, Renfro LA, Bot BM, Burzykowski T, Buyse M, Sargent DJ.
 Comparative assessment of trial-level surrogacy measures for candidate
 time-to-event surrogate endpoints in clinical trials. 
-\emph{Computational Statistics & Data Analysis} 2011; 55: 2748--2757.
+\emph{Computational Statistics & Data Analysis} 2011; 
+\bold{55}: 2748--2757.
 }
 
 \author{
