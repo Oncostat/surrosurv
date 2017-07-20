@@ -22,7 +22,7 @@ find.sigma2 <- function(tau) {
 
 
 ################################################################################
-simData <- function(method = c('re', 'cc', 'mx')) {
+simData <- function(method = c('re', 'cc', 'gh', 'mx')) {
   method <- match.arg(method)
   
   simfun <- function(
@@ -69,9 +69,9 @@ simData <- function(method = c('re', 'cc', 'mx')) {
     d_ab <- sqrt(R2 * alphaVar * betaVar)
     d_ST <- sqrt(baseCorr) * sqrt(prod(baseVars))
     Sigma_trial <- matrix(c(baseVars[1], d_ST, 0, 0,
-                           d_ST, baseVars[2], 0, 0,
-                           0, 0, alphaVar, d_ab,
-                           0, 0, d_ab, betaVar), 4)
+                            d_ST, baseVars[2], 0, 0,
+                            0, 0, alphaVar, d_ab,
+                            0, 0, d_ab, betaVar), 4)
     #   library('MASS')
     pars <- mvrnorm(n = N,
                     mu = c(muS, muT, alpha, beta),
@@ -161,10 +161,6 @@ simData <- function(method = c('re', 'cc', 'mx')) {
           rweibull(nrow(data), shape = shape.T, scale = scale.T)
         # ******************************************************************** #
       } else {
-        # Individ2ual-level
-        theta <- 2 * kTau / (1 - kTau)
-        # ******************************************************************** #
-        
         # Second stage: survival times *************************************** #
         # Weibull hazard:
         # h(t) = lambda gamma x^(gamma-1)
@@ -175,13 +171,33 @@ simData <- function(method = c('re', 'cc', 'mx')) {
         US <- runif(nrow(data), 0, 1)
         data$S <- (-log(US) / lambda.S) ^ (1 / gammaWei[1])
         
-        # T times | S times
-        UT <- runif(nrow(data), 0, 1)
-        UT_prime <-
-          ((UT ^ (-theta / (1 + theta)) - 1) * US ^ (-theta) + 1) ^ (-1 / theta)
-        data$T <- (-log(UT_prime) / lambda.T) ^ (1 / gammaWei[2])
-        # ******************************************************************** #
-        #     plot(data$S, data$T, log='xy', col=data$trt+1.5)
+        if (method == 'cc') { # CLAYTON copula
+          theta <- 2 * kTau / (1 - kTau)
+          # T times | S times
+          UT <- runif(nrow(data), 0, 1)
+          UT_prime <-
+            ((UT ^ (-theta / (1 + theta)) - 1) * US ^ (-theta) + 1) ^ (-1 / theta)
+          data$T <- (-log(UT_prime) / lambda.T) ^ (1 / gammaWei[2])
+        } else if (method == 'gh') { # GUMBEL-HOUGAARD copula
+          theta <- 1 - kTau
+          # T times | S times
+          UT <- runif(nrow(data), 0, 1)
+          f <- Vectorize(function(x, UT, US, theta) {
+            logV <- -exp(x)
+            (log(UT) + log(US) + (
+              (-log(US))^(1/theta) + (-logV)^(1/theta))^theta -
+                (theta - 1) * log(
+                  1 + (logV / log(US))^(1 / theta)))^2
+          })
+          g <- function(UT, US, theta) {
+            nlminb(.5, f, UT = UT, US = US, theta = theta)$par
+          }
+          UT_prime <- exp(-exp(mapply(g, UT, US, theta)))
+          data$T <- (-log(UT_prime) / lambda.T) ^ (1 / gammaWei[2])
+        }
+        # par(mfrow = 1:2)
+        # plot(US, UT_prime, col = data$trialref)
+        # plot(data$S, data$T, log = 'xy', col = data$trialref)
       }
     }
     
@@ -226,5 +242,6 @@ simData <- function(method = c('re', 'cc', 'mx')) {
 }
 
 simData.cc <- simData('cc')
+simData.gh <- simData('gh')
 simData.re <- simData('re')
 simData.mx <- simData('mx')

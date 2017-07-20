@@ -1,6 +1,7 @@
 \name{simData}
 \alias{simData.re}
 \alias{simData.cc}
+\alias{simData.gh}
 \alias{simData.mx}
 \title{
   Generate survival times for two endpoints in a meta-analysis of randomized trials
@@ -8,6 +9,7 @@
 \description{
   Data are generated from a mixed proportional hazard model,
   a Clayton copula model (Burzykowski and Cortinas Abrahantes, 2005),
+  a Gumbel-Hougaard copula model,
   or a mixture of half-normal and exponential random variables
   (Shi et al., 2011).
 }
@@ -20,6 +22,13 @@ simData.re(R2 = 0.6, N = 30, ni = 200,
            mstS = 4 * 365.25, mstT = 8 * 365.25)
            
 simData.cc(R2 = 0.6, N = 30, ni = 200,
+           nifix = TRUE, gammaWei = c(1, 1), censorT, censorA,
+           kTau= 0.6, baseCorr = 0.5, baseVars = c(0.2, 0.2),
+           alpha = 0, beta = 0,
+           alphaVar = 0.1, betaVar = 0.1,
+           mstS = 4 * 365.25, mstT = 8 * 365.25)
+           
+simData.gh(R2 = 0.6, N = 30, ni = 200,
            nifix = TRUE, gammaWei = c(1, 1), censorT, censorA,
            kTau= 0.6, baseCorr = 0.5, baseVars = c(0.2, 0.2),
            alpha = 0, beta = 0,

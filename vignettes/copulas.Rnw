@@ -45,9 +45,9 @@ In the case of possibly right-censored data,
 \end{itemize}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Clayton copula}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The bivariate \cite{Clayton78} copula is defined as
 \begin{equation}
     C(u,v)= \left(
@@ -81,9 +81,9 @@ The \cite{Kendall38}'s tau for the Clayton copula is
 \end{equation}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Plackett copula}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The bivariate \cite{Plackett65} copula is defined as
 \begin{equation}
     C(u,v)= \frac{
@@ -102,9 +102,10 @@ with
 Given that
 \begin{align}
     \frac{\partial}{\partial u} Q &= \theta - 1,\\
-    \frac{\partial}{\partial u} R &= 2(\theta-1) \left(
+    \frac{\partial}{\partial u} R &= 2(\theta-1) \Big(
         1 - (\theta+1) v + (\theta-1) u
-    \right),
+    \Big) \nonumber \\
+        &= 2 (\theta - 1) (Q - 2 \theta v),
 \end{align}
 the first derivative of $C(u, v)$ with respect to $u$ is 
 \begin{align}
@@ -120,24 +121,26 @@ the first derivative of $C(u, v)$ with respect to $u$ is
 
 By defining
 \begin{align}
-    f &= 1 - (\theta+1) v + (\theta-1) u,\\
+    f &= Q - 2 \theta v,\\
     g &= R^{1/2}
 \end{align}
 and given that
 \begin{align}
-    f^\prime = \frac{\partial}{\partial u} f &= -(\theta + 1),\\
-    g^\prime = \frac{\partial}{\partial u} g &= \frac{\theta-1}{R^{1/2}} \Big(
-        1 - (\theta+1) u + (\theta-1) v \Big),
+    f^\prime = \frac{\partial}{\partial v} f &= -(\theta + 1),\\
+    g^\prime = \frac{\partial}{\partial v} g &= \frac{\theta-1}{R^{1/2}} \Big(
+        1 - (\theta+1) u + (\theta-1) v \Big)
+                \nonumber\\
+         &= \frac{\theta-1}{R^{1/2}} \Big(Q - 2 \theta u \Big),
 \end{align}
 then, the second derivative with respect to $u$ and $v$ is 
 \begin{align}
     \frac{\partial^2}{\partial u\partial v}C(u,v)
         &= - \frac{f^\prime g - fg^\prime}{2 g^2}
         \nonumber\\
-        &= - \frac\theta{R^{3/2}}\Big[
+        &= \frac\theta{R^{3/2}}\Big[
             1 + (\theta-1)(u+v-2uv)\Big]
         \nonumber\\
-        &= - \frac\theta{R^{3/2}}\Big[
+        &= \frac\theta{R^{3/2}}\Big[
             Q - 2(\theta-1)uv\Big].
 \end{align}
 
@@ -147,9 +150,9 @@ The Kendall's tau for the Plackett copula cannot be computed analyticaly
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Gumbel--Hougaard copula}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The bivariate \cite{Gumbel60}--\cite{Hougaard86} copula is defined as
 \begin{equation}
     C(u,v)= \exp\Big(-Q^\theta \Big), \qquad \theta \in (0, 1),
@@ -168,6 +171,7 @@ then, the first derivative with respect to $u$ is
 \begin{equation}
     \frac{\partial}{\partial u}C(u,v)
     = \frac{ (-\ln u)^{1/\theta - 1} }u C(u, v) Q^{\theta-1}
+    \label{eq:GHder}
 \end{equation}
 and the second derivative with respect to $u$ and $v$ is 
 \begin{equation}
@@ -184,6 +188,9 @@ The Kendall's tau for the Gumbel--Hougaard copula is
 
 
 \section*{Simulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Clayton copula}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The function \texttt{simData.cc()} generates data from a Clayton copula model.
 First, the time value for the surrogate endpoint $S$ is generated
   from its (exponential) marginal survival function:
@@ -208,7 +215,7 @@ The conditional survival function of $T\mid S$ is
         \dfrac{\partial}{\partial u} C(u, 1)
       }
   \end{equation}
-As the Clayton copula is used, we get (see Equtaion~\ref{eq:CCder1})
+As the Clayton copula is used, we get (see Equation~\ref{eq:CCder1})
   \begin{align}
     \nonumber
     S_{T\mid S}(t\mid s) 
@@ -221,10 +228,10 @@ As the Clayton copula is used, we get (see Equtaion~\ref{eq:CCder1})
         U_S^{-\theta} + S_T(t)^{-\theta} - 1
       }{
         U_S^{-\theta}
-      }\right]^{\frac{1 + \theta}\theta}\\
+      }\right]^{-\frac{1 + \theta}\theta}\\
     &= \Big[1 + 
         U_S^\theta (S_T(t)^{-\theta} - 1)
-        \Big]^{\frac{1 + \theta}\theta}
+        \Big]^{-\frac{1 + \theta}\theta}
   \end{align}
 By generating uniform random values for 
   $U_T := S_{T\mid S}(T\mid s)\sim U(0,1)$,
@@ -233,19 +240,70 @@ By generating uniform random values for
     \nonumber
     U_T &= \Big[1 + 
       U_S^\theta (S_T(T)^{-\theta} - 1)
-      \Big]^{\frac{1 + \theta}\theta}
+      \Big]^{-\frac{1 + \theta}\theta}
     \\ \nonumber
     S_T(T) &= \left[
       \left(U_T^{-\frac\theta{1+\theta}} - 1\right) U_S^{-\theta} + 1
       \right]^{-1 / \theta}
     \\ 
-    T &= -\log(U^\prime_T / \lambda_T),  \qquad\text{with }
-      U^\prime_T = \left[
-      \left(U_T^{-\frac\theta{1+\theta}} - 1\right) U_S^{-\theta} + 1
-      \right]^{-1 / \theta}.
+    T &= -\log(S_T(T) / \lambda_T).
+      % ,  \qquad\text{with }
+      % U^\prime_T = \left[
+      % \left(U_T^{-\frac\theta{1+\theta}} - 1\right) U_S^{-\theta} + 1
+      % \right]^{-1 / \theta}.
   \end{align}
 
   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Gumbel--Hougaard copula}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The function \texttt{simData.gh()} generates data from a Gumbel-Hougaard copula model.
+First, the time value for the surrogate endpoint $S$ is generated
+  from its (exponential) marginal survival function:
+  \begin{equation}
+    S = -\log(U_S / \lambda_S), \qquad\text{with }
+      U_S := S_S(S) \sim U(0,1).
+  \end{equation}
+
+The conditional survival function of $T\mid S$ is
+    (see Equation~\ref{eq:GHder})
+  \begin{align}
+    \nonumber
+    S_{T\mid S}(t\mid s) 
+    &= \exp\Big(
+            Q(S_S(s), 1)^\theta - Q(S_S(s), S_T(t))^\theta
+        \Big)\left[\frac{Q(S_S(s), S_T(t))}{Q(S_S(s), 1)}
+            \right]^{\theta - 1}
+    \\
+    &= \exp\Big(
+            -\log U_S - \left[
+                (-\log U_S)^{\frac1\theta} + (-\log S_T(t))^{\frac1\theta}
+            \right]^\theta
+        \Big)
+        \left[1 + \left(\frac{\log S_T(t)}{\log U_S}\right)^{\frac1\theta}
+        \right]^{\theta-1}
+  \end{align}
+By generating uniform random values for 
+  $U_T := S_{T\mid S}(T\mid s)\sim U(0,1)$,
+  the values of $S_T(T)$ are obtained by numerically solving
+  \begin{equation}
+    U_T - \exp\Big(
+            -\log U_S - \left[
+                (-\log U_S)^{\frac1\theta} + (-\log S_T(T))^{\frac1\theta}
+            \right]^\theta
+        \Big)
+        \left[1 + \left(\frac{\log S_T(T)}{\log U_S}\right)^{\frac1\theta}
+        \right]^{\theta-1} = 0
+  \end{equation}
+  and then the times $T\mid S$ are
+  \begin{equation}
+    T = -\log(S_T(T) / \lambda_T).
+      % ,  \qquad\text{with }
+      % U^\prime_T = \left[
+      % \left(U_T^{-\frac\theta{1+\theta}} - 1\right) U_S^{-\theta} + 1
+      % \right]^{-1 / \theta}.
+  \end{equation}
+
 
 \hrule
 \nocite{Nelsen06}

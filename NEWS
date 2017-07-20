@@ -1,3 +1,6 @@
+Changes in version 1.1.23 (2017-07-13)
+- new function simData.gh() to generate data from Gumbel-Hougaard copula
+
 Changes in version 1.1.15 (2017-04-25)
 - fixed minor issue in prediction function for adjusted copula models
 
