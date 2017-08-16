@@ -10,7 +10,7 @@
 \def\ccom{\raisebox{.45ex}{\textrm{,}}}
 
 \title{Parameterization of copula functions for bivariate survival data \\
-  in the \href{https://cran.r-project.org/package=surrosurv}{\texttt{surrosurv}} package.\\
+  in the \href{https://cran.r-project.org/package=surrosurv}{\texttt{surrosurv}} package (v.~\Sexpr{packageVersion('surrosurv')}).\\
   Modelling and simulation}
 \author{\href{mailto:Federico Rotolo <federico.rotolo@gustaveroussy.fr>
 ?Subject=R:::surrosurv}{Federico Rotolo}}
@@ -133,6 +133,7 @@ and given that
          &= \frac{\theta-1}{R^{1/2}} \Big(Q - 2 \theta u \Big),
 \end{align}
 then, the second derivative with respect to $u$ and $v$ is 
+  (see Appendix~\ref{sec:plack2} for full details)
 \begin{align}
     \frac{\partial^2}{\partial u\partial v}C(u,v)
         &= - \frac{f^\prime g - fg^\prime}{2 g^2}
@@ -143,6 +144,7 @@ then, the second derivative with respect to $u$ and $v$ is
         &= \frac\theta{R^{3/2}}\Big[
             Q - 2(\theta-1)uv\Big].
 \end{align}
+
 
 The Kendall's tau for the Plackett copula cannot be computed analyticaly
   and is obtained numerically.
@@ -306,8 +308,70 @@ By generating uniform random values for
 
 
 \hrule
-\nocite{Nelsen06}
+\nocite{Nelsen06, RotoloPoissurogate}
 
 \bibliographystyle{plainnat}
 \bibliography{refs}{}
+
+\clearpage
+\appendix
+\section{Second Derivative of the Plackett Copula}
+\label{sec:plack2}
+Let $f = Q - 2 \theta v$, and $g = R^{1/2}$, 
+  with $Q = 1 +(\theta-1)(u+v)$ and $R = Q^2 - 4 \theta(\theta-1)uv$. 
+Hence, 
+\begin{align}
+    f^\prime = \frac{\partial}{\partial v} f &= -(\theta + 1),\\
+    g^\prime = \frac{\partial}{\partial v} g 
+         &= \frac{\theta-1}{R^{1/2}} \Big(Q - 2 \theta u \Big).
+\end{align}
+Then, the second derivative of $C(u, v)$
+  with respect to $u$ and $v$ is 
+\begin{align}
+    \frac{\partial^2}{\partial u\partial v}C(u,v)
+        &= - \frac{f^\prime g - fg^\prime}{2 g^2}
+         = \frac{f g^\prime - f^\prime g}{2 g^2}
+        \nonumber\\
+        &= \frac1{R}\left[
+          \frac{\theta-1}{2 R^{1/2}}
+           \Big(Q - 2 \theta u \Big)
+            \Big(Q - 2 \theta v \Big) +
+            (\theta + 1) R^{1/2}
+        \right]
+        \nonumber\\
+        &= \frac1{2 R^{3/2}}\left[
+          (\theta-1) \Big(Q - 2 \theta u \Big) \Big(Q - 2 \theta v \Big) +
+            (\theta + 1) R
+        \right]
+        \nonumber\\
+        &= \frac1{2 R^{3/2}}\left[
+          (\theta-1) \Big(Q^2 + 4 \theta^2 uv - 2 \theta Q (u + v) \Big) +
+            (\theta + 1) \Big( Q^2 - 4 \theta(\theta-1)uv \Big)
+        \right]
+        \nonumber\\
+        &= \frac1{2 R^{3/2}}\left[
+          \Big( (\theta-1) Q^2  
+            - 4 \theta^2 (\theta-1) uv
+            - 2 \theta Q (\theta-1) (u + v)
+          \Big) +
+          \Big( (\theta + 1) Q^2
+            - 4 \theta (\theta^2 - 1) uv
+          \Big)
+        \right]
+        \nonumber\\
+\end{align}
+Since $(u+v)(\theta-1) = Q - 1$, then
+\begin{align}
+    \frac{\partial^2}{\partial u\partial v}C(u,v)
+        &= \frac1{2 R^{3/2}}\Big[
+          2\theta Q^2  
+            - 4 \theta (\theta-1) uv
+            - 2 \theta Q (Q-1)
+        \Big]
+        \nonumber\\
+        &= \frac1{2 R^{3/2}}\Big[ 2 \theta Q - 4 \theta (\theta-1) uv \Big]
+        \nonumber\\
+        &= \frac\theta{R^{3/2}}\Big[
+            Q - 2(\theta-1)uv\Big].
+\end{align}
 \end{document}
