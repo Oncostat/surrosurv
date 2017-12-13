@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 vignette\surrosurv.Rnw
 vignette\surrosurv.bbl
+vignette\Sweave.sty
 vignette\surrosurv.log
 vignette\surrosurv.syntex.gz
 ^\.travis\.yml$

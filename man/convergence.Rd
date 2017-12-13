@@ -1,6 +1,8 @@
 \name{convergence}
 \alias{convergence}
+\alias{convergence.surrosurv}
 \alias{convals}
+\alias{convals.surrosurv}
 \title{
   Assesses the convergence of fitted models for surrogacy evaluation
 }
@@ -13,8 +15,8 @@
     are positive definite.
 }
 \usage{
-  convals(x)
-  convergence(x, kkttol = 1e-2, kkt2tol = 1e-8)
+  \method{convals}{surrosurv}(x, ...)
+  \method{convergence}{surrosurv}(x, kkttol = 1e-2, kkt2tol = 1e-8, ...)
 }
 \arguments{
   \item{x}{
@@ -30,6 +32,9 @@
       the variance-covariance matrix of random treatment effects
       are positive definite.
     The threshold is for the minimum of the eigenvalues.
+  }
+  \item{...}{
+    Further parameters (not implemented)
   }
 }
 
