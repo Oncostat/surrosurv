@@ -158,6 +158,3 @@ time-to-event surrogate endpoints in clinical trials.
   simData.cc(N = 2, ni = 5)
   simData.mx(N = 2, ni = 5)
 }
-
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }
