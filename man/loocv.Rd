@@ -95,7 +95,7 @@
 }
 
 \examples{
-  \donttest{
+  \dontrun{
   # Possibly long computation time!
   data('gastadv')
   cvRes <- loocv(gastadv)

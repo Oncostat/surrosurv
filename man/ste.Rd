@@ -47,7 +47,7 @@ ste(x, models = names(x), exact.models)
 }
 
 \examples{
-  \donttest{
+  \dontrun{
   # Possibly long computation time!
   data('gastadv')
   mod <- surrosurv(gastadv, 'Clayton')
