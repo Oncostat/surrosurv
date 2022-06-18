@@ -8,7 +8,7 @@
 ################################################################################
 logsigma2 <- seq(-2, 4.5, by = .25)
 kTaus <- Vectorize(function(lnSigma2)
-  parfm:::fr.lognormal(what = 'tau', sigma2 = exp(lnSigma2)))
+  fr.lognormal(what = 'tau', sigma2 = exp(lnSigma2)))
 # plot(exp(logsigma2), kTaus_ln(logsigma2))
 
 find.sigma2 <- function(tau) {
