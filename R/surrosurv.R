@@ -67,7 +67,7 @@ surrosurv <- function(data,
       ),
       silent = FALSE)
       #TRUE)
-      if (class(res) == 'try-error') {
+      if (inherits(res, 'try-error')) {
         res <- list(
           kTau = NA,
           alpha = NA,
@@ -100,7 +100,7 @@ surrosurv <- function(data,
       verbose = verbose
     ),
     silent = TRUE)
-    if (class(res) == 'try-error')
+    if (inherits(res, 'try-error'))
       res <- list(
         modelT = list(R2 = NA, kTau = NA),
         modelI = list(R2 = NA, kTau = NA),
