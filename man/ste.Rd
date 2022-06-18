@@ -32,13 +32,6 @@ ste(x, models = names(x), exact.models)
 
 \value{
   An object of class \code{steSurrosurv} 
-  containing, for each trial:
-  \item{}{
-    
-  }
-  \item{}{
-    
-  }
 }
   
 \references{
