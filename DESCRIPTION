@@ -5,14 +5,14 @@ Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
 Version: 1.1.25
 Date: 2017-12-13
 Authors@R: c(
-  person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr", 
+  person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr",
+          comment = c(ORCID = "0000-0003-4837-6501"), 
           role=c("aut", "cre")),
   person("Xavier", "Paoletti", role="ctr"),
   person("Marc", "Buyse", role="ctr"),
   person("Tomasz", "Burzykowski", role="ctr"),
-  person("Stefan", "Michiels", role="ctr"))
-Author: Federico Rotolo [aut, cre],
-  Xavier Paoletti [ctr], Marc Buyse [ctr], Tomasz Burzykowski [ctr], Stefan Michiels [ctr]
+  person("Stefan", "Michiels", role="ctr",
+          comment = c(ORCID = "0000-0002-6963-2968")))
 Maintainer: Federico Rotolo <federico.rotolo@gustaveroussy.fr>
 Description: Provides functions for the evaluation of
     surrogate endpoints when both the surrogate and the true endpoint are failure
@@ -37,6 +37,8 @@ Imports:
     survival,
     SurvCorr
 License: GPL-2
+URL: https://github.com/Oncostat/surrosurv
+BugReports: https://github.com/Oncostat/surrosurv/issues/
 VignetteBuilder: R.rsp
 Suggests: R.rsp
 Encoding: UTF-8
