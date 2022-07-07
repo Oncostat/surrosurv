@@ -17,6 +17,7 @@ devtools::spell_check()
 
 #check on different OS
 devtools::check_rhub(interactive=FALSE, env_vars=c(R_COMPILE_AND_INSTALL_PACKAGES = "always"))
+rhub::check_for_cran()
 devtools::check_win_devel(quiet=TRUE)
 # devtools::check_win_release()
 # devtools::check_win_oldrelease()
