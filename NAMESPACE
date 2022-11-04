@@ -11,8 +11,6 @@ importFrom(Matrix,
            nearPD)
 importFrom(msm, 
            deltamethod, rtnorm)
-importFrom(SurvCorr, 
-           survcorr)
 importFrom(parfm, 
            parfm)
 importFrom(graphics,
