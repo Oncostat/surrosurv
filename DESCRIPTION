@@ -22,7 +22,6 @@ Description: Provides functions for the evaluation of
     step (either adjusted or not for measurement error);
     (2) mixed proportional hazard models estimated via mixed Poisson GLM
     (Rotolo et al, 2017 <DOI:10.1177/0962280217718582>).
-Depends: R (>= 2.10), stats, optimx, grDevices
 Imports:
     copula,
     eha,
