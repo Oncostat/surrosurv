@@ -8,10 +8,10 @@ Authors@R: c(
   person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr",
           comment = c(ORCID = "0000-0003-4837-6501"), 
           role=c("aut")),
-  person("Xavier", "Paoletti", role="ctr"),
-  person("Marc", "Buyse", role="ctr"),
-  person("Tomasz", "Burzykowski", role="ctr"),
-  person("Stefan", "Michiels", role=c("ctr", "cre"), email="stefan.michiels@gustaveroussy",
+  person("Xavier", "Paoletti", role="ctb"),
+  person("Marc", "Buyse", role="ctb"),
+  person("Tomasz", "Burzykowski", role="ctb"),
+  person("Stefan", "Michiels", role=c("ctb", "cre"), email="stefan.michiels@gustaveroussy",
           comment = c(ORCID = "0000-0002-6963-2968")))
 Maintainer: Stefan Michiels <stefan.michiels@gustaveroussy.fr>
 Description: Provides functions for the evaluation of
