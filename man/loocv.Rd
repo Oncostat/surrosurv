@@ -7,7 +7,7 @@
   Leave-one-trial-out cross-validation for treatment effect prediction
 }
 \description{
-  The function \code{loocv()} computed leave-one-out predcition of the treatment
+  The function \code{loocv()} computed leave-one-out prediction of the treatment
     effect on the true endpoint for each trial,
     based on the observed effect on the surrogate endpoint in the trial itself
     and based on the meta-analytic model fitted on the remaining trials

@@ -147,7 +147,7 @@ then, the second derivative with respect to $u$ and $v$ is
 \end{align}
 
 
-The Kendall's tau for the Plackett copula cannot be computed analyticaly
+The Kendall's tau for the Plackett copula cannot be computed analytically
   and is obtained numerically.
 
 

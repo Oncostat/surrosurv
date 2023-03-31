@@ -141,7 +141,7 @@ surrosurv(data,
   Burzykowski et al. (2001), which relies on the results
   by van Houwelingen et al. (2002).
   
-  The moxed Poisson models that can be fit
+  The mixed Poisson models that can be fit
   are used to estimate parameters of mixed proportional hazard models,
   as described for instance by Crowther et al (2014).
   The statistical details are provided in Rotolo et al (WP).
@@ -195,7 +195,7 @@ surrosurv(data,
  Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
   A Poisson approach for the validation of failure time surrogate endpoints
   in individual patient data meta-analyses.
-  \emph{Statistical Methhods in Medical Research} 2017;
+  \emph{Statistical Methods in Medical Research} 2017;
   \bold{In Press}.
   \doi{10.1177/0962280217718582}
 

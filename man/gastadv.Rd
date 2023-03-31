@@ -15,9 +15,9 @@
     \item{timeT:}{Overall survival time (days).}
     \item{statusT:}{Overall survival indicator (0=censored, 1=death).}
     \item{timeS:}{Progression-free survival time (days).}
-    \item{statusS:}{Progression-free survival indicator (0=censored, 1=prgoression on death).}
+    \item{statusS:}{Progression-free survival indicator (0=censored, 1=progression on death).}
     \item{trialref:}{Trial indicator}
-    \item{trt:}{Treatment arm (-0.5 = control, 0.5=chemomtherapy).}
+    \item{trt:}{Treatment arm (-0.5 = control, 0.5=chemotherapy).}
     \item{id:}{Patient identifier.}
     }
   }

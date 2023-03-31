@@ -39,7 +39,7 @@
 }
 
 \value{
-  The function \code{convals()} returns a matrix with one row per model and three columans,
+  The function \code{convals()} returns a matrix with one row per model and three columns,
     reporting the values of the maximum scaled gradient (\code{maxSgrad}), 
     of the minimum eigenvalue of the Hessian matrix (\code{minHev}), and
     of the minimum eigenvalue of the estimated variance-covariance matrix

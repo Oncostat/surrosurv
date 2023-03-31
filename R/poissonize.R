@@ -7,14 +7,14 @@
 #                                                                              #
 #  Its parameters are                                                          #
 #   - data          : a data frame with columns:                               #
-#                     - id       : the patient identifyier                     #
+#                     - id       : the patient identifier                     #
 #                     - time     : the event/censoring time                    #
 #                     - status   : the event(1) or censoring(0) indicator      #
 #                     - ...      : other factors such like the covariables     #
 #                             needed in the regression model                   #
 #   - all.breaks    : the breakpoints between time intervals                   #
 #   - interval.width: the width of the time intervals on wich the risks        #
-#                     will be assumed consant.                                 #
+#                     will be assumed constant.                                #
 #                     To be used if intervals of the same length               #
 #                     This parameter is ignored if all.breaks is specified     #
 #   - nInts         : the number of intervals containing the same expected     #

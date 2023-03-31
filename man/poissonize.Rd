@@ -2,10 +2,10 @@
 \alias{poissonize}
 \alias{plotsson}
 \title{
-  Tranform survival data for fitting a Poisson model
+  Transform survival data for fitting a Poisson model
 }
 \description{
-  This function  tranform survival data into a format compatible with
+  This function transform survival data into a format compatible with
   the \code{\link{glm}()} function for fitting an auxiliary Poisson model,
   providing the parameter estimates of the associated proportional hazard model.
 }
@@ -20,7 +20,7 @@ plotsson(x, type = c('survival', 'hazard'),
   \item{data}{
     a data frame with columns:
     \itemize{
-     \item id       : the patient identifyier
+     \item id       : the patient identifier
      \item time     : the event/censoring time
      \item status   : the event(1) or censoring(0) indicator
      \item ...      : other factors such like the covariables needed
@@ -31,7 +31,7 @@ plotsson(x, type = c('survival', 'hazard'),
     the breakpoints between time intervals
 }
   \item{interval.width}{
-    the width of the time intervals on which the risks will be assumed consant,
+    the width of the time intervals on which the risks will be assumed constant,
     in case of intervals of the same length.
     This parameter is ignored if \code{all.breaks} is specified
 }
@@ -73,7 +73,7 @@ plotsson(x, type = c('survival', 'hazard'),
 }
 
 \details{
-  If \code{interval.width} is not null, the study period is diveded into
+  If \code{interval.width} is not null, the study period is divided into
     equal-length intervals of length \code{interval.width}.
   Otherwise, \code{nInts} intervals are used, and the location of their bounds
     is computed based on the empirical quantiles of the survival function.

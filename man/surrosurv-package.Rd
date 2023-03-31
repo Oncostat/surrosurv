@@ -22,7 +22,7 @@
   Rotolo F, Paoletti X, Burzykowski T, Buyse M, Michiels S.
   A Poisson approach for the validation of failure time surrogate endpoints
   in individual patient data meta-analyses.
-  \emph{Statistical Methhods in Medical Research} 2017;
+  \emph{Statistical Methods in Medical Research} 2017;
   \bold{In Press}.
   \doi{10.1177/0962280217718582}
   

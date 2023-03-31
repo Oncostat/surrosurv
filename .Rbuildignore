@@ -9,5 +9,6 @@ vignette/surrosurv.syntex.gz
 ^\.travis\.yml$
 TODO
 
+tests
 .*\.Rnw
 .*\.tex
