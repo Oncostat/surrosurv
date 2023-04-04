@@ -5,15 +5,16 @@ Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
 Version: 1.1.26
 Date: 2017-12-13
 Authors@R: c(
-  person("Federico", "Rotolo", email="federico.rotolo@gustaveroussy.fr",
-          comment = c(ORCID = "0000-0003-4837-6501"), 
-          role=c("aut")),
+  person("Federico", "Rotolo", role="aut", email="federico.rotolo@gustaveroussy.fr",
+          comment = c(ORCID = "0000-0003-4837-6501")),
   person("Xavier", "Paoletti", role="ctb"),
   person("Marc", "Buyse", role="ctb"),
   person("Tomasz", "Burzykowski", role="ctb"),
-  person("Stefan", "Michiels", role=c("ctb", "cre"), email="stefan.michiels@gustaveroussy",
-          comment = c(ORCID = "0000-0002-6963-2968")))
-Maintainer: Stefan Michiels <stefan.michiels@gustaveroussy.fr>
+  person("Stefan", "Michiels", role="ctb", email="stefan.michiels@gustaveroussy.fr",
+          comment = c(ORCID = "0000-0002-6963-2968")),
+  person("Dan", "Chaltiel", role="cre", email="dan.chaltiel@gustaveroussy.fr",
+          comment = c(ORCID = "0000-0003-3488-779X")))
+Maintainer: Dan Chaltiel <dan.chaltiel@gustaveroussy.fr>
 Description: Provides functions for the evaluation of
     surrogate endpoints when both the surrogate and the true endpoint are failure
     time variables. The approaches implemented are:
