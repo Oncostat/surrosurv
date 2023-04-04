@@ -24,8 +24,13 @@ predict.surrosurv <- function(object,
   copulas <- intersect(c('Clayton', 'Plackett', 'Hougaard'), models)
   poissons <- grep('PoissonT', models, value = TRUE)
   
-  allRES <- c(# Copula models
+  allRES <- c(
+    # Copula models
     sapply(copulas, function(cop) {
+      if(all(is.na(unlist(object[[cop]])))){
+        empty <- data.frame(alpha=numeric(), beta=numeric())
+        return(list(unadj=empty, adj=empty))
+      }
       list(unadj = as.data.frame(object[[cop]]$unadj$step1[c('alpha', 'beta')]),
            adj = as.data.frame(object[[cop]]$adj$ranef))
     }),
@@ -40,8 +45,8 @@ predict.surrosurv <- function(object,
     colnames(object) <- c('trtS', 'trtT')
     return(object)
   })
-  names(allRES) <- c(paste(rep(copulas, each = 2), rep(c('unadj', 'adj'), length(copulas)), sep =
-                             '.'),
+  names(allRES) <- c(paste(rep(copulas, each = 2), rep(c('unadj', 'adj'), length(copulas)), 
+                           sep = '.'),
                      poissons)
   
   class(allRES)  <- c('predictSurrosurv', class(allRES))
