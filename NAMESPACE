@@ -1,6 +1,8 @@
-import(eha, lme4, msm, mvmeta, optextras, optimx, parallel, stats, survival)
+import(eha, lme4, msm, mvmeta, parallel, stats, survival)
 importFrom(copula,
            tau, claytonCopula, gumbelCopula, plackettCopula)
+importFrom(optimx,
+           optimx, grnd)
 importFrom(graphics,
            curve, mtext, points, polygon, text)
 importFrom(grDevices, 

@@ -23,18 +23,21 @@ Description: Provides functions for the evaluation of
     step (either adjusted or not for measurement error);
     (2) mixed proportional hazard models estimated via mixed Poisson GLM
     (Rotolo et al, 2017 <DOI:10.1177/0962280217718582>).
-Depends: R (>= 3.5.0), stats, optimx, grDevices
+Depends:
+    R (>= 3.5.0)
 Imports:
     copula,
     eha,
+    grDevices, 
     lme4,
     MASS,
     Matrix, 
     msm,
     mvmeta,
-    optextras,
+    optimx, 
     parallel,
     parfm,
+    stats, 
     survival
 License: GPL-2
 URL: https://github.com/Oncostat/surrosurv
