@@ -1,4 +1,6 @@
+
 skip_on_cran()
+skip_on_ci()
 
 #Fitting the whole dataset takes 1 hour
 #It should be made
