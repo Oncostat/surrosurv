@@ -192,12 +192,14 @@ ste <- function(x, models = names(x), exact.models) {
   }
   
   res <- sapply(ind, function(i) {
+    if(nrow(x[[i]])==0) return(NA)
     f <- function(y)
       attr(x, 'predf')[[i]](y)['upr', ] ^ 2
-    ste <- optimize(f, c(-1e8, 1e8))$minimum
+    ste <- suppressWarnings(optimize(f, c(-1e8, 1e8))$minimum)
     ste <- ifelse(abs(f(ste)) > 1e-4, NA, ste)
     return(ste)
   })
+  
   names(res) <- names(x)[ind]
   class(res) <- 'steSurrosurv'
   return(res)
