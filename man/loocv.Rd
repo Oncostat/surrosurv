@@ -87,7 +87,7 @@
     in locally advanced head and neck cancer:
     meta-analyses of individual patient data.
     \emph{Lancet Oncol}. 2009;10(4):341-50.
-    doi:\href{http://dx.doi.org/10.1016/S1470-2045(09)70023-3}{10.1016/S1470-2045(09)70023-3}
+    \doi{10.1016/S1470-2045(09)70023-3}
 }
 
 \author{

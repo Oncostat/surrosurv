@@ -83,7 +83,7 @@ plotsson(x, type = c('survival', 'hazard'),
     Fitting Cox's regression model to survival
     data using GLIM.
     \emph{J Roy Stat Soc C Appl Stat} 1980; \bold{29}(3):268-275.
-    \url{http://www.jstor.org/stable/2346901}.
+    \url{https://www.jstor.org/stable/2346901}.
   
   Crowther MJ, Riley RD, Staessen JA, Wang J, Gueyffier F, Lambert PC.
     Individual patient data meta-analysis of survival data
@@ -95,8 +95,7 @@ plotsson(x, type = c('survival', 'hazard'),
   \packageAuthor{surrosurv}
 }
 \note{
-  This code is hugely inspired by original code made publicly available by Stephanie Kovalchik
-  \href{http://r.789695.n4.nabble.com/exponential-proportional-hazard-model-td805536.html}{[web link]}
+  This code is hugely inspired by original code made publicly available by Stephanie Kovalchik.
 }
 
 \examples{

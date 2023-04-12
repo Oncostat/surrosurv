@@ -3,7 +3,6 @@ Type: Package
 Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
     Meta-Analyses
 Version: 1.1.26
-Date: 2017-12-13
 Authors@R: c(
   person("Federico", "Rotolo", role="aut", email="federico.rotolo@gustaveroussy.fr",
           comment = c(ORCID = "0000-0003-4837-6501")),

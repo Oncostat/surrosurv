@@ -41,19 +41,19 @@ The GASTRIC Group data are available within the \code{surrosurv} package
     Progression-free survival as a surrogate for overall survival
     in advanced/recurrent gastric cancer trials: a meta-analysis.
     \emph{J Ntl Cancer Inst}, 105(21):1667-70, 2013.
-    doi:\href{http://dx.doi.org/10.1093/jnci/djt269}{10.1093/jnci/djt269}.
+    \doi{10.1093/jnci/djt269}.
     
   The GASTRIC group.
     Role of chemotherapy for advanced/recurrent gastric cancer:
     An individual-patient-data meta-analysis. 
     \emph{Eur J Cancer}, 49(7):1565-77, 2013.
-    doi:\href{http://dx.doi.org/10.1016/j.ejca.2012.12.016}{10.1016/j.ejca.2012.12.016}.
+    \doi{10.1016/j.ejca.2012.12.016}.
     
   Buyse M, Molenberghs G, Paoletti Xavier et al.
     Statistical evaluation of surrogate endpoints
     with examples from cancer clinical trials.
     \emph{Biom J}, 58(1):104-32, 2016.
-    doi:\href{http://dx.doi.org/10.1002/bimj.201400049}{10.1002/bimj.201400049}
+    \doi{10.1002/bimj.201400049}
 }
 \examples{
   \dontrun{

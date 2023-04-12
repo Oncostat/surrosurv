@@ -1,5 +1,4 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/surrosurv)](https://cran.r-project.org/package=surrosurv)
-[![Build Status](https://travis-ci.org/Oncostat/surrosurv.svg?branch=master)](https://travis-ci.org/Oncostat/surrosurv)
 
 # surrosurv
 Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses

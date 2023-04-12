@@ -39,7 +39,7 @@
   
   Burzykowski T, Molenberghs G, Buyse M (2005). 
   \emph{The Evaluation of Surrogate Endpoints}. Springer, New York.
-  \url{http://rd.springer.com/book/10.1007/b138566}
+  \url{https://rd.springer.com/book/10.1007/b138566}
 }
 \keyword{ surrogate endpoint }
 \keyword{ survival }

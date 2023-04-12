@@ -39,7 +39,7 @@ ste(x, models = names(x), exact.models)
     Surrogate threshold effect: an alternative measure
     for meta-analytic surrogate endpoint validation.
     \emph{Pharm Stat}. 2006;5(3):173-86.
-    doi:\href{http://dx.doi.org/10.1002/pst.207}{10.1002/pst.207}
+    \doi{10.1002/pst.207}
 }
 
 \author{

@@ -31,7 +31,6 @@
 #                                                                              #
 # Author: Federico Rotolo <federico.rotolo@gustaveroussy.fr>                   #
 # Original code by Stephanie Kovalchik                                         #
-# http://r.789695.n4.nabble.com/exponential-proportional-hazard-model-td805536.html #
 #                                                                              #
 #   Date:                 June 22, 2015                                        #
 #   Last modification on: June 15, 2016                                        #
