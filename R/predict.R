@@ -139,7 +139,7 @@ predict.surrosurv <- function(object,
   return(allRES)
 }
 
-format.methodNames <- function(x) {
+format.methodNames <- function(x, ...) {
   sub(
     '.unadj',
     ' copula (Unadjusted)',
