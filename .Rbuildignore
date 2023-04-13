@@ -12,3 +12,5 @@ TODO
 tests
 .*\.Rnw
 .*\.tex
+^cran-comments\.md$
+^CRAN-SUBMISSION$
