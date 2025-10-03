@@ -2,7 +2,7 @@ Package: surrosurv
 Type: Package
 Title: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data
     Meta-Analyses
-Version: 1.1.26
+Version: 1.1.27
 Authors@R: c(
   person("Federico", "Rotolo", role="aut", email="federico.rotolo@gustaveroussy.fr",
           comment = c(ORCID = "0000-0003-4837-6501")),
