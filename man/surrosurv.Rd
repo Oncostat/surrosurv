@@ -84,10 +84,10 @@ surrosurv(data,
     (see \link{poissonize})
   }
   \item{cop.OPTIMIZER}{
-    the optimizer for copula models (see \code{\link{optimx}})
+    the optimizer for copula models (see \code{\link[optimx]{optimx}})
   }
   \item{poi.OPTIMIZER}{
-    the optimizer for Poisson models (see \code{\link{optimx}})
+    the optimizer for Poisson models (see \code{\link[optimx]{optimx}})
   }
   \item{verbose}{
     should the function print out the model being fitted
