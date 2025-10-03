@@ -1,0 +1,240 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "surrosurv",
+  "description": "Provides functions for the evaluation of surrogate endpoints when both the surrogate and the true endpoint are failure time variables. The approaches implemented are: (1) the two-step approach (Burzykowski et al, 2001) <DOI:10.1111/1467-9876.00244> with a copula model (Clayton, Plackett, Hougaard) at the first step and either a linear regression of log-hazard ratios at the second step (either adjusted or not for measurement error); (2) mixed proportional hazard models estimated via mixed Poisson GLM (Rotolo et al, 2017 <DOI:10.1177/0962280217718582>).",
+  "name": "surrosurv: Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data\n    Meta-Analyses",
+  "codeRepository": "https://github.com/Oncostat/surrosurv",
+  "issueTracker": "https://github.com/Oncostat/surrosurv/issues/",
+  "license": "https://spdx.org/licenses/GPL-2.0",
+  "version": "1.1.27",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.4.3 (2025-02-28 ucrt)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Federico",
+      "familyName": "Rotolo",
+      "email": "federico.rotolo@gustaveroussy.fr",
+      "@id": "https://orcid.org/0000-0003-4837-6501"
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Xavier",
+      "familyName": "Paoletti"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Marc",
+      "familyName": "Buyse"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Tomasz",
+      "familyName": "Burzykowski"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Stefan",
+      "familyName": "Michiels",
+      "email": "stefan.michiels@gustaveroussy.fr",
+      "@id": "https://orcid.org/0000-0002-6963-2968"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Dan",
+      "familyName": "Chaltiel",
+      "email": "dan.chaltiel@gustaveroussy.fr",
+      "@id": "https://orcid.org/0000-0003-3488-779X"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "R.rsp",
+      "name": "R.rsp",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=R.rsp"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.5.0"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "copula",
+      "name": "copula",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=copula"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "eha",
+      "name": "eha",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=eha"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "grDevices",
+      "name": "grDevices"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "lme4",
+      "name": "lme4",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lme4"
+    },
+    "6": {
+      "@type": "SoftwareApplication",
+      "identifier": "MASS",
+      "name": "MASS",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=MASS"
+    },
+    "7": {
+      "@type": "SoftwareApplication",
+      "identifier": "Matrix",
+      "name": "Matrix",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=Matrix"
+    },
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "msm",
+      "name": "msm",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=msm"
+    },
+    "9": {
+      "@type": "SoftwareApplication",
+      "identifier": "mvmeta",
+      "name": "mvmeta",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mvmeta"
+    },
+    "10": {
+      "@type": "SoftwareApplication",
+      "identifier": "optimx",
+      "name": "optimx",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=optimx"
+    },
+    "11": {
+      "@type": "SoftwareApplication",
+      "identifier": "parallel",
+      "name": "parallel"
+    },
+    "12": {
+      "@type": "SoftwareApplication",
+      "identifier": "parfm",
+      "name": "parfm",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=parfm"
+    },
+    "13": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "14": {
+      "@type": "SoftwareApplication",
+      "identifier": "survival",
+      "name": "survival",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=survival"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "1014.025KB",
+  "releaseNotes": "https://github.com/Oncostat/surrosurv/blob/master/NEWS",
+  "readme": "https://github.com/Oncostat/surrosurv/blob/master/README.md",
+  "relatedLink": "https://CRAN.R-project.org/package=surrosurv"
+}
