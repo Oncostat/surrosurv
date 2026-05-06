@@ -1,6 +1,6 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/surrosurv)](https://cran.r-project.org/package=surrosurv)
 
-# surrosurv
+# surrosurv <img src="man/figures/logo.png" align="right" height="139" alt="" />
 Evaluation of Failure Time Surrogate Endpoints in Individual Patient Data Meta-Analyses
 
 ## Description
